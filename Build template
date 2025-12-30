@@ -52,11 +52,11 @@ Copy and fill this for each of the 13 projects. This ensures every business alig
 *Do not rebuild these. All templates above plug into this foundation.*
 
 *   **Repository:** Single Monorepo (Nx/Turborepo).
-*   **Authentication:** Unified Auth0/Web3 Login (One User ID across all apps).
-*   **Database:** Single PostgreSQL Schema (Prisma) with partitions for each project.
-*   **UI Library:** `@ecosystem/ui-components` (Shared buttons, charts, maps).
-*   **DevOps:** Single CI/CD Pipeline (GitHub Actions → AWS ECS).
-*   **Optimization:** `ecosystem-brains` Python library (Shared forecasting/solver logic).
+*   **Authentication:** Unified Auth0/Web3 Login (One User ID across all apps) [1].
+*   **Database:** Single PostgreSQL Schema (Prisma) with partitions for each project [2][3].
+*   **UI Library:** `@ecosystem/ui-components` (Shared buttons, charts, maps) [4].
+*   **DevOps:** Single CI/CD Pipeline (GitHub Actions $\rightarrow$ AWS ECS) [5].
+*   **Optimization:** `ecosystem-brains` Python library (Shared forecasting/solver logic) [6].
 
 ---
 
@@ -65,39 +65,39 @@ Here is how three different projects (Low, Mid, and High complexity) fit into th
 
 #### **Example A: Centennial Bulb (#8) – The Infrastructure Layer**
 *   **Identity:** #8 EverLume | "Lighting-as-a-Service" | Tier: Low (IoT)
-*   **The Brain:** **Predictive Maintenance Model**. Uses Bayesian reliability to predict failure years in advance.
-*   **The Body:** LED Driver with ESP32 MCU, monitoring voltage/thermal cycles.
-*   **RegenCity:** **Zone A & B**. Installed as streetlights and housing illumination. Establishes the mesh network for other sensors.
-*   **Business:** **HaaS**. Subscription model ($5–$20/bulb/mo) guaranteeing uptime.
+*   **The Brain:** **Predictive Maintenance Model**. Uses Bayesian reliability to predict failure years in advance [7].
+*   **The Body:** LED Driver with ESP32 MCU, monitoring voltage/thermal cycles [8].
+*   **RegenCity:** **Zone A & B**. Installed as streetlights and housing illumination. Establishes the mesh network for other sensors [9].
+*   **Business:** **HaaS**. Subscription model ($5–$20/bulb/mo) guaranteeing uptime [10].
 *   **Synergy:**
     *   *Input:* Power from Micro-Hydro (#13).
     *   *Output:* IoT mesh backbone for Symbiosis (#2) sensors.
-*   **Specs:** 3–5 Months | $60k–$120k | 1 Firmware + 1 Backend.
+*   **Specs:** 3–5 Months | $60k–$120k | 1 Firmware + 1 Backend [11].
 
 #### **Example B: Symbiosis (#2) – The Biological Layer**
 *   **Identity:** #2 AgriConnect | "The Soil Operating System" | Tier: Mid (SaaS)
-*   **The Brain:** **Recommendation Engine**. ML (scikit-learn) matches fungal strains to soil data to maximize yield.
-*   **The Body:** Soil sensor nodes (Moisture, pH, NPK) connecting via MQTT.
-*   **RegenCity:** **Zone C (Farm)**. Inoculates soil to boost initial crop yields by ~30%.
-*   **Business:** **Vertical SaaS**. Monthly subscription + hardware lease fees.
+*   **The Brain:** **Recommendation Engine**. ML (scikit-learn) matches fungal strains to soil data to maximize yield [12].
+*   **The Body:** Soil sensor nodes (Moisture, pH, NPK) connecting via MQTT [13].
+*   **RegenCity:** **Zone C (Farm)**. Inoculates soil to boost initial crop yields by ~30% [14].
+*   **Business:** **Vertical SaaS**. Monthly subscription + hardware lease fees [15].
 *   **Synergy:**
     *   *Input:* Sensor data pipeline established by #8.
     *   *Output:* Increased crop yields for Closed-Loop Farm (#3).
-*   **Specs:** 3–5 Months | $60k–$120k | 1 ML Eng + 1 Full Stack.
+*   **Specs:** 3–5 Months | $60k–$120k | 1 ML Eng + 1 Full Stack [16].
 
 #### **Example C: Geothermal Network (#10) – The Utility Layer**
 *   **Identity:** #10 ThermalGrid | "District Heat Utility" | Tier: High (Infrastructure)
-*   **The Brain:** **Flow & Dispatch Optimizer**. Graph theory (NetworkX) balances heat loads between buildings.
-*   **The Body:** PLCs controlling motorized valves and pumps; temperature sensors.
-*   **RegenCity:** **Zone A**. Buried loop under the residential zone heating the Foam Homes.
-*   **Business:** **Utility**. Long-term heat sales contracts + connection fees.
+*   **The Brain:** **Flow & Dispatch Optimizer**. Graph theory (NetworkX) balances heat loads between buildings [17].
+*   **The Body:** PLCs controlling motorized valves and pumps; temperature sensors [18].
+*   **RegenCity:** **Zone A**. Buried loop under the residential zone heating the Foam Homes [19].
+*   **Business:** **Utility**. Long-term heat sales contracts + connection fees [20].
 *   **Synergy:**
     *   *Input:* Excess electricity from Solar (#12) runs pumps.
     *   *Output:* Heating/Cooling for Foam Homes (#1).
-*   **Specs:** 5–7 Months | $100k–$180k | 1 Systems Eng + 1 Backend.
+*   **Specs:** 5–7 Months | $100k–$180k | 1 Systems Eng + 1 Backend [21].
 
 ### **How to Use This Template**
 1.  **Copy the Template** for the remaining 10 projects.
-2.  **Fill in the "Brain"** section using the *Software Build* source data (e.g., for #9 AWG, use "Demand Forecasting with Prophet").
-3.  **Fill in the "RegenCity"** section using the *20-Acre Blueprint* source data.
+2.  **Fill in the "Brain"** section using the *Software Build* source data (e.g., for #9 AWG, use "Demand Forecasting with Prophet") [22].
+3.  **Fill in the "RegenCity"** section using the *20-Acre Blueprint* source data [23].
 4.  **Execute Phase 1:** Build the **Shared Kernel** + **Centennial Bulb (#8)** first. This validates the structure before you spend money on the complex reactors.
