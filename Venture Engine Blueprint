@@ -1,0 +1,413 @@
+# Venture Foundry Engine: Complete Blueprint
+
+## Executive Summary
+
+The Venture Foundry Engine is a **gamified, Web3-native platform** that transforms abstract ideas (software, music, art, hardware) into revenue-generating assets through collaborative quest completion. Contributors earn **real equity + royalties**, creators get **instant marketplaces**, and you build a **self-sustaining economy** without traditional hiring friction.
+
+**Core Innovation**: Every completed quest automatically becomes a shoppable product with perpetual contributor royalties, creating a flywheel: Ideas â†’ Quests â†’ Products â†’ Revenue â†’ Contributor Loyalty â†’ More Quests.
+
+---
+
+## 1. THE SITE (User Experience Layer)
+
+### Homepage / Portal Entry
+- **Hero**: "Turn Any Idea Into Equity" (quest board preview)
+- **CTA Buttons**: "Browse Quests" | "Post a Quest" | "View Marketplace"
+- **Social Proof**: Recent completions, top contributors, total platform revenue (all on-chain, trustworthy)
+- **Navigation**: Quest Board | Marketplace | My Equity | Leaderboards | Earn | Community
+
+### Quest Board (`apps/quest-board`)
+**Master Quest View**
+- Large card: "Synthwave Production Suite" (Master Quest title)
+- Visual progress bar (30% â†’ 3/10 sub-quests complete)
+- Metric cards (6 Codex scores): Trueness 0.999 âœ… | Flow 0.60 âœ… | PCS 0.765 âœ… | RPS 0.723 âœ… | CU 0.510 âœ… | Tap10 0.810 (info only)
+- Sub-quests grid (collapsible):
+  - "Record Bass" (Bronze, $500 ECOS, 0.5% equity, claimed by @musicdev, 80% done)
+  - "Mix Vocals" (Silver, $300 ECOS, 0.3% equity, OPEN)
+  - "Master & Distribution" (Gold, $200 ECOS, 0.2% equity, OPEN)
+- Team roster: Avatar pills with roles + contribution %
+- Chat: Collapsible thread for async collaboration
+- "Claim This Sub-Quest" button â†’ confirms wallet â†’ locks slot instantly
+
+**Quest Discovery Feed**
+- Filter by: Difficulty (Bronze/Silver/Gold), Domain (Code/Music/Art/Hardware), Reward Type (Token/Equity/Revenue), Time to Complete, Reputation Requirement
+- Sort by: Most Popular, Highest Equity, Fastest Payout, Expiring Soon
+- Infinite scroll with live status updates (realtime via WebSocket)
+
+### Marketplace (`apps/marketplace`)
+**Product Grid**
+- Each product is a completed quest's output:
+  - Thumbnail + title ("Synthwave Album - Vol 1")
+  - "From Quest #47 | 4 Contributors | Total Sales: $2,340"
+  - Price, buy button (Stripe/wallet)
+  - Contributor bios with equity % ("Producer: 60% | Engineer: 30% | Artist: 10%")
+  - Demo/preview link, reviews from buyers
+- Product types auto-tagged: #SaaS, #Music, #3DAsset, #Hardware, #Course, #Code
+- "Buy as Bundle" option (e.g., "Get Solar SaaS + FoamHomes Kit for 20% off")
+- Affiliate leaderboard (right sidebar): Top 3 quest products by week
+
+**Product Detail Page**
+- Immersive hero section (video demo for SaaS, music player for tracks, 3D model viewer for assets)
+- Specs / Features list (pulled from Milestone acceptance criteria)
+- Contributor breakdown: Interactive chart showing equity splits, daily earnings streamed live
+- Buy section: Pricing options (one-time, subscription, PAYG), payment methods
+- Changelog (tied to merged PRs in the quest)
+- Reviews + Q&A from community
+
+### Contributor Dashboard (`apps/dashboard`)
+**Profile Section**
+- Avatar, name, social links (GitHub, Twitter, portfolio)
+- "Founding Member" badge (if early), reputation score, leaderboard rank
+- Bio: Auto-generated from quest completions ("3D Artist | 5 quests | $4.2K earned")
+
+**Portfolio Tab**
+- **Equity Holdings**: Table of all active quests with equity %, vesting schedule, current value (if tracked)
+  - "Quest #12: ThoriumOS Core | 0.75% | Vesting 4yr cliff 1yr | Est. Value: $2,400" (assuming $320K valuation from Series A signals)
+  - **Key insight**: Show realized vs. unrealized equity; if a quest's underlying startup raises funding, auto-update valuation
+
+**Earnings Tab**
+- **Live Royalty Stream**: "Your code earned $84.20 this week" (realtime, updating via WebSocket)
+  - Breakdown by product: "Synthwave Album: +$42 (15 sales) | Solar SaaS: +$25 (5 seats) | VST Plugin: +$17.20 (12 downloads)"
+  - Graph: 30-day earnings trend, burndown to next payout (weekly, on-chain)
+  - Payout history (timestamp, amount, tx hash for transparency)
+
+**Active Quests Tab**
+- Cards for each in-progress quest (Master Quest title, current sub-quest, % complete)
+- "Time to Completion" estimate based on contributor velocity
+- Link to quest board for updates + team chat
+
+**Leaderboard**
+- Global: Top 10 by total equity, top 10 by weekly earnings, top 10 by contribution count
+- Seasonal: "Q1 2026 Top Contributors", "Fastest Completion", "Best Code Quality"
+- Badges unlock: "Polymath" (5+ domains), "Speedrunner" (sub 2-week average), "Trusted" (L20 reputation)
+
+---
+
+## 2. BUSINESS LOGIC (Revenue & Incentive Model)
+
+### The Venture Foundry Protocol: Genesis â†’ Assetization â†’ Monetization
+
+**Stage 1: Genesis (Idea Posted)**
+
+A founder posts: "Build an AI Music Production Tool"
+
+1. System auto-scores via **Codex Engine** on 6 dimensions:
+   - **Trueness (â‰¥0.60)**: Idea signal clarity \( T = \sigma(3 \cdot (A - \max(B, N, 0.1))) \)
+     - A = vision specificity (1.0 = "Build AImusic tool that exports stems" vs. 0.2 = "Build something cool with AI")
+     - B = market noise (competitor clutter)
+     - N = execution doubts (founder track record issues)
+     - **Result**: 0.85 âœ… GO (founder has shipped 2 prior products, clear spec)
+
+   - **Flow (â‰¥0.55)**: Velocity & resource drag \( F = I \cdot D' \cdot R_{src} \)
+     - I = initiative (0.8 = founder actively recruiting; 0.3 = someday idea)
+     - D = delay (how many weeks to start; normalized)
+     - R_src = resource availability (team size ready to claim quests)
+     - **Result**: 0.60 âœ… GO (founder has 3 devs ready, starting week 1)
+
+   - **PCS (â‰¥0.62)**: Partner/Criteria Score \( PCS = \sum w_j v_j \) (5 criteria max)
+     - Criteria: Market demand (0.9), Talent pool size (0.8), Tech maturity (0.7), Speed to MVP (0.6), Budget ceiling (0.5)
+     - Weights: market 30%, talent 25%, tech 20%, speed 15%, budget 10%
+     - **Result**: 0.765 âœ… GO (strong demand + deep talent bench available)
+
+   - **RPS (â‰¥0.50)**: Rollout Priority Score \( RPS = (\alpha S + \beta ROI + \gamma PF)(1 - Risk) \)
+     - S = market saturation (0.85 = enough demand)
+     - ROI = revenue forecast (0.8 = $100K revenue potential)
+     - PF = profit margin (0.9 = 70% gross margin SaaS)
+     - Risk = execution risk (0.15 = low; prior team success)
+     - \( RPS = (1/3 \cdot 0.85 + 1/3 \cdot 0.8 + 1/3 \cdot 0.9)(1 - 0.15) = 0.85 \cdot 0.85 = 0.72 \) âœ… GO
+
+   - **CU (â‰¥0.50)**: Capacity Utilization \( CU = G \cdot Rr \cdot Pm \)
+     - G = founder readiness (0.8 = engaged weekly)
+     - Rr = contributor retention (0.75 = expect 75% to stay 2+ quests)
+     - Pm = merge pace (0.85 = ~5 PRs/week expected velocity)
+     - **Result**: 0.51 âœ… GO (sufficient delivery power)
+
+   - **Tap10 (informational)**: Top-10 lever effectiveness (doesn't gate)
+     - Identifies which business levers matter most: Speed to MVP (0.9), Market timing (0.8), Team hiring (0.7), Code quality (0.6), ...
+     - **Use**: Founder tweaks strategy mid-quest based on sensitivity ("Flow.D matters most â†’ reduce timeline")
+
+2. **Outcome**: All gates GO â†’ Quest auto-lists on board + system suggests first 5 sub-quests via template.
+
+**Stage 2: Fractionalization (Breakdown into Sub-Quests)**
+
+System proposes:
+- "AI Core Engine" ($2K ECOS, 2% equity, difficulty: Gold, timeline: 4 weeks)
+- "UI/Frontend" ($1K ECOS, 1% equity, difficulty: Silver, timeline: 3 weeks)
+- "Audio Processing Lib" ($800 ECOS, 0.8% equity, difficulty: Silver, timeline: 2 weeks)
+- "API & Docs" ($500 ECOS, 0.5% equity, difficulty: Bronze, timeline: 1 week)
+- "DevOps & Deployment" ($700 ECOS, 0.7% equity, difficulty: Silver, timeline: 2 weeks)
+
+Each sub-quest:
+- Links to GitHub issue (auto-generated with acceptance criteria from Prisma `Milestone`)
+- Specs: "Must handle 5 audio formats, process in <2 sec, export as WAV/MP3"
+- Reward structure: 70% base ECOS pay, 30% equity vesting 4yr (1yr cliff); all equity split across team claiming the quest
+
+**Stage 3: Execution (Contributors Claim & Build)**
+
+1. Dev @alice connects GitHub wallet, claims "AI Core Engine" sub-quest
+   - Instant team slot lock (no double-claim)
+   - Chat opens for collab (async + video call integration optional)
+   - PR events automatically trigger smart contract validation
+
+2. Alice pushes commits to quest repo (e.g., `github.com/yourname/quest-47-ai-core`)
+   - GitHub App (installed per quest repo) listens for `pull_request.opened` events
+   - On PR open: DevRoyalty contract checks: does this PR reference Milestone #47-1? Yes â†’ **PRs flow to contract**
+
+3. Core team reviews PR
+   - If approved & merged: GitHub webhook fires â†’ calls DevRoyalty smart contract
+   - Contract validates: merged commit hash exists, contributor wallet is registered, quest ID is live
+   - **Minting**: Contract mints 70% ECOS immediately (non-vesting) + records 30% equity vesting entry
+
+4. Real-time progress bar updates: "AI Core Engine: 60% done (6/10 sub-components complete)"
+
+**Stage 4: Assetization (Completion â†’ Product)**
+
+All 5 sub-quests merged (100% complete):
+1. Master Quest marked DONE in Prisma `Project` record
+2. System triggers **media-engine** package:
+   - Pulls latest artifacts: code (from repo), docs (from README), demo (compiled binary or SaaS instance)
+   - Generates product metadata:
+     - Title: "AI Music Production Suite v1.0"
+     - Description: Auto-derived from PR comments + quest narrative
+     - Demo link: e.g., deployed SaaS instance at `https://ai-music-tool.vercel.app?demo=true`
+     - Changelog: Linked to all merged PR titles
+     - Contributors: Alice (70% AI core), Bob (60% UI), Carol (80% Audio Lib), Dave (50% API), Eve (75% DevOps)
+       - Each contributor's equity share calculated: Total 100 ECOS base + (Alice: 2%, Bob: 1%, Carol: 0.8%, Dave: 0.5%, Eve: 0.7%)
+       - Vesting records created in `EquityRecord` contract table
+
+3. Smart contract emits: `ProductCreated(productId: 47, assetUri: "ipfs://QmXxxx", contributors: [alice, bob, carol, dave, eve])`
+
+4. Product auto-lists on marketplace within 1 hour with:
+   - 7-day free trial (if SaaS) or instant download (if code)
+   - Contributor bios + earnings dashboard (embedded iframe showing live royalties)
+
+**Stage 5: Monetization (Sales â†’ Perpetual Royalties)**
+
+Customer buys $99 SaaS annual subscription:
+1. Payment processed via Stripe (or wallet for crypto)
+2. **Revenue split** via smart contract (deterministic, on-chain):
+   ```
+   Total: $99
+   â†’ Contributors (60%): $59.40
+      - Alice (70%): $41.58 [vests 10% immediately, rest 4yr from today]
+      - Bob (60%): $35.64
+      - Carol (80%): $47.52
+      - Dave (50%): $29.70
+      - Eve (75%): $44.55
+   â†’ Platform (15%): $14.85 [ops fund]
+   â†’ Founder (15%): $14.85 [quest initiation reward]
+   â†’ Future quests (10%): $9.90 [reinvestment]
+   ```
+3. **Payouts**: Weekly on-chain transfers to contributor wallets (batched, low-fee L2)
+4. **Royalty Stream Dashboard** updates live:
+   - "Your share of AI Music Suite: +$41.58 this week (1 sale)"
+   - 30-day trend: $42, $41, $38, $45, ... (volatile per sales, smoothing over time)
+   - Cumulative: $3,240 earned; $1,080 vested; $2,160 locked (vests Apr 2026)
+
+### Key Business Metrics
+| Metric | Definition | Why It Matters |
+|--------|-----------|----------------|
+| **Quest GO Rate** | % of posted quests passing all 6 gates | Too low = criteria too strict; too high = insufficient filtering |
+| **Time-to-Product** | Days from quest open to marketplace | Faster = more feedback loops, higher contributor velocity |
+| **Revenue per Quest** | Total sales of resulting product | ROI on equity / ECOS issued per quest |
+| **Contributor Retention** | % completing 2+ quests | Network effect; repeated contributors = higher-quality work |
+| **Equity Dilution** | Total % issued per quarter | Cap at ~20% per year to avoid inflation; tie to revenue milestones |
+| **Platform Take** | 15% of gross sales | Sustainable? Should hit 50% gross margin (5-7% ops cost) |
+
+---
+
+## 3. THE BUILD PROCESS (Technical Roadmap)
+
+### Tech Stack Summary
+```
+Frontend (React/Next.js + TypeScript)
+  â”œâ”€ apps/quest-board
+  â”œâ”€ apps/marketplace
+  â””â”€ apps/dashboard
+
+Backend (Python FastAPI + Node.js)
+  â”œâ”€ packages/smart-contracts (Solidity)
+  â”œâ”€ packages/billing-engine (Stripe + Crypto)
+  â”œâ”€ packages/media-engine (FFmpeg + asset bundling)
+  â”œâ”€ packages/wallet-service (Web3.py + ethers.js)
+  â””â”€ packages/auth-module (GitHub OAuth + SIWE)
+
+Data (Prisma ORM + PostgreSQL)
+  â”œâ”€ Project (Master Quest)
+  â”œâ”€ Milestone (Sub-Quest)
+  â”œâ”€ Product (Completed asset)
+  â”œâ”€ EquityRecord (Vesting entries)
+  â””â”€ RoyaltyStream (Revenue splits)
+
+External
+  â”œâ”€ GitHub API (PRs, webhook)
+  â”œâ”€ Stripe (payments)
+  â”œâ”€ Web3 (Polygon smart contracts)
+  â”œâ”€ IPFS/Arweave (asset storage)
+  â””â”€ Supabase (realtime chat)
+```
+
+### Phase 1: Foundation (Weeks 1-4)
+
+**Week 1: Quest Board Infrastructure**
+- Scaffold `apps/quest-board` with Next.js (Vercel deployment)
+- Build UI components: Quest card, progress bar, sub-quest grid, claim button
+- Connect Prisma to read `Project` (Master Quests) and `Milestone` (Sub-Quests)
+- Integrate GitHub OAuth login + wallet connect (use `wallet-service` package)
+- Test locally with 3 seed quests from your 13 startups
+
+**Week 2: Codex Engine Integration**
+- Expose `codex_engine.py` as FastAPI microservice (Python endpoint at `/api/score`)
+- Input: Quest description, team size, market estimate â†’ Output: 6 metric scores + GO/NO-GO
+- Wire quest creation form to call endpoint on submit
+- Display 6 gauge cards in quest card UI
+- Implement: If NO-GO, suggest 3 sub-quests to de-risk (e.g., "Market Validation Sprint", "Proof of Concept")
+
+**Week 3: Smart Contract & DevRoyalty**
+- Write `packages/smart-contracts/DevRoyalty.sol`:
+  ```solidity
+  contract DevRoyalty {
+    function mintDevRoyalty(
+      address contributor,
+      uint256 questId,
+      uint256 equityBasisPoints,    // 100 = 1%
+      uint256 ecoTokens
+    ) external onlyGitHubApp {
+      // Mint ECOS tokens immediately
+      ecoToken.mint(contributor, ecoTokens);
+      
+      // Record equity vesting (4yr, 1yr cliff)
+      equityRecord[questId][contributor] = VestingEntry({
+        totalBasisPoints: equityBasisPoints,
+        cliffEnd: now + 1 years,
+        vestingEnd: now + 4 years,
+        claimedBasisPoints: 0
+      });
+      
+      emit DevRoyaltyMinted(contributor, questId, equityBasisPoints, ecoTokens);
+    }
+  }
+  ```
+- Deploy to Polygon Mumbai (testnet) for initial testing
+- Wire GitHub App to call contract on PR merge (HTTP webhook â†’ backend job â†’ contract call)
+- Test with 3 internal PRs
+
+**Week 4: Marketplace MVP**
+- Build `apps/marketplace` with product grid
+- Add Stripe payment integration (handle recurring + one-time)
+- Connect `billing-engine` to split revenue on purchase:
+  - 60% contributors, 15% platform, 15% founder, 10% reinvest
+  - Store splits in Prisma `RevenueAllocation` table
+  - Queue Stripe payouts (async job, weekly)
+- Seed marketplace with 5 products from your history (upload manually to IPFS)
+- Test end-to-end: Buy product â†’ smart contract emits event â†’ contributor dashboard updates
+
+### Phase 2: Alpha Launch (Weeks 5-8)
+
+**Week 5: Onboarding & First 50 Devs**
+- Finalize quest board UX (notifications, team chat, real-time updates)
+- Launch "Founding 50" campaign: Offer 1.5x royalty multiplier + cosmetic NFT badge
+- Recruit from: GitHub contributors to your repos, Splice platform (music), ArtStation (art), Upwork (generalists)
+- Seed 10 open quests (5 code, 2 music, 2 art, 1 hardware sketch)
+- Send email: "Join Venture Foundry. Build. Get equity. Earn royalties."
+
+**Week 6: Cross-Domain Fusion Quest**
+- Launch hybrid quest: "Bioreactor Visualization Game" (needs coder + 3D artist + sound designer)
+- Track: Do different domains collaborate? UI friction?
+- Outcome metrics: Team formation time, commit velocity, quality of integration
+- If successful: Celebrate + highlight on home page
+
+**Week 7: Royalty Stream Go-Live**
+- First 5 quests complete â†’ auto-list on marketplace
+- Day 1 of sales: Dashboard shows "$X earned this week"
+- Leaderboard updates: Top 10 earners, top 10 equity holders
+- Bonus: 2x ECOS multiplier for week's top contributor (gamification)
+- Community email: "100 PRs merged. $2K in sales. First royalties streaming."
+
+**Week 8: Snapshot Voting (DAO Lite)**
+- Enable Snapshot governance: Contributors vote on seasonal quest budgets, fee adjustments
+- Voting power = cumulative equity stake
+- Sample votes: "Should platform fee increase from 15% to 17%?" (requires majority approval)
+- Participation reward: 50 bonus ECOS for voters
+
+### Phase 3: Scale (Weeks 9-12)
+
+**Week 9: Partner Portal & Showroom**
+- Add `apps/partner-portal` for hardware/manufacturing partners
+- Sync Digital Twin data (RegenCity performance metrics) to partner dashboard
+- Real-time leaderboard: "Top 3 partners by device uptime"
+- Warrant vesting triggers: "LED fixture sales hit $50K â†’ 10% warrant vest"
+
+**Week 10: Product Expansion & Affiliate Boosts**
+- 30+ products live on marketplace
+- Introduce "Quest Bundles": Buy Solar SaaS + FoamHomes CAD files for 20% off
+- Affiliate leaderboard: Top 3 products per week get featured homepage slot
+- Bonus royalty multiplier (1.25x) for featured products
+
+**Week 11-12: Infinite Squad & Seasonality**
+- Implement cross-quest talent matching: "Frontend dev from Quest #12 â†’ recommended for UI role on Quest #45"
+- Launch "Season 1: Light" (Q1 2026)
+  - Themed quests (all related to lighting, IoT, solar)
+  - Seasonal leaderboard + unique NFT reward (cosmetic)
+  - 10% bonus ECOS multiplier for seasonal quest completions
+- Announce "Season 2: Water" (Q2 2026) roadmap
+
+### CI/CD & DevOps
+
+**Local Development**
+```bash
+git clone https://github.com/yourname/ecosystem-monorepo.git
+cd ecosystem-monorepo
+npm install
+nx run quest-board:dev           # Port 3000
+nx run marketplace:dev           # Port 3001
+nx run dashboard:dev             # Port 3002
+python -m uvicorn api.main:app   # Port 8000 (Codex service)
+```
+
+**Testing**
+```bash
+npm run test                     # Jest for frontend
+pytest packages/codex_engine    # Python unit tests
+npm run contracts:test           # Hardhat for Solidity
+```
+
+**Deployment**
+- **Frontend**: Vercel (auto-deploy on main branch, preview on PR)
+- **Smart Contracts**: Polygon mainnet (production), Mumbai (staging)
+- **Python API**: Fly.io or Railway (auto-scaling)
+- **Database**: Neon PostgreSQL (serverless, scales to 0)
+- **Realtime Chat**: Supabase (serverless, auto-scaling)
+- **Asset Storage**: Pinata (IPFS) or Arweave (permanent)
+
+---
+
+## 4. Key Design Decisions & Rationale
+
+| Decision | Why |
+|----------|-----|
+| **Polygon instead of Ethereum mainnet** | 100x cheaper gas, <2 sec finality, still decentralized. Users feel instant payouts. |
+| **Stripe + Web3 dual payment** | 60% of US devs don't have crypto wallets yet; Stripe reaches everyone. |
+| **Weekly (not daily) payouts** | Daily would burn on fees; weekly batches reduce cost, still fast for motivation. |
+| **Codex 6-metric scoring** | 6 gates = sufficient filtering without over-optimization. 1-2 gates = spam; 10+ gates = analysis paralysis. |
+| **Open quests + seeded templates** | Founder posts idea, system auto-fractures into sub-quests; lowers barrier to entry vs. "design everything yourself". |
+| **Equity vesting (4yr, 1yr cliff)** | Industry standard; incentivizes long-term contributor retention; cliff prevents churn early. |
+| **Product NFT (non-transferable)** | Proves ownership on-chain without creating secondary market speculation. |
+| **Seasonal themes** | Keeps engagement fresh; guides contributor focus; creates urgency ("only Q1 for Light-themed quests"). |
+
+---
+
+## 5. Success Metrics (90-Day Target)
+
+| Metric | Target | Status |
+|--------|--------|--------|
+| Quests Posted | 13 (your startups) + 10 (community) = 23 | Week 1 |
+| Quest GO Rate | â‰¥85% | Week 2 |
+| Contributors Onboarded | 50 (Founding 50) | Week 5 |
+| Quests Completed | 5-8 | Week 8 |
+| Products Listed | 5-8 (on marketplace) | Week 8 |
+| Marketplace Revenue | $10K+ | Week 12 |
+| Contributor Retention | â‰¥50% (Quest 2+) | Week 12 |
+| DAO Governance Participants | â‰¥30% of contributors | Week 12 |
+
+**Overall**: By Day 90, the Venture Foundry is a **self-sustaining flywheel**. Every quest completion feeds the marketplace, every sale feeds contributor royalties, every royalty brings contributors back for the next quest. **Your operating system for decentralized creation is live.**
