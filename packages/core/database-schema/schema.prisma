@@ -1,0 +1,403 @@
+// ECOS Unified Database Schema
+// Single Source of Truth for all 13 projects
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// SHARED CORE MODELS
+// ============================================
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  auth0Id       String?  @unique
+  web3Address   String?  @unique
+  name          String?
+  role          UserRole @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  devices       Device[]
+  subscriptions Subscription[]
+  
+  @@map("users")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  OPERATOR
+  RESEARCHER
+}
+
+model Device {
+  id            String       @id @default(uuid())
+  deviceId      String       @unique
+  projectCode   ProjectCode
+  deviceType    String
+  locationId    String?
+  userId        String?
+  status        DeviceStatus @default(ACTIVE)
+  metadata      Json?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  
+  user          User?        @relation(fields: [userId], references: [id])
+  telemetry     Telemetry[]
+  
+  @@index([projectCode])
+  @@index([deviceType])
+  @@map("devices")
+}
+
+enum DeviceStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  OFFLINE
+}
+
+enum ProjectCode {
+  P01_FOAM_HOMES
+  P02_SYMBIOSIS
+  P03_FARM
+  P04_HEMP_LAB
+  P05_GREENHOUSE
+  P06_REACTOR
+  P07_BIOREACTOR
+  P08_BULB
+  P09_AWG
+  P10_GEOTHERMAL
+  P11_RESERVED
+  P12_SOLAR
+  P13_HYDRO
+}
+
+// Universal Telemetry Schema - All sensor data flows here
+model Telemetry {
+  id                String    @id @default(uuid())
+  sensorId          String
+  locationId        String?
+  measurementType   String
+  measurementValue  Float
+  unit              String
+  timestamp         DateTime
+  qualityFlag       String    @default("valid")
+  schemaVersion     String    @default("1.0.0")
+  sourceSystem      String
+  ingestionTime     DateTime  @default(now())
+  
+  device            Device?   @relation(fields: [sensorId], references: [deviceId])
+  
+  @@index([measurementType])
+  @@index([timestamp])
+  @@index([sourceSystem])
+  @@index([sensorId])
+  @@map("telemetry")
+}
+
+model Subscription {
+  id            String             @id @default(uuid())
+  userId        String
+  projectCode   ProjectCode
+  tier          SubscriptionTier
+  status        SubscriptionStatus @default(ACTIVE)
+  stripeId      String?            @unique
+  startDate     DateTime           @default(now())
+  endDate       DateTime?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  
+  user          User               @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([projectCode])
+  @@map("subscriptions")
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+}
+
+// ============================================
+// PROJECT #1: FOAM HOMES (EcoHomes OS)
+// ============================================
+
+model FoamHome {
+  id                String   @id @default(uuid())
+  homeId            String   @unique
+  zone              String   // Zone A
+  designModel       Json     // 3D parametric design data
+  billOfMaterials   Json     // BOM generated from design
+  robotToolpath     Json?    // Manufacturing instructions
+  constructionStatus String  @default("PLANNED")
+  thermalReadings   Float[]  // Temperature sensors
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@map("foam_homes")
+}
+
+// ============================================
+// PROJECT #2: SYMBIOSIS (AgriConnect)
+// ============================================
+
+model SoilReading {
+  id              String   @id @default(uuid())
+  locationId      String
+  soilMoisture    Float    // percentage
+  soilPh          Float
+  soilNpk         Json     // {N, P, K values}
+  soilTemp        Float    // celsius
+  timestamp       DateTime
+  fungalStrain    String?  // Recommended strain
+  yieldPrediction Float?   // Predicted yield increase %
+  
+  @@index([locationId])
+  @@index([timestamp])
+  @@map("soil_readings")
+}
+
+// ============================================
+// PROJECT #3: CLOSED-LOOP FARM (RegeneraFarm)
+// ============================================
+
+model FarmCycle {
+  id              String   @id @default(uuid())
+  cycleId         String   @unique
+  cropType        String
+  wasteInputs     Json     // Compost, organic matter
+  nutrientDemand  Json     // NPK requirements
+  optimizedPlan   Json     // OR-Tools solution
+  carbonCredits   Float?   // Generated credits
+  yieldActual     Float?
+  timestamp       DateTime @default(now())
+  
+  @@index([cycleId])
+  @@map("farm_cycles")
+}
+
+// ============================================
+// PROJECT #4: HEMP LAB (HempMobility)
+// ============================================
+
+model MaterialTest {
+  id              String   @id @default(uuid())
+  testId          String   @unique
+  materialType    String   // Biocomposite type
+  stressStrain    Json     // FEA simulation results
+  lcaMetrics      Json     // Lifecycle assessment
+  crashTest       Json?    // Safety validation
+  timestamp       DateTime @default(now())
+  
+  @@map("material_tests")
+}
+
+// ============================================
+// PROJECT #5: GREENHOUSE (LumiFreq)
+// ============================================
+
+model LightRecipe {
+  id              String   @id @default(uuid())
+  recipeId        String   @unique
+  cropType        String
+  lightFrequency  Float    // Hz
+  intensity       Float    // Lux
+  duration        Float    // Hours
+  plantResponse   Json?    // Computer vision feedback
+  growthRate      Float?   // mm/day
+  timestamp       DateTime @default(now())
+  
+  @@map("light_recipes")
+}
+
+// ============================================
+// PROJECT #6: FAST REACTOR (NucleoSim)
+// ============================================
+
+model ReactorSimulation {
+  id              String   @id @default(uuid())
+  simId           String   @unique
+  reactorTemp     Float    // celsius
+  neutronFlux     Float
+  thermalOutput   Float    // kW
+  safetyMetrics   Json     // Compliance data
+  auditLog        Json     // Immutable logging
+  timestamp       DateTime @default(now())
+  
+  @@map("reactor_simulations")
+}
+
+// ============================================
+// PROJECT #7: BIOREACTOR (PlastiCycle)
+// ============================================
+
+model BioreactorReading {
+  id                String   @id @default(uuid())
+  reactorId         String
+  ph                Float
+  temperature       Float    // celsius
+  bacterialGrowth   Float    // OD600
+  degradationRate   Float    // g/hour
+  plasticType       String
+  monomerYield      Float?   // kg
+  timestamp         DateTime @default(now())
+  
+  @@index([reactorId])
+  @@index([timestamp])
+  @@map("bioreactor_readings")
+}
+
+// ============================================
+// PROJECT #8: BULB (EverLume)
+// ============================================
+
+model BulbTelemetry {
+  id              String   @id @default(uuid())
+  bulbId          String
+  voltage         Float    // V
+  thermalCycles   Int
+  uptime          Float    // hours
+  failurePrediction Float? // Bayesian probability
+  meshStatus      String   // Network connectivity
+  timestamp       DateTime @default(now())
+  
+  @@index([bulbId])
+  @@index([timestamp])
+  @@map("bulb_telemetry")
+}
+
+// ============================================
+// PROJECT #9: AWG (AquaGen)
+// ============================================
+
+model WaterGeneration {
+  id              String   @id @default(uuid())
+  deviceId        String
+  humidity        Float    // percentage
+  temperature     Float    // celsius
+  waterProduced   Float    // liters
+  energyConsumed  Float    // kWh
+  costPerLiter    Float
+  optimizedRun    Boolean  // Was this an optimal window?
+  timestamp       DateTime @default(now())
+  
+  @@index([deviceId])
+  @@index([timestamp])
+  @@map("water_generation")
+}
+
+// ============================================
+// PROJECT #10: GEOTHERMAL (ThermalGrid)
+// ============================================
+
+model GeothermalFlow {
+  id              String   @id @default(uuid())
+  nodeId          String
+  buildingId      String
+  heatLoad        Float    // kW
+  flowRate        Float    // L/min
+  groundTemp      Float    // celsius
+  pumpStatus      String
+  optimizedRoute  Json?    // NetworkX solution
+  timestamp       DateTime @default(now())
+  
+  @@index([nodeId])
+  @@index([buildingId])
+  @@index([timestamp])
+  @@map("geothermal_flow")
+}
+
+// ============================================
+// PROJECT #11: RESERVED (Future Expansion)
+// ============================================
+
+// Placeholder for future project
+
+// ============================================
+// PROJECT #12: SOLAR (SolarShare)
+// ============================================
+
+model SolarGeneration {
+  id              String   @id @default(uuid())
+  arrayId         String
+  irradiance      Float    // W/m²
+  powerOutput     Float    // kW
+  subscriberCredits Json   // Credit allocation
+  gridInjection   Float?   // kW to grid
+  timestamp       DateTime @default(now())
+  
+  @@index([arrayId])
+  @@index([timestamp])
+  @@map("solar_generation")
+}
+
+// ============================================
+// PROJECT #13: MICRO-HYDRO (MicroHydro)
+// ============================================
+
+model HydroGeneration {
+  id              String   @id @default(uuid())
+  turbineId       String
+  streamFlow      Float    // m³/s
+  powerOutput     Float    // kW
+  batteryCharge   Float    // kWh
+  flowForecast    Float?   // LSTM prediction
+  weatherData     Json?
+  timestamp       DateTime @default(now())
+  
+  @@index([turbineId])
+  @@index([timestamp])
+  @@map("hydro_generation")
+}
+
+// ============================================
+// ANALYTICS & INSIGHTS
+// ============================================
+
+model PredictionLog {
+  id              String      @id @default(uuid())
+  projectCode     ProjectCode
+  modelType       String      // LSTM, Prophet, OR-Tools, etc.
+  inputData       Json
+  prediction      Json
+  actualValue     Float?
+  accuracy        Float?
+  timestamp       DateTime    @default(now())
+  
+  @@index([projectCode])
+  @@index([modelType])
+  @@index([timestamp])
+  @@map("prediction_logs")
+}
+
+model AuditLog {
+  id              String      @id @default(uuid())
+  projectCode     ProjectCode
+  action          String
+  userId          String?
+  metadata        Json
+  timestamp       DateTime    @default(now())
+  
+  @@index([projectCode])
+  @@index([timestamp])
+  @@map("audit_logs")
+}
