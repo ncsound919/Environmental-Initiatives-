@@ -7,7 +7,7 @@ Completes Level 1 requirement: API Exposed
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr, Field
 from typing import Dict, List, Any, Literal, Iterable
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import hashlib
 import hmac
 import json
@@ -105,12 +105,12 @@ class DispatchRequest(BaseModel):
 
 
 class TelemetryIngestRequest(BaseModel):
-    sensor_id: str
-    project_code: str
-    device_id: str
-    measurement_type: str
+    sensor_id: str = Field(min_length=1)
+    project_code: str = Field(min_length=1)
+    device_id: str = Field(min_length=1)
+    measurement_type: str = Field(min_length=1)
     measurement_value: float
-    unit: str
+    unit: str = Field(min_length=1)
     timestamp: datetime
     quality_flag: Literal["valid", "suspect", "invalid"] = "valid"
 
@@ -136,8 +136,8 @@ class FirmwareFlashRequest(BaseModel):
 
 
 class DeploymentStatusRequest(BaseModel):
-    zone: str
-    project_code: str
+    zone: str = Field(min_length=1)
+    project_code: str = Field(min_length=1)
     inputs_from: List[str] = Field(default_factory=list)
     outputs_to: List[str] = Field(default_factory=list)
 
@@ -173,7 +173,7 @@ async def health_check():
     """System health check"""
     return {
         "status": "operational",
-        "timestamp": datetime.now().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "version": "1.0.0"
     }
 
@@ -335,6 +335,11 @@ async def dispatcher_status():
 @app.post("/api/iot/ingest")
 async def ingest_telemetry(request: TelemetryIngestRequest):
     """Level 2: Accept telemetry from MQTT pipeline"""
+    now_utc = datetime.now(timezone.utc)
+    if request.timestamp > now_utc:
+        raise HTTPException(status_code=400, detail="Timestamp cannot be in the future")
+    if request.timestamp < now_utc - timedelta(days=30):
+        raise HTTPException(status_code=400, detail="Timestamp too old for ingestion window")
     topic = f"ecos/{request.project_code}/{request.device_id}/telemetry"
     return {
         "topic": topic,
@@ -353,7 +358,7 @@ async def ingest_telemetry(request: TelemetryIngestRequest):
 @app.post("/api/auth/token")
 async def issue_auth_token(request: AuthTokenRequest):
     """Level 2: Shared auth token issuance (versioned HMAC-signed token)"""
-    issued_at = datetime.now().replace(microsecond=0)
+    issued_at = datetime.now(timezone.utc).replace(microsecond=0)
     expires_at = issued_at + timedelta(hours=24)
     payload = {
         "user_id": request.user_id,
@@ -398,9 +403,8 @@ async def billing_estimate(request: BillingEstimateRequest):
 @app.post("/api/firmware/flash")
 async def firmware_flash(request: FirmwareFlashRequest):
     """Level 3: Simulate OTA firmware flash queue"""
-    # Require a full 64-character hex checksum (e.g., SHA-256) for firmware integrity
     if not re.fullmatch(r"[a-fA-F0-9]{64}", request.checksum):
-        raise HTTPException(status_code=400, detail="Invalid firmware checksum format")
+        raise HTTPException(status_code=400, detail="Invalid firmware checksum format; expected 64 hex chars")
     if not re.fullmatch(r"v?\d+\.\d+\.\d+", request.firmware_version):
         raise HTTPException(status_code=400, detail="Invalid firmware version format")
     return {
@@ -409,7 +413,7 @@ async def firmware_flash(request: FirmwareFlashRequest):
         "firmware_version": request.firmware_version,
         "checksum": request.checksum,
         "status": "queued",
-        "queued_at": datetime.now().isoformat(),
+        "queued_at": datetime.now(timezone.utc).isoformat(),
     }
 
 
@@ -431,7 +435,7 @@ async def deployment_status(request: DeploymentStatusRequest):
         "invalid_outputs_to": invalid_outputs_to,
         "project_code_pattern": project_pattern.pattern,
         "synergy_ready": synergy_ready,
-        "updated_at": datetime.now().isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
     }
 
 
@@ -495,7 +499,7 @@ async def saas_tier(request: SaaSTierRequest):
     audit_entry = {
         "tier": tier_key,
         "regulatory_log_enabled": config["regulatory_log"],
-        "timestamp": datetime.now().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
     return {
