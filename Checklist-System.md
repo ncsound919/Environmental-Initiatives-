@@ -171,15 +171,15 @@ This structure allows you to build **one** system that just happens to have 13 d
 ### References
 
 1. **Prisma Schema Documentation** - `packages/core/database-schema/schema.prisma` - Centralized database schema definitions
-2. **Database Model Definitions** - Data type specifications for sensor readings and environmental metrics
+2. **Database Model Definitions** - `docs/database/model-definitions.md` - Data type specifications for sensor readings and environmental metrics
 3. **Ecosystem Brains Package** - `packages/ecosystem-brains/` - Shared Python optimization and ML logic
 4. **API Documentation** - FastAPI/NestJS endpoint specifications in `apps/api-gateway/`
-5. **MQTT Topic Structure** - IoT messaging protocol documentation for telemetry data
+5. **MQTT Topic Structure** - `docs/iot/mqtt-topic-structure.md` - IoT messaging protocol documentation for telemetry data
 6. **Authentication Module** - `packages/core/auth-module/` - Shared Auth0/Web3 login implementation
 7. **UI Components Library** - `packages/ui-components/` - Reusable React components (Chart, Map, Gauge, Button)
 8. **Billing Engine** - `packages/core/billing-engine/` - Stripe and token-based payment integration
-9. **OTA Pipeline Documentation** - Over-the-air firmware update system for ESP32/STM32 devices
-10. **Database Integration** - PostgreSQL + TimescaleDB connection and data flow architecture
-11. **RegenCity Zone Map** - Physical deployment zones (A: Living, B: Infrastructure, C: Agriculture, D: R&D)
-12. **Project Synergy Matrix** - Inter-project dependencies and data flow connections
-13. **Regulatory Compliance** - Audit trail and logging requirements for Nuclear/Bio projects
+9. **OTA Pipeline Documentation** - `docs/firmware/ota-pipeline.md` - Over-the-air firmware update system for ESP32/STM32 devices
+10. **Database Integration** - `docs/data/database-integration.md` - PostgreSQL + TimescaleDB connection and data flow architecture
+11. **RegenCity Zone Map** - `docs/deployment/regencity-zone-map.md` - Physical deployment zones (A: Living, B: Infrastructure, C: Agriculture, D: R&D)
+12. **Project Synergy Matrix** - `docs/architecture/project-synergy-matrix.md` - Inter-project dependencies and data flow connections
+13. **Regulatory Compliance** - `docs/compliance/regulatory-logging.md` - Audit trail and logging requirements for Nuclear/Bio projects
