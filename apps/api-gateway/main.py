@@ -129,8 +129,8 @@ class BillingEstimateRequest(BaseModel):
 
 
 class FirmwareFlashRequest(BaseModel):
-    device_id: str
-    project_code: str
+    device_id: str = Field(min_length=1, max_length=255)
+    project_code: str = Field(min_length=1, max_length=255)
     firmware_version: str
     checksum: str
 
