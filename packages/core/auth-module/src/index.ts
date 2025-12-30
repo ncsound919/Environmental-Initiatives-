@@ -38,8 +38,18 @@ export type AuthToken = z.infer<typeof AuthTokenSchema>;
 export class AuthService {
   private jwtSecret: string;
 
-  constructor(jwtSecret: string = process.env.JWT_SECRET || 'dev-secret') {
-    this.jwtSecret = jwtSecret;
+  constructor(jwtSecret?: string) {
+    const resolvedSecret = jwtSecret ?? process.env.JWT_SECRET;
+
+    if (!resolvedSecret) {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('JWT secret must be provided in production environment');
+      }
+      this.jwtSecret = 'dev-secret';
+      return;
+    }
+
+    this.jwtSecret = resolvedSecret;
   }
 
   /**

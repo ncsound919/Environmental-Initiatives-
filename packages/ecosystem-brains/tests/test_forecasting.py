@@ -3,7 +3,6 @@ Unit tests for ecosystem-brains forecasting module
 Validates Level 1 completion criteria
 """
 
-import pytest
 from datetime import datetime, timedelta
 import pandas as pd
 from forecasting import (

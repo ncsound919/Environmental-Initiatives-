@@ -228,7 +228,6 @@ def validate_level_1():
     print("VALIDATION SUMMARY")
     print("=" * 60 + "\n")
     
-    total_projects = len(results)
     passed_projects = sum(1 for status in results.values() if status == 'PASS')
     readiness_percentage = (passed_projects / 13) * 20  # 20% readiness per project
     

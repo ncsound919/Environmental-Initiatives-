@@ -6,7 +6,7 @@ Completes Level 1 requirement: API Exposed
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
 from datetime import datetime
 import sys
 import os

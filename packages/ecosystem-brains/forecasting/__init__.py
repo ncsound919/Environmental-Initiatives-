@@ -51,7 +51,29 @@ class ProphetForecaster:
         Args:
             df: DataFrame with 'ds' (timestamp) and 'y' (value) columns
         """
-        self.model.fit(df)
+        # Basic validation to provide clearer error messages than raw Prophet exceptions
+        if not isinstance(df, pd.DataFrame):
+            raise TypeError("ProphetForecaster.fit expected a pandas DataFrame as 'df'.")
+
+        required_columns = {"ds", "y"}
+        missing = required_columns.difference(df.columns)
+        if missing:
+            raise ValueError(
+                f"ProphetForecaster.fit requires DataFrame columns {sorted(required_columns)}, "
+                f"but missing {sorted(missing)}."
+            )
+
+        if df.empty or len(df) < 2:
+            raise ValueError(
+                "ProphetForecaster.fit requires at least 2 rows of historical data; "
+                f"received {len(df)}."
+            )
+
+        try:
+            self.model.fit(df)
+        except Exception as exc:
+            raise ValueError(f"Failed to fit Prophet model: {exc}") from exc
+        
         self.fitted = True
     
     def predict(self, periods: int = 24) -> pd.DataFrame:

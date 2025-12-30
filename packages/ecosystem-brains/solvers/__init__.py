@@ -146,7 +146,6 @@ def optimize_geothermal_flow(
         return {'status': 'error', 'message': 'Solver not available'}
     
     buildings = list(building_loads.keys())
-    n = len(buildings)
     
     # Variables: heat allocation to each building
     allocations = {}
@@ -154,7 +153,7 @@ def optimize_geothermal_flow(
         allocations[building] = solver.NumVar(0, building_loads[building], f'alloc_{building}')
     
     # Constraint: total allocation <= available capacity
-    solver.Add(lpSum([allocations[b] for b in buildings]) <= available_capacity)
+    solver.Add(solver.Sum([allocations[b] for b in buildings]) <= available_capacity)
     
     # Objective: maximize satisfied demand (prioritize critical buildings equally)
     objective = solver.Objective()

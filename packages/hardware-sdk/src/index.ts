@@ -113,7 +113,8 @@ export class EcosMqttClient {
 
     this.client.subscribe(topic, { qos: 1 });
 
-    this.client.on('message', (messageTopic, payload) => {
+    // Create a message handler specific to this topic
+    const messageHandler = (messageTopic: string, payload: Buffer) => {
       if (messageTopic === topic) {
         try {
           const data = JSON.parse(payload.toString());
@@ -123,7 +124,11 @@ export class EcosMqttClient {
           console.error('Invalid telemetry data:', error);
         }
       }
-    });
+    };
+
+    // Remove existing listeners to avoid duplicate processing
+    this.client.removeAllListeners('message');
+    this.client.on('message', messageHandler);
   }
 
   /**

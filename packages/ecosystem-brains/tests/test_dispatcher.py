@@ -3,8 +3,7 @@ Unit tests for ecosystem-brains dispatcher module
 Validates Level 1 completion criteria
 """
 
-import pytest
-from dispatcher import EcosDispatcher, dispatch
+from dispatcher import dispatch
 
 
 def test_dispatcher_solar_awg():

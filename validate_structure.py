@@ -5,7 +5,6 @@ Validates that all 13 projects have the required structure for 20% readiness
 """
 
 import os
-import json
 
 def check_file_exists(path):
     """Check if a file exists"""
@@ -17,7 +16,8 @@ def validate_structure():
     print("ECOS LEVEL 1 STRUCTURE VALIDATION")
     print("=" * 60 + "\n")
     
-    base_path = "/home/runner/work/Environmental-Initiatives-/Environmental-Initiatives-"
+    # Use relative path or environment variable for better portability
+    base_path = os.environ.get('ECOS_BASE_PATH', os.path.dirname(os.path.abspath(__file__)))
     results = {}
     
     # ============================================

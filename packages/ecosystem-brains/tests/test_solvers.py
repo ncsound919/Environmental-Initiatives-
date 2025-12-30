@@ -3,7 +3,6 @@ Unit tests for ecosystem-brains solvers module
 Validates Level 1 completion criteria
 """
 
-import pytest
 from solvers import (
     optimize_nutrient_cycle,
     optimize_awg_schedule,
