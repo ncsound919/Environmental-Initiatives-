@@ -112,7 +112,7 @@ class TelemetryIngestRequest(BaseModel):
     measurement_value: float
     unit: str
     timestamp: datetime
-    quality_flag: str = "valid"
+    quality_flag: Literal["valid", "suspect", "invalid"] = "valid"
 
 
 class AuthTokenRequest(BaseModel):
