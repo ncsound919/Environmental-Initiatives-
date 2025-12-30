@@ -418,12 +418,17 @@ async def deployment_status(request: DeploymentStatusRequest):
     project_pattern = re.compile(r"^P\d{2}")
     validated_inputs = [code for code in request.inputs_from if project_pattern.match(code)]
     validated_outputs = [code for code in request.outputs_to if project_pattern.match(code)]
+    invalid_inputs_from = [code for code in request.inputs_from if not project_pattern.match(code)]
+    invalid_outputs_to = [code for code in request.outputs_to if not project_pattern.match(code)]
     synergy_ready = bool(validated_inputs and validated_outputs)
     return {
         "zone": request.zone,
         "project": request.project_code,
         "inputs_from": validated_inputs,
+        "invalid_inputs_from": invalid_inputs_from,
         "outputs_to": validated_outputs,
+        "invalid_outputs_to": invalid_outputs_to,
+        "project_code_pattern": project_pattern.pattern,
         "synergy_ready": synergy_ready,
         "updated_at": datetime.now().isoformat(),
     }
