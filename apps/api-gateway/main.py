@@ -5,13 +5,15 @@ Completes Level 1 requirement: API Exposed
 """
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-from typing import Dict, List, Any
-from datetime import datetime
+from pydantic import BaseModel, EmailStr, Field
+from typing import Dict, List, Any, Literal, Iterable
+from datetime import datetime, timedelta
 import hashlib
 import hmac
 import json
 import secrets
+import base64
+import re
 import sys
 import os
 
@@ -38,7 +40,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
-SECRET_KEY = os.environ.get("ECOS_JWT_SECRET", "dev-secret")
+SECRET_KEY = os.environ.get("ECOS_JWT_SECRET")
+if not SECRET_KEY:
+    if os.environ.get("NODE_ENV") == "production":
+        raise RuntimeError("ECOS_JWT_SECRET must be set in production")
+    SECRET_KEY = secrets.token_urlsafe(32)
 
 
 # ============================================
@@ -110,14 +116,14 @@ class TelemetryIngestRequest(BaseModel):
 
 
 class AuthTokenRequest(BaseModel):
-    user_id: str
-    email: str
+    user_id: str = Field(min_length=1)
+    email: EmailStr
     role: str = "USER"
     project_access: List[str] = Field(default_factory=list)
 
 
 class BillingEstimateRequest(BaseModel):
-    tier: str = "pro"
+    tier: Literal["free", "pro", "enterprise"] = "pro"
     usage_kwh: float = 0.0
     water_liters: float = 0.0
 
@@ -137,14 +143,25 @@ class DeploymentStatusRequest(BaseModel):
 
 
 class SaaSTierRequest(BaseModel):
-    tier: str
+    tier: Literal["free", "pro", "enterprise"]
 
 
 def _sign_token(payload: Dict[str, Any]) -> str:
     serialized = json.dumps(payload, sort_keys=True)
-    signature = hmac.new(SECRET_KEY.encode(), serialized.encode(), hashlib.sha256).hexdigest()
+    encoded_payload = base64.urlsafe_b64encode(serialized.encode()).decode()
     nonce = secrets.token_urlsafe(8)
-    return f"{serialized}.{signature}.{nonce}"
+    message = f"{encoded_payload}.{nonce}"
+    signature = hmac.new(SECRET_KEY.encode(), message.encode(), hashlib.sha256).hexdigest()
+    return f"v1.{message}.{signature}"
+
+
+def _validate_tier(tier: str, allowed: Iterable[str]) -> str:
+    tier_key = tier.lower()
+    allowed_values = list(allowed)
+    if tier_key not in allowed_values:
+        allowed_str = ", ".join(sorted(allowed_values))
+        raise HTTPException(status_code=400, detail=f"Unknown tier. Allowed: {allowed_str}")
+    return tier_key
 
 
 # ============================================
@@ -335,36 +352,42 @@ async def ingest_telemetry(request: TelemetryIngestRequest):
 
 @app.post("/api/auth/token")
 async def issue_auth_token(request: AuthTokenRequest):
-    """Level 2: Shared auth token issuance (JWT-compatible HMAC)"""
+    """Level 2: Shared auth token issuance (versioned HMAC-signed token)"""
+    issued_at = datetime.now().replace(microsecond=0)
+    expires_at = issued_at + timedelta(hours=24)
     payload = {
         "user_id": request.user_id,
         "email": request.email,
         "role": request.role,
         "project_access": request.project_access,
+        "issued_at": issued_at.isoformat(),
+        "exp": expires_at.isoformat(),
     }
     token = _sign_token(payload)
     return {
         "token": token,
         "expires_in_hours": 24,
         "scopes": request.project_access,
+        "issued_at": issued_at.isoformat(),
+        "expires_at": expires_at.isoformat(),
     }
 
 
 @app.post("/api/billing/estimate")
 async def billing_estimate(request: BillingEstimateRequest):
     """Level 2: Billing hook to estimate usage-based charges"""
-    tier = request.tier.lower()
     rate_card = {
         "free": {"kwh": 0.25, "water": 0.05, "platform": 0.0},
         "pro": {"kwh": 0.18, "water": 0.03, "platform": 5.0},
         "enterprise": {"kwh": 0.12, "water": 0.02, "platform": 15.0},
     }
-    rate = rate_card.get(tier, rate_card["pro"])
+    tier_key = _validate_tier(request.tier, rate_card.keys())
+    rate = rate_card[tier_key]
     energy_cost = request.usage_kwh * rate["kwh"]
     water_cost = request.water_liters * rate["water"]
     total = energy_cost + water_cost + rate["platform"]
     return {
-        "tier": tier,
+        "tier": tier_key,
         "energy_cost": round(energy_cost, 2),
         "water_cost": round(water_cost, 2),
         "platform_fee": rate["platform"],
@@ -375,6 +398,10 @@ async def billing_estimate(request: BillingEstimateRequest):
 @app.post("/api/firmware/flash")
 async def firmware_flash(request: FirmwareFlashRequest):
     """Level 3: Simulate OTA firmware flash queue"""
+    if not re.fullmatch(r"[a-fA-F0-9]{8,}", request.checksum):
+        raise HTTPException(status_code=400, detail="Invalid firmware checksum format")
+    if not re.fullmatch(r"v?\d+\.\d+\.\d+", request.firmware_version):
+        raise HTTPException(status_code=400, detail="Invalid firmware version format")
     return {
         "project": request.project_code,
         "device_id": request.device_id,
@@ -388,12 +415,15 @@ async def firmware_flash(request: FirmwareFlashRequest):
 @app.post("/api/deployment/status")
 async def deployment_status(request: DeploymentStatusRequest):
     """Level 4: Field deployment + synergy readiness"""
-    synergy_ready = bool(request.inputs_from and request.outputs_to)
+    project_pattern = re.compile(r"^P\d{2}")
+    validated_inputs = [code for code in request.inputs_from if project_pattern.match(code)]
+    validated_outputs = [code for code in request.outputs_to if project_pattern.match(code)]
+    synergy_ready = bool(validated_inputs and validated_outputs)
     return {
         "zone": request.zone,
         "project": request.project_code,
-        "inputs_from": request.inputs_from,
-        "outputs_to": request.outputs_to,
+        "inputs_from": validated_inputs,
+        "outputs_to": validated_outputs,
         "synergy_ready": synergy_ready,
         "updated_at": datetime.now().isoformat(),
     }
@@ -419,10 +449,8 @@ async def saas_tier(request: SaaSTierRequest):
             "support_level": "dedicated",
         },
     }
-    tier_key = request.tier.lower()
-    config = tiers.get(tier_key)
-    if not config:
-        raise HTTPException(status_code=400, detail="Unknown SaaS tier")
+    tier_key = _validate_tier(request.tier, tiers.keys())
+    config = tiers[tier_key]
 
     audit_entry = {
         "tier": tier_key,
