@@ -398,7 +398,8 @@ async def billing_estimate(request: BillingEstimateRequest):
 @app.post("/api/firmware/flash")
 async def firmware_flash(request: FirmwareFlashRequest):
     """Level 3: Simulate OTA firmware flash queue"""
-    if not re.fullmatch(r"[a-fA-F0-9]{8,}", request.checksum):
+    # Require a full 64-character hex checksum (e.g., SHA-256) for firmware integrity
+    if not re.fullmatch(r"[a-fA-F0-9]{64}", request.checksum):
         raise HTTPException(status_code=400, detail="Invalid firmware checksum format")
     if not re.fullmatch(r"v?\d+\.\d+\.\d+", request.firmware_version):
         raise HTTPException(status_code=400, detail="Invalid firmware version format")
