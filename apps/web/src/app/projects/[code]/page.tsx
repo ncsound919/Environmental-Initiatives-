@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { projects } from '@/lib/data';
+import { withOpacity } from '@/lib/utils';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -36,7 +37,7 @@ export default function ProjectDetailPage() {
       <main>
         {/* Hero Section */}
         <section style={{ 
-          background: `linear-gradient(135deg, ${project.color}20 0%, ${project.color}10 100%)`,
+          background: `linear-gradient(135deg, ${withOpacity(project.color, 12)} 0%, ${withOpacity(project.color, 6)} 100%)`,
           padding: '3rem 0'
         }}>
           <div className="container">
@@ -49,7 +50,7 @@ export default function ProjectDetailPage() {
                 width: '80px', 
                 height: '80px', 
                 borderRadius: '1rem',
-                background: `${project.color}30`,
+                background: withOpacity(project.color, 19),
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -123,7 +124,7 @@ export default function ProjectDetailPage() {
                       <span 
                         key={index} 
                         style={{ 
-                          background: `${project.color}20`,
+                          background: withOpacity(project.color, 12),
                           color: project.color,
                           padding: '0.5rem 1rem',
                           borderRadius: '0.5rem',

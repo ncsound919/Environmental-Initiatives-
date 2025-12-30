@@ -1,4 +1,5 @@
 import type { Project } from '@/lib/data';
+import { withOpacity } from '@/lib/utils';
 
 interface ProjectCardProps {
   project: Project;
@@ -10,7 +11,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <div className="project-header">
         <div 
           className="project-icon" 
-          style={{ backgroundColor: `${project.color}20` }}
+          style={{ backgroundColor: withOpacity(project.color, 12) }}
         >
           {project.icon}
         </div>
