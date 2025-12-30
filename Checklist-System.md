@@ -151,11 +151,11 @@ Give these rules to the LLM to prevent syntax errors and "imaginary" imports.
 *   **Example:**
     ```cpp
     void readSensor() {
-      #ifdef SIMULATION
-        temperature = mockTemperature();  // Use mock data for local testing
-      #else
-        temperature = sensor.read();      // Read from physical hardware
-      #endif
+    #ifdef SIMULATION
+      temperature = mockTemperature();  // Use mock data for local testing
+    #else
+      temperature = sensor.read();      // Read from physical hardware
+    #endif
     }
     ```
 
