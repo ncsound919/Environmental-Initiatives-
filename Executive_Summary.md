@@ -88,7 +88,7 @@ Every quest gets auto-scored by the Codex Engine on 6 dimensions:
 **Equity Distribution:**
 - Months 1-11: No equity vested
 - Month 12: Vest 0.125% equity (25% of 0.5% = first cliff)
-- Months 13-48: Vest ~0.0104% equity per month (75% of 0.5% over 36 months)
+- Months 13-48: Vest 0.0104166% equity per month (0.375% ÷ 36 months)
 
 **Plus**: Perpetual royalties on all subsequent product sales
 
@@ -130,7 +130,7 @@ Every quest gets auto-scored by the Codex Engine on 6 dimensions:
 - 200 active contributors by Q4
 - 50+ products on marketplace by Q4
 - Average product revenue: $2K/month after marketplace maturation (Q4)
-- Total Q4 monthly marketplace revenue: 50 products × $2K = $100K/month (~$300K for Q4)
+- Total Q4 monthly marketplace revenue: 50 products × $2K = $100K/month (Q4 total: $300K over 3 months)
 - Platform take: 15% of marketplace sales (12% net after payment processing fees)
 - Platform net revenue (Q4): $300K × 12% = $36K
 - Annual platform net revenue: ~$48K (weighted across quarters)
