@@ -1,5 +1,26 @@
 To scale these 13 projects from isolated experiments into a unified ecosystem, we must standardize the **Shared Components** (the "Nervous System") and deploy **Synergistic Benchmarking Tools** (the "Digital Twin"). This ensures that data from a physical experiment in the greenhouse (#5) immediately improves the simulation models for the bioreactor (#7) or the farming OS (#3).
 
+**Note:** Project #11 is intentionally reserved as a placeholder for future ecosystem expansion and is not yet defined in this document.
+
+### Projects Inventory
+The unified ecosystem spans 13 projects, each addressing specific environmental and sustainability challenges:
+
+| Code | Project Name | Description |
+| :--- | :--- | :--- |
+| **#1** | Foam Homes | Sustainable housing using advanced foam insulation with integrated environmental controls. |
+| **#2** | Symbiosis | IoT sensor network for monitoring mycological and biological symbiotic relationships. |
+| **#3** | Farm (Closed-Loop Farming) | Automated farming system with nutrient cycling and waste minimization. |
+| **#4** | Hemp Lab | Research facility for hemp-based materials and bioproducts. |
+| **#5** | Greenhouse (Resonant Light) | Controlled environment agriculture with optimized light frequency research. |
+| **#6** | Fast Reactor | Advanced thermal energy generation and management system. |
+| **#7** | Bioreactor (Bacteria) | Biological processing unit for waste conversion and nutrient production. |
+| **#8** | Bulb (Centennial Bulbs) | Long-life LED lighting with integrated mesh networking capabilities. |
+| **#9** | AWG (Atmospheric Water Generator) | Water extraction from ambient air with energy optimization. |
+| **#10** | Geothermal | Ground-source heating and cooling with thermal storage loops. |
+| **#11** | *(Reserved)* | Placeholder for future ecosystem expansion. |
+| **#12** | Solar Gardens | Photovoltaic array with predictive energy management. |
+| **#13** | Micro-Hydro | Small-scale hydroelectric generation with stream flow forecasting. |
+
 Here is the breakdown of cross-cutting components and the feedback loops they enable.
 
 ### 1. Shared Physical Components (The "Nervous System")
@@ -18,13 +39,60 @@ Instead of building 13 separate software stacks, these core libraries are built 
 
 *   **`ecosystem-brains/forecasting` (The Prophet Wrapper):**
     *   **Function:** A unified Python library for time-series prediction [14].
-    *   **Synergy:** The same LSTM model structure predicts solar irradiance for **Solar Gardens (#12)** and stream flow for **Micro-Hydro (#13)**. Improvements in weather normalization in one project immediately upgrade the other [15][16].
+    *   **Synergy:** The same LSTM model architecture template (network depth and layer types) is used to predict solar irradiance for **Solar Gardens (#12)** and stream flow for **Micro-Hydro (#13)**. While input features, preprocessing pipelines, and hyperparameters require domain-specific tuning (cloud cover/temperature/humidity for solar vs. precipitation/snowmelt/discharge for hydro), improvements to shared weather normalization code (bias correction, feature scaling) can partially transfer between projects [15][16].
 *   **`ecosystem-brains/solvers` (The OR-Tools Wrapper):**
     *   **Function:** A linear programming engine for resource dispatch [17].
     *   **Synergy:** The logic that balances heat loads in **Geothermal (#10)** is mathematically identical to the logic balancing nutrient loads in **Farming (#3)**. One solver optimizes both fluids [18][19].
 *   **`hardware-sdk` (The Telemetry Standard):**
     *   **Function:** A shared TypeScript/Python SDK that handles MQTT connections, buffering, and data packet formatting [20].
     *   **Synergy:** Ensures that a temperature reading from a **Foam Home (#1)** and a **Bioreactor (#7)** enter the database with the exact same schema, enabling facility-wide thermal analysis [21][22].
+*   **`ecosystem-brains/dispatcher` (The Shared Brain / Orchestrator):**
+    *   **Function:** A logical orchestration layer (code resides in `ecosystem-brains/solvers`) that receives forecasts, selects and invokes appropriate solver(s), schedules actions across hardware modules, and handles retries, failures, and logging/metrics.
+    *   **Data Flow:** Dispatcher receives predictions from `forecasting` module → Selects optimization strategy from `solvers` module → Issues commands via `hardware-sdk` to physical devices (e.g., AWG units, geothermal pumps).
+    *   **Synergy:** Enables coordinated multi-project actions such as triggering **AWG (#9)** water production when **Solar Gardens (#12)** forecast excess power, while simultaneously routing waste heat to **Geothermal (#10)** loops.
+
+### 2.1 Shared Data Schema
+To enable uniform benchmarking and cross-project integration, all sensor data and telemetry must conform to a standardized schema:
+
+**Canonical Data Model:**
+```json
+{
+  "sensor_id": "string (UUID)",
+  "location_id": "string (project_code-zone, e.g., 'P05-GH-A1')",
+  "measurement_type": "string (enum: temperature, humidity, lux, flow_rate, etc.)",
+  "measurement_value": "float",
+  "unit": "string (SI units: celsius, percent, lux, L/min, kW, etc.)",
+  "timestamp": "string (ISO8601 UTC, e.g., '2025-12-30T12:00:00Z')",
+  "quality_flag": "string (enum: valid, suspect, error)",
+  "schema_version": "string (semver, e.g., '1.0.0')",
+  "source_system": "string (project_code, e.g., 'P09-AWG')",
+  "ingestion_time": "string (ISO8601 UTC)"
+}
+```
+
+**Required Fields:** `sensor_id`, `measurement_type`, `measurement_value`, `unit`, `timestamp`, `schema_version`
+
+**Optional Fields:** `location_id`, `quality_flag`, `source_system`, `ingestion_time`
+
+**Example Payload (Temperature Reading from Greenhouse #5):**
+```json
+{
+  "sensor_id": "550e8400-e29b-41d4-a716-446655440000",
+  "location_id": "P05-GH-A1",
+  "measurement_type": "temperature",
+  "measurement_value": 23.5,
+  "unit": "celsius",
+  "timestamp": "2025-12-30T12:00:00Z",
+  "quality_flag": "valid",
+  "schema_version": "1.0.0",
+  "source_system": "P05-Greenhouse",
+  "ingestion_time": "2025-12-30T12:00:02Z"
+}
+```
+
+**Cross-Project Query Convention:** All facility-wide thermal analysis queries use `measurement_type='temperature'` with `unit='celsius'` to aggregate data across all 13 projects, enabling unified heatmap visualizations and thermal optimization.
+
+**Versioning & Migration:** Schema changes require incrementing `schema_version` and maintaining backward compatibility for 6 months. The `hardware-sdk` module validates all payloads against the schema before database insertion.
 
 ### 3. Synergistic Benchmarking Tools
 These are new tools you must build to visualize the "heartbeat" of the entire RegenCity and use experiments to refine simulations.
@@ -65,3 +133,69 @@ By treating the 20-acre compound as a single organism, physical outputs from one
 *   The **Shared Software** (Forecasting/Solvers) is the **Brain**—processing inputs to make decisions.
 *   The **RegenCity Compound** is the **Body**—where the physical actions (eating, moving, heating) actually occur.
 *   The **Benchmarking Tools** are the **Consciousness**—observing the body's performance to learn and improve skills over time.
+
+---
+
+### References
+
+[1] Internal Specification — "Shared Component Standardization Strategy v2.1" (2025), RegenCity Architecture Team
+
+[2] Espressif Systems — ESP32 Series Datasheet v4.8 (2024), https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf
+
+[3] STMicroelectronics — STM32 Reference Manual RM0090 (2024), https://www.st.com/resource/en/reference_manual/rm0090-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
+
+[4] Siemens — S7-1200 Programmable Controller System Manual (2024), https://support.industry.siemens.com/cs/document/36932465
+
+[5] Allen-Bradley — ControlLogix PLC Programming Manual (2024), https://literature.rockwellautomation.com/idc/groups/literature/documents/pm/1756-pm001_-en-p.pdf
+
+[6] Aosong Electronics — DHT22 Digital Temperature and Humidity Sensor Datasheet (2023), https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf
+
+[7] Internal Repository — "Soil Probe Calibration Data and Specs" (2025), github.com/regencity/hardware-specs/soil-probe
+
+[8] SCT — Split Core Current Transformer CT Clamp Datasheet SCT-013-000 (2023), https://learn.openenergymonitor.org/electricity-monitoring/ct-sensors/interface-with-arduino
+
+[9] Internal Specification — "Smart Meter Integration Protocol v1.3" (2025), RegenCity Energy Team
+
+[10] Raspberry Pi Foundation — Raspberry Pi 4 Model B Datasheet (2024), https://datasheets.raspberrypi.com/rpi4/raspberry-pi-4-datasheet.pdf
+
+[11] NVIDIA — Jetson Nano Developer Kit Datasheet (2024), https://developer.nvidia.com/embedded/jetson-nano-developer-kit
+
+[12] Internal Repository — "Ecosystem-Brains Software Architecture" (2025), github.com/regencity/ecosystem-brains
+
+[13] Internal Specification — "Unified Benchmarking Framework Design Document v3.0" (2025), RegenCity Software Team
+
+[14] Facebook Research — Prophet: Forecasting at Scale (2018), https://peerj.com/preprints/3190/
+
+[15] Hochreiter & Schmidhuber — "Long Short-Term Memory" Neural Computation 9(8) (1997), https://doi.org/10.1162/neco.1997.9.8.1735
+
+[16] Internal Repository — "LSTM Weather Normalization Module" (2025), github.com/regencity/ecosystem-brains/forecasting
+
+[17] Google — OR-Tools: Operations Research Tools (2024), https://developers.google.com/optimization
+
+[18] Internal Research — "Resource Dispatch Optimization for Thermal and Nutrient Loads" (2025), RegenCity Research Paper (internal)
+
+[19] Internal Repository — "Solver Module Implementation" (2025), github.com/regencity/ecosystem-brains/solvers
+
+[20] Internal Repository — "Hardware SDK Documentation" (2025), github.com/regencity/hardware-sdk
+
+[21] MQTT.org — MQTT Version 5.0 Specification (2019), https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
+
+[22] Internal Specification — "Telemetry Data Schema v1.0" (2025), RegenCity Data Team
+
+[23] Internal Research — "Material Science Benchmarking for Bio-Fillers" (2025), RegenCity Materials Lab (internal)
+
+[24] Unity Technologies — Unity Real-Time Development Platform (2024), https://unity.com/
+
+[25] PostgreSQL Global Development Group — PostgreSQL Documentation v16 (2024), https://www.postgresql.org/docs/16/
+
+[26] Internal Specification — "DevRoyalty Economic Attribution Model v1.2" (2025), RegenCity Business Intelligence Team
+
+[27] Internal Research — "Bio-Feedback Loop Controller Design" (2025), RegenCity Bio-Systems Lab (internal)
+
+[28] Internal Repository — "Plant Growth Response Dataset" (2025), github.com/regencity/datasets/greenhouse-biofeedback
+
+[29] Bluetooth SIG — Bluetooth 5.4 Core Specification (2023), https://www.bluetooth.com/specifications/specs/core-specification-5-4/
+
+[30] Thread Group — Thread 1.3.0 Specification (2022), https://www.threadgroup.org/support#specifications
+
+[31] Internal Research — "Thermal Energy Cascade and Geothermal Recharge Strategy" (2025), RegenCity Energy Systems Team (internal)
