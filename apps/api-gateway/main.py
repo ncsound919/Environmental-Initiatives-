@@ -434,26 +434,60 @@ async def deployment_status(request: DeploymentStatusRequest):
     }
 
 
+# Default SaaS tier configuration. Can be overridden at runtime via the
+# SAAS_TIERS_JSON environment variable (must be a JSON object).
+DEFAULT_SAAS_TIERS: Dict[str, Dict[str, Any]] = {
+    "free": {
+        "features": ["basic-dashboard", "read-only-api"],
+        "regulatory_log": False,
+        "support_level": "community",
+    },
+    "pro": {
+        "features": ["dashboard", "api-access", "iot-pipeline"],
+        "regulatory_log": True,
+        "support_level": "standard",
+    },
+    "enterprise": {
+        "features": [
+            "dashboard",
+            "api-access",
+            "iot-pipeline",
+            "billing-hooks",
+            "audit-trail",
+        ],
+        "regulatory_log": True,
+        "support_level": "dedicated",
+    },
+}
+
+
+def _get_saas_tiers() -> Dict[str, Dict[str, Any]]:
+    """Return SaaS tier configuration, allowing override via environment.
+
+    If SAAS_TIERS_JSON is set and contains a valid JSON object, that object
+    is used as the tier configuration. Otherwise, DEFAULT_SAAS_TIERS is used.
+    """
+    raw = os.getenv("SAAS_TIERS_JSON")
+    if not raw:
+        return DEFAULT_SAAS_TIERS
+
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        # Fallback to default configuration on invalid JSON
+        return DEFAULT_SAAS_TIERS
+
+    # Ensure the loaded data is a mapping; otherwise, fall back
+    if not isinstance(data, dict):
+        return DEFAULT_SAAS_TIERS
+
+    return data  # type: ignore[return-value]
+
+
 @app.post("/api/saas/tier")
 async def saas_tier(request: SaaSTierRequest):
     """Level 5: SaaS tiering + regulatory logging surface"""
-    tiers = {
-        "free": {
-            "features": ["basic-dashboard", "read-only-api"],
-            "regulatory_log": False,
-            "support_level": "community",
-        },
-        "pro": {
-            "features": ["dashboard", "api-access", "iot-pipeline"],
-            "regulatory_log": True,
-            "support_level": "standard",
-        },
-        "enterprise": {
-            "features": ["dashboard", "api-access", "iot-pipeline", "billing-hooks", "audit-trail"],
-            "regulatory_log": True,
-            "support_level": "dedicated",
-        },
-    }
+    tiers = _get_saas_tiers()
     tier_key = _validate_tier(request.tier, tiers.keys())
     config = tiers[tier_key]
 
