@@ -15,6 +15,18 @@ All 12 active projects have achieved Level 1 readiness with:
 - ✅ **Shared Infrastructure**: Auth, UI components, Hardware SDK
 - ✅ **100% Structure Validation**: All required files in place
 
+### 🚀 New: Venture Foundry Engine
+
+**Transforming ideas into revenue-generating assets through gamified collaboration.**
+
+The Venture Foundry Engine is a strategic expansion that enables distributed teams to build products collaboratively, earning equity and perpetual royalties. See [Executive Summary](./Executive_Summary.md) and [complete documentation](./docs/venture-foundry/) for details.
+
+**Key Features:**
+- 6-metric Codex scoring system for idea validation
+- Quest-based collaboration with smart contract payouts
+- Automatic equity vesting (4-year, 1-year cliff)
+- Perpetual royalty distribution on marketplace sales
+
 ---
 
 ## 📋 The 13 Projects
@@ -82,10 +94,20 @@ python validate_structure.py
 
 ## 📚 Documentation
 
+### ECOS Ecosystem
 - **[Implementation Status](./IMPLEMENTATION_STATUS.md)** - Detailed 20% readiness report
 - **[Business Outline](./Business-Outline.md)** - Full business specifications for all 13 projects
 - **[Checklist System](./Checklist-System.md)** - Level 1-5 readiness checklist
 - **[API Documentation](http://localhost:8000/docs)** - Interactive Swagger/OpenAPI docs (when running)
+
+### Venture Foundry Engine
+- **[Executive Summary](./Executive_Summary.md)** - 3-page overview for decision-makers
+- **[Complete Rundown](./docs/venture-foundry/venture_foundry_rundown.md)** - Full platform specification
+- **[Technical Blueprint](./docs/venture-foundry/foundry_blueprint.md)** - Deep-dive with formulas & code
+- **[Quick Reference](./docs/venture-foundry/venture_foundry_quick_reference.md)** - One-page cheat sheet
+
+### All Documentation
+- **[Documentation Index](./DOCS_INDEX.md)** - Complete guide to all documentation
 
 ---
 
