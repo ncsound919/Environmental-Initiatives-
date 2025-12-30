@@ -31,6 +31,26 @@
 | [Checklist-System.md](./Checklist-System.md) | Readiness checklist | Level 1-5 criteria for each project |
 | [Unified Ecosystem](./Unified%20Ecosystem) | Synergy & integration | Cross-project dependencies |
 | [Build template](./Build%20template) | Module template | Standard project structure |
+| [Executive_Summary.md](./Executive_Summary.md) | Venture Foundry overview | 3-page executive summary for decision-makers |
+
+---
+
+## 🚀 Venture Foundry Documentation
+
+The Venture Foundry Engine is a gamified Web3 platform for transforming ideas into revenue-generating assets through quest-based collaboration.
+
+| Document | Purpose | Read Time |
+|----------|---------|-----------|
+| [Executive Summary](./Executive_Summary.md) | High-level overview & business case | 10 min |
+| [Complete Rundown](./docs/venture-foundry/venture_foundry_rundown.md) | Full platform breakdown (UX, business logic, tech) | 30 min |
+| [Technical Blueprint](./docs/venture-foundry/foundry_blueprint.md) | Deep-dive with formulas & code examples | 45 min |
+| [Quick Reference](./docs/venture-foundry/venture_foundry_quick_reference.md) | One-page cheat sheet | 5 min |
+
+**Key Features:**
+- 6-metric Codex scoring system (Trueness, Flow, PCS, RPS, CU, Tap10)
+- Quest-based collaboration with equity distribution
+- Smart contract-powered vesting & royalties
+- Automated marketplace for completed products
 
 ---
 
