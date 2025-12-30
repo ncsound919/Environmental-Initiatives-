@@ -78,7 +78,7 @@ Every quest gets auto-scored by the Codex Engine on 6 dimensions:
 #### Company Equity (4-year vesting, 1-year cliff)
 - **0% vests** before 12 months
 - **25% vests** at 12-month cliff
-- **Remaining 75% vests** monthly over Years 2-4 (2.083% per month = 25% per year)
+- **Remaining 75% vests** monthly over Years 2-4 (2.0833% per month = 25% per year)
 
 #### Example: Quest Earns $500 ECOS Equivalent + 0.5% Equity
 **Token Distribution:**
@@ -88,7 +88,7 @@ Every quest gets auto-scored by the Codex Engine on 6 dimensions:
 **Equity Distribution:**
 - Months 1-11: No equity vested
 - Month 12: Vest 0.125% equity (25% of 0.5% = first cliff)
-- Months 13-48: Vest 0.0104166% equity per month (0.375% ÷ 36 months)
+- Months 13-48: Vest 0.0104167% equity per month (0.375% ÷ 36 months)
 
 **Plus**: Perpetual royalties on all subsequent product sales
 
