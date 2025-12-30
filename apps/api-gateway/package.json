@@ -1,0 +1,10 @@
+{
+  "name": "@ecos/api-gateway",
+  "version": "1.0.0",
+  "description": "FastAPI gateway for all ECOS projects",
+  "scripts": {
+    "dev": "python main.py",
+    "test": "pytest tests/"
+  },
+  "dependencies": {}
+}
