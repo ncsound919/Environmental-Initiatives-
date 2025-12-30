@@ -77,7 +77,7 @@ Here is the structural outline for each business, its specific software requirem
 *   **Tech Stack:**
     *   *Frontend:* Three.js/Babylon.js for browser-based 3D design.
     *   *Backend:* NestJS + Redis for fast quote generation [31].
-*   **RegenCity Role:** Rapidly constructs the 40 tiny homes in Zone A [32].
+*   **RegenCity Role:** Rapidly constructs the 40 tiny homes in Zone A [30].
 
 #### **8. Geothermal Network (#10) – "ThermalGrid"**
 *   **Business Structure:** **Utility (Heat-as-a-Service).** Long-term contracts (20 years) to provide heating/cooling to districts [33].
@@ -122,7 +122,7 @@ Here is the structural outline for each business, its specific software requirem
 *   **Tech Stack:**
     *   *Security:* Immutable audit logging (Kafka) for regulatory compliance.
     *   *Frontend:* Interactive 3D reactor visualization [50].
-*   **RegenCity Role:** Server room simulation lab (no physical reactor yet) [47].
+*   **RegenCity Role:** Server room simulation lab (no physical reactor yet) [48].
 
 #### **13. Thorium Reactor OS (#11) – "ThoriumOS"**
 *   **Business Structure:** **IP Licensing & Consulting.** Long-term play for next-gen nuclear operating systems [51].
