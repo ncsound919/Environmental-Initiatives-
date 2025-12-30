@@ -62,11 +62,11 @@ To enable uniform benchmarking and cross-project integration, all sensor data an
   "measurement_type": "string (enum: temperature, humidity, lux, flow_rate, etc.)",
   "measurement_value": "float",
   "unit": "string (SI units: celsius, percent, lux, L/min, kW, etc.)",
-  "timestamp": "ISO8601 UTC (e.g., '2025-12-30T12:00:00Z')",
+  "timestamp": "string (ISO8601 UTC, e.g., '2025-12-30T12:00:00Z')",
   "quality_flag": "string (enum: valid, suspect, error)",
   "schema_version": "string (semver, e.g., '1.0.0')",
   "source_system": "string (project_code, e.g., 'P09-AWG')",
-  "ingestion_time": "ISO8601 UTC"
+  "ingestion_time": "string (ISO8601 UTC)"
 }
 ```
 
@@ -180,7 +180,7 @@ By treating the 20-acre compound as a single organism, physical outputs from one
 
 [21] MQTT.org — MQTT Version 5.0 Specification (2019), https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
 
-[22] Internal Specification — "Telemetry Data Schema v1.0" (2025), RegenCity Data Team (see Section 2.1)
+[22] Internal Specification — "Telemetry Data Schema v1.0" (2025), RegenCity Data Team
 
 [23] Internal Research — "Material Science Benchmarking for Bio-Fillers" (2025), RegenCity Materials Lab (internal)
 
