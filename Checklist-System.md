@@ -1,3 +1,5 @@
+# ECOS Readiness Checklist System
+
 To scale these 13 projects efficiently, you need a standardized "Definition of Done" for every stage of development. This prevents feature creep and ensures every line of code written by an LLM fits into your specific Monorepo architecture.
 
 Here is the **Universal Readiness Checklist**, the **LLM Context Block** (to paste into your AI coding tool), and the **Strict Coding Rules** to prevent errors.
