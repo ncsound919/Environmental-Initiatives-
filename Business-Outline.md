@@ -150,6 +150,7 @@ The 41% cost reduction from $1.95M to $1.15M is achieved through the shared ECOS
 *   13 separate database schemas: ~$195K (13 × $15K)
 *   13 separate deployment pipelines: ~$130K (13 × $10K)
 *   Redundant forecasting/optimization code: ~$260K (duplicated effort across projects)
+*   Project-specific features (13 projects): ~$1.1M
 *   **Total:** ~$1.95M
 
 **Unified Ecosystem Cost (With Shared ECOS Kernel):**
