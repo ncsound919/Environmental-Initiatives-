@@ -10,33 +10,33 @@ Every project (from #1 Foam Homes to #13 Micro-Hydro) must pass these 5 gates. D
 
 #### **Level 1: The "Digital Brain" (Software Logic)**
 *Focus: Can we simulate the result before building hardware?*
-*   [ ] **Input Defined:** specific data types defined in Prisma Schema (e.g., `soil_moisture: float`, `reactor_temp: float`) [1], [2].
-*   [ ] **Logic Isolated:** The core optimization (Python) is written as a standalone function in `packages/ecosystem-brains/` [3].
+*   [ ] **Input Defined:** specific data types defined in Prisma Schema (e.g., `soil_moisture: float`, `reactor_temp: float`) (see Prisma schema and data-typing standards).
+*   [ ] **Logic Isolated:** The core optimization (Python) is written as a standalone function in `packages/ecosystem-brains/` (see "ecosystem-brains" package structure guidelines).
 *   [ ] **Unit Test Passed:** The logic returns a valid prediction/decision on mock data (e.g., "If humidity is 80%, turn on AWG").
-*   [ ] **API Exposed:** The logic is wrapped in a FastAPI/NestJS endpoint [4].
+*   [ ] **API Exposed:** The logic is wrapped in a FastAPI/NestJS endpoint (see API service standards).
 
 #### **Level 2: The "Digital Body" (Interface & Connectivity)**
 *Focus: Can a user or device talk to the Brain?*
-*   [ ] **IoT Pipeline:** MQTT topic established (`ecos/{project_id}/telemetry`) [5].
-*   [ ] **Shared Auth:** The app uses the universal `@ecosystem/auth-module` (no custom login forms) [6].
-*   [ ] **UI Component:** Dashboard uses shared `@ecosystem/ui-components` (Chart, Map, Gauge) [7].
-*   [ ] **Billing Hook:** The service is connected to the Shared Billing Engine (Stripe/Token) [8].
+*   [ ] **IoT Pipeline:** MQTT topic established (`ecos/{project_id}/telemetry`) (see IoT/MQTT topic conventions).
+*   [ ] **Shared Auth:** The app uses the universal `@ecosystem/auth-module` (no custom login forms) (see auth-module integration guide).
+*   [ ] **UI Component:** Dashboard uses shared `@ecosystem/ui-components` (Chart, Map, Gauge) (see shared UI component library standards).
+*   [ ] **Billing Hook:** The service is connected to the Shared Billing Engine (Stripe/Token) (see shared billing integration guide).
 
 #### **Level 3: The "Physical Twin" (Prototype)**
 *Focus: Does the code work on hardware?*
-*   [ ] **Firmware Flash:** Code successfully flashes to the target MCU (ESP32/STM32) via the shared OTA pipeline [9].
-*   [ ] **Telemetry Flow:** Real sensor data appears in the shared PostgreSQL database [10].
+*   [ ] **Firmware Flash:** Code successfully flashes to the target MCU (ESP32/STM32) via the shared OTA pipeline (see OTA firmware deployment pipeline).
+*   [ ] **Telemetry Flow:** Real sensor data appears in the shared PostgreSQL database (see telemetry ingestion and storage standards).
 *   [ ] **Control Loop:** A command sent from the UI triggers a physical relay/action within 200ms.
 
 #### **Level 4: The "RegenCity" Integration (Field Test)**
 *Focus: Does it work in the 20-acre ecosystem?*
-*   [ ] **Zone Deployment:** Hardware installed in its designated zone (e.g., Bulb in Zone A, Reactor Sim in Zone D) [11].
-*   [ ] **Synergy Check:** The system consumes inputs from another project (e.g., AWG uses Solar forecasts) [12].
+*   [ ] **Zone Deployment:** Hardware installed in its designated zone (e.g., Bulb in Zone A, Reactor Sim in Zone D) (see RegenCity zone layout and deployment plan).
+*   [ ] **Synergy Check:** The system consumes inputs from another project (e.g., AWG uses Solar forecasts) (see inter-project data dependency map).
 *   [ ] **Data Lake Verify:** Data is accessible to the "RegenCity Digital Twin" for global optimization.
 
 #### **Level 5: Scale & Monetization**
 *   [ ] **SaaS Tiering:** Feature flags enabled for "Free," "Pro," and "Enterprise" tiers.
-*   [ ] **Regulatory Log:** Immutable audit trails enabled (required for Nuclear/Bio) [13].
+*   [ ] **Regulatory Log:** Immutable audit trails enabled (required for Nuclear/Bio) (see regulatory compliance logging standards).
 *   [ ] **Documentation:** API docs generated automatically via Swagger/OpenAPI.
 
 ---
