@@ -124,8 +124,8 @@ class AuthTokenRequest(BaseModel):
 
 class BillingEstimateRequest(BaseModel):
     tier: Literal["free", "pro", "enterprise"] = "pro"
-    usage_kwh: float = 0.0
-    water_liters: float = 0.0
+    usage_kwh: float = Field(default=0.0, ge=0.0)
+    water_liters: float = Field(default=0.0, ge=0.0)
 
 
 class FirmwareFlashRequest(BaseModel):
