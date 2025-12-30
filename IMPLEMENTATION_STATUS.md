@@ -264,6 +264,17 @@ Each project has dedicated tables:
 
 ---
 
+## 🚧 Level 2-5 Activation Progress
+
+- ✅ Telemetry ingestion endpoint (`/api/iot/ingest`) returns MQTT topics for devices
+- ✅ Shared auth token stub (`/api/auth/token`) issues signed scopes for projects
+- ✅ Billing estimator hook (`/api/billing/estimate`) models usage-based charges
+- ✅ Firmware flash queue (`/api/firmware/flash`) simulates OTA deployment (Level 3)
+- ✅ Deployment synergy status (`/api/deployment/status`) surfaces RegenCity zone readiness (Level 4)
+- ✅ SaaS tier + regulatory logging surface (`/api/saas/tier`) for monetization controls (Level 5)
+
+---
+
 ## 🛣️ Next Steps: Path to 40% Readiness (Level 2)
 
 ### Shared Infrastructure

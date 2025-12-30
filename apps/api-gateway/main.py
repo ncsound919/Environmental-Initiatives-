@@ -5,9 +5,15 @@ Completes Level 1 requirement: API Exposed
 """
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-from typing import Dict, List, Any
-from datetime import datetime
+from pydantic import BaseModel, EmailStr, Field
+from typing import Dict, List, Any, Literal, Iterable
+from datetime import datetime, timedelta, timezone
+import hashlib
+import hmac
+import json
+import secrets
+import base64
+import re
 import sys
 import os
 
@@ -33,6 +39,12 @@ app = FastAPI(
     description="Unified API for all 13 Environmental Businesses",
     version="1.0.0"
 )
+
+SECRET_KEY = os.environ.get("ECOS_JWT_SECRET")
+if not SECRET_KEY:
+    if os.environ.get("NODE_ENV") == "production":
+        raise RuntimeError("ECOS_JWT_SECRET must be set in production")
+    SECRET_KEY = secrets.token_urlsafe(32)
 
 
 # ============================================
@@ -92,6 +104,66 @@ class DispatchRequest(BaseModel):
     params: Dict[str, Any] = Field(default_factory=dict)
 
 
+class TelemetryIngestRequest(BaseModel):
+    sensor_id: str = Field(min_length=1)
+    project_code: str = Field(min_length=1)
+    device_id: str = Field(min_length=1)
+    measurement_type: str = Field(min_length=1)
+    measurement_value: float
+    unit: str = Field(min_length=1)
+    timestamp: datetime
+    quality_flag: Literal["valid", "suspect", "invalid"] = "valid"
+
+
+class AuthTokenRequest(BaseModel):
+    user_id: str = Field(min_length=1)
+    email: EmailStr
+    role: str = "USER"
+    project_access: List[str] = Field(default_factory=list)
+
+
+class BillingEstimateRequest(BaseModel):
+    tier: Literal["free", "pro", "enterprise"] = "pro"
+    usage_kwh: float = Field(default=0.0, ge=0.0)
+    water_liters: float = Field(default=0.0, ge=0.0)
+
+
+class FirmwareFlashRequest(BaseModel):
+    device_id: str = Field(min_length=1, max_length=255)
+    project_code: str = Field(min_length=1, max_length=255)
+    firmware_version: str
+    checksum: str
+
+
+class DeploymentStatusRequest(BaseModel):
+    zone: str = Field(min_length=1)
+    project_code: str = Field(min_length=1)
+    inputs_from: List[str] = Field(default_factory=list)
+    outputs_to: List[str] = Field(default_factory=list)
+
+
+class SaaSTierRequest(BaseModel):
+    tier: Literal["free", "pro", "enterprise"]
+
+
+def _sign_token(payload: Dict[str, Any]) -> str:
+    serialized = json.dumps(payload, sort_keys=True)
+    encoded_payload = base64.urlsafe_b64encode(serialized.encode()).decode()
+    nonce = secrets.token_urlsafe(8)
+    message = f"{encoded_payload}.{nonce}"
+    signature = hmac.new(SECRET_KEY.encode(), message.encode(), hashlib.sha256).hexdigest()
+    return f"v1.{message}.{signature}"
+
+
+def _validate_tier(tier: str, allowed: Iterable[str]) -> str:
+    tier_key = tier.lower()
+    allowed_values = list(allowed)
+    if tier_key not in allowed_values:
+        allowed_str = ", ".join(sorted(allowed_values))
+        raise HTTPException(status_code=400, detail=f"Unknown tier. Allowed: {allowed_str}")
+    return tier_key
+
+
 # ============================================
 # CORE ENDPOINTS
 # ============================================
@@ -101,7 +173,7 @@ async def health_check():
     """System health check"""
     return {
         "status": "operational",
-        "timestamp": datetime.now().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "version": "1.0.0"
     }
 
@@ -253,6 +325,189 @@ async def dispatcher_status():
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================
+# LEVEL 2-5 CAPABILITIES (Connectivity, Billing, Deployment)
+# ============================================
+
+
+@app.post("/api/iot/ingest")
+async def ingest_telemetry(request: TelemetryIngestRequest):
+    """Level 2: Accept telemetry from MQTT pipeline"""
+    now_utc = datetime.now(timezone.utc)
+    if request.timestamp > now_utc:
+        raise HTTPException(status_code=400, detail="Timestamp cannot be in the future")
+    if request.timestamp < now_utc - timedelta(days=30):
+        raise HTTPException(status_code=400, detail="Timestamp too old for ingestion window")
+    topic = f"ecos/{request.project_code}/{request.device_id}/telemetry"
+    return {
+        "topic": topic,
+        "ingested": True,
+        "quality_flag": request.quality_flag,
+        "echo": {
+            "sensor_id": request.sensor_id,
+            "measurement_type": request.measurement_type,
+            "measurement_value": request.measurement_value,
+            "unit": request.unit,
+            "timestamp": request.timestamp.isoformat(),
+        },
+    }
+
+
+@app.post("/api/auth/token")
+async def issue_auth_token(request: AuthTokenRequest):
+    """Level 2: Shared auth token issuance (versioned HMAC-signed token)"""
+    issued_at = datetime.now(timezone.utc).replace(microsecond=0)
+    expires_at = issued_at + timedelta(hours=24)
+    payload = {
+        "user_id": request.user_id,
+        "email": request.email,
+        "role": request.role,
+        "project_access": request.project_access,
+        "issued_at": issued_at.isoformat(),
+        "exp": expires_at.isoformat(),
+    }
+    token = _sign_token(payload)
+    return {
+        "token": token,
+        "expires_in_hours": 24,
+        "scopes": request.project_access,
+        "issued_at": issued_at.isoformat(),
+        "expires_at": expires_at.isoformat(),
+    }
+
+
+@app.post("/api/billing/estimate")
+async def billing_estimate(request: BillingEstimateRequest):
+    """Level 2: Billing hook to estimate usage-based charges"""
+    rate_card = {
+        "free": {"kwh": 0.25, "water": 0.05, "platform": 0.0},
+        "pro": {"kwh": 0.18, "water": 0.03, "platform": 5.0},
+        "enterprise": {"kwh": 0.12, "water": 0.02, "platform": 15.0},
+    }
+    tier_key = _validate_tier(request.tier, rate_card.keys())
+    rate = rate_card[tier_key]
+    energy_cost = request.usage_kwh * rate["kwh"]
+    water_cost = request.water_liters * rate["water"]
+    total = energy_cost + water_cost + rate["platform"]
+    return {
+        "tier": tier_key,
+        "energy_cost": round(energy_cost, 2),
+        "water_cost": round(water_cost, 2),
+        "platform_fee": rate["platform"],
+        "total_estimate": round(total, 2),
+    }
+
+
+@app.post("/api/firmware/flash")
+async def firmware_flash(request: FirmwareFlashRequest):
+    """Level 3: Simulate OTA firmware flash queue"""
+    if not re.fullmatch(r"[a-fA-F0-9]{64}", request.checksum):
+        raise HTTPException(status_code=400, detail="Invalid firmware checksum format; expected 64 hex chars")
+    if not re.fullmatch(r"v?\d+\.\d+\.\d+", request.firmware_version):
+        raise HTTPException(status_code=400, detail="Invalid firmware version format")
+    return {
+        "project": request.project_code,
+        "device_id": request.device_id,
+        "firmware_version": request.firmware_version,
+        "checksum": request.checksum,
+        "status": "queued",
+        "queued_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+@app.post("/api/deployment/status")
+async def deployment_status(request: DeploymentStatusRequest):
+    """Level 4: Field deployment + synergy readiness"""
+    project_pattern = re.compile(r"^P\d{2}")
+    validated_inputs = [code for code in request.inputs_from if project_pattern.match(code)]
+    validated_outputs = [code for code in request.outputs_to if project_pattern.match(code)]
+    invalid_inputs_from = [code for code in request.inputs_from if not project_pattern.match(code)]
+    invalid_outputs_to = [code for code in request.outputs_to if not project_pattern.match(code)]
+    synergy_ready = bool(validated_inputs and validated_outputs)
+    return {
+        "zone": request.zone,
+        "project": request.project_code,
+        "inputs_from": validated_inputs,
+        "invalid_inputs_from": invalid_inputs_from,
+        "outputs_to": validated_outputs,
+        "invalid_outputs_to": invalid_outputs_to,
+        "project_code_pattern": project_pattern.pattern,
+        "synergy_ready": synergy_ready,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+# Default SaaS tier configuration. Can be overridden at runtime via the
+# SAAS_TIERS_JSON environment variable (must be a JSON object).
+DEFAULT_SAAS_TIERS: Dict[str, Dict[str, Any]] = {
+    "free": {
+        "features": ["basic-dashboard", "read-only-api"],
+        "regulatory_log": False,
+        "support_level": "community",
+    },
+    "pro": {
+        "features": ["dashboard", "api-access", "iot-pipeline"],
+        "regulatory_log": True,
+        "support_level": "standard",
+    },
+    "enterprise": {
+        "features": [
+            "dashboard",
+            "api-access",
+            "iot-pipeline",
+            "billing-hooks",
+            "audit-trail",
+        ],
+        "regulatory_log": True,
+        "support_level": "dedicated",
+    },
+}
+
+
+def _get_saas_tiers() -> Dict[str, Dict[str, Any]]:
+    """Return SaaS tier configuration, allowing override via environment.
+
+    If SAAS_TIERS_JSON is set and contains a valid JSON object, that object
+    is used as the tier configuration. Otherwise, DEFAULT_SAAS_TIERS is used.
+    """
+    raw = os.getenv("SAAS_TIERS_JSON")
+    if not raw:
+        return DEFAULT_SAAS_TIERS
+
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        # Fallback to default configuration on invalid JSON
+        return DEFAULT_SAAS_TIERS
+
+    # Ensure the loaded data is a mapping; otherwise, fall back
+    if not isinstance(data, dict):
+        return DEFAULT_SAAS_TIERS
+
+    return data  # type: ignore[return-value]
+
+
+@app.post("/api/saas/tier")
+async def saas_tier(request: SaaSTierRequest):
+    """Level 5: SaaS tiering + regulatory logging surface"""
+    tiers = _get_saas_tiers()
+    tier_key = _validate_tier(request.tier, tiers.keys())
+    config = tiers[tier_key]
+
+    audit_entry = {
+        "tier": tier_key,
+        "regulatory_log_enabled": config["regulatory_log"],
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+    return {
+        "tier": tier_key,
+        "features": config["features"],
+        "support_level": config["support_level"],
+        "regulatory_log": audit_entry,
+    }
 
 
 # ============================================
