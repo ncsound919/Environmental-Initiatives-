@@ -108,6 +108,7 @@ Give these rules to the LLM to prevent syntax errors and "imaginary" imports.
 #### **Rule 3: The "Strict Typing" Rule**
 *   **Instruction:** "All code must be strictly typed. No `any`. Zod schemas must be defined for all API inputs."
 *   **Why:** Prevents "syntax hallucinations" where the LLM assumes data exists that isn't actually there.
+*   **Validation:** Always call `schema.parse(input)` or `schema.safeParse(input)` at API boundaries (e.g., request handlers or validation middleware) to enforce runtime type safety. Convert validation failures into a 4xx response with a clear error message. Use `z.infer<typeof Schema>` to derive TypeScript types from your Zod schemas.
 *   **Example:**
     ```typescript
     import { z } from 'zod';
@@ -116,6 +117,14 @@ Give these rules to the LLM to prevent syntax errors and "imaginary" imports.
       humidity: z.number(),
       deviceId: z.string()
     });
+    
+    // In your API handler:
+    try {
+      const validatedData = TelemetrySchema.parse(request.body);
+      // validatedData is now strongly typed
+    } catch (error) {
+      return response.status(400).json({ error: error.message });
+    }
     ```
 
 #### **Rule 4: The "Existing Component" Rule**
@@ -125,6 +134,16 @@ Give these rules to the LLM to prevent syntax errors and "imaginary" imports.
 #### **Rule 5: The "Simulated Hardware" Rule**
 *   **Instruction:** "When writing Firmware code (C++), always include a `#ifdef SIMULATION` block that allows the code to run on a local machine without physical hardware."
 *   **Why:** Allows you to test the logic for the **Centennial Bulb (#8)** or **Reactor (#6)** continuously without needing to flash a physical chip every time [9].
+*   **Example:**
+    ```cpp
+    void readSensor() {
+      #ifdef SIMULATION
+        temperature = mockTemperature();  // Use mock data for local testing
+      #else
+        temperature = sensor.read();      // Read from physical hardware
+      #endif
+    }
+    ```
 
 ### Summary of Workflow
 1.  **Check Readiness:** Look at Part 1 to see which phase you are in.
@@ -132,3 +151,21 @@ Give these rules to the LLM to prevent syntax errors and "imaginary" imports.
 3.  **Enforce Rules:** Apply Part 3 to every code review.
 
 This structure allows you to build **one** system that just happens to have 13 different faces, drastically reducing the complexity of the code.
+
+---
+
+### References
+
+1. **Prisma Schema Documentation** - `packages/core/database-schema/schema.prisma` - Centralized database schema definitions
+2. **Database Model Definitions** - Data type specifications for sensor readings and environmental metrics
+3. **Ecosystem Brains Package** - `packages/ecosystem-brains/` - Shared Python optimization and ML logic
+4. **API Documentation** - FastAPI/NestJS endpoint specifications in `apps/api-gateway/`
+5. **MQTT Topic Structure** - IoT messaging protocol documentation for telemetry data
+6. **Authentication Module** - `packages/core/auth-module/` - Shared Auth0/Web3 login implementation
+7. **UI Components Library** - `packages/ui-components/` - Reusable React components (Chart, Map, Gauge, Button)
+8. **Billing Engine** - `packages/core/billing-engine/` - Stripe and token-based payment integration
+9. **OTA Pipeline Documentation** - Over-the-air firmware update system for ESP32/STM32 devices
+10. **Database Integration** - PostgreSQL + TimescaleDB connection and data flow architecture
+11. **RegenCity Zone Map** - Physical deployment zones (A: Living, B: Infrastructure, C: Agriculture, D: R&D)
+12. **Project Synergy Matrix** - Inter-project dependencies and data flow connections
+13. **Regulatory Compliance** - Audit trail and logging requirements for Nuclear/Bio projects
