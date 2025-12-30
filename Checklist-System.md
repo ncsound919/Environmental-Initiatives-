@@ -112,19 +112,33 @@ Give these rules to the LLM to prevent syntax errors and "imaginary" imports.
 *   **Example:**
     ```typescript
     import { z } from 'zod';
+    
     const TelemetrySchema = z.object({
       temperature: z.number(),
       humidity: z.number(),
       deviceId: z.string()
     });
     
-    // In your API handler:
+    // Derive the TypeScript type from the Zod schema
+    type Telemetry = z.infer<typeof TelemetrySchema>;
+    
+    // In your API handler using `parse` (throws on invalid input):
     try {
-      const validatedData = TelemetrySchema.parse(request.body);
-      // validatedData is now strongly typed
+      const validatedData: Telemetry = TelemetrySchema.parse(request.body);
+      // validatedData is now strongly typed as Telemetry
     } catch (error) {
-      return response.status(400).json({ error: error.message });
+      return response.status(400).json({ error: (error as Error).message });
     }
+    
+    // Alternatively, using `safeParse` (does not throw):
+    const result = TelemetrySchema.safeParse(request.body);
+    if (!result.success) {
+      // result.error contains detailed validation issues
+      return response.status(400).json({ error: result.error.flatten() });
+    }
+    
+    const safeValidatedData: Telemetry = result.data;
+    // safeValidatedData is also strongly typed as Telemetry
     ```
 
 #### **Rule 4: The "Existing Component" Rule**
