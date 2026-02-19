@@ -23,11 +23,24 @@ def test_execute_level_2():
     print(f"✓ Level 2 executed: {result['mqtt_topic']}")
 
 
+def test_execute_level_2_failure_case():
+    result = execute_level_2("P09", checks_override={"iot_pipeline": False})
+    assert result["passed"] is False
+    print("✓ Level 2 failure scenario validated")
+
+
 def test_execute_level_3():
     result = execute_level_3("P09")
     assert result["passed"] is True
     assert result["control_loop_latency_ms"] <= 200
     print(f"✓ Level 3 executed: {result['control_loop_latency_ms']}ms")
+
+
+def test_execute_level_3_failure_case():
+    result = execute_level_3("P09", control_loop_latency_ms=250)
+    assert result["passed"] is False
+    assert result["checks"]["control_loop"] is False
+    print("✓ Level 3 failure scenario validated")
 
 
 def test_project_readiness_hits_target_band():
@@ -47,7 +60,9 @@ def test_all_initiatives_have_target_readiness():
 if __name__ == "__main__":
     print("\n=== ECOS Checklist Phase Tests ===\n")
     test_execute_level_2()
+    test_execute_level_2_failure_case()
     test_execute_level_3()
+    test_execute_level_3_failure_case()
     test_project_readiness_hits_target_band()
     test_all_initiatives_have_target_readiness()
     print("\n✓ All checklist phase tests passed!\n")

@@ -197,7 +197,7 @@ async def list_projects():
         {"id": "P12", "name": "SolarShare", "type": "Solar Gardens"},
         {"id": "P13", "name": "MicroHydro", "type": "Micro-Hydro"},
     ]
-    phase_results = execute_all_initiatives(project["id"] for project in projects)
+    phase_results = execute_all_initiatives()
     for project in projects:
         project["readiness"] = f"{phase_results[project['id']]['readiness']}%"
     average_readiness = sum(result["readiness"] for result in phase_results.values()) / len(phase_results)

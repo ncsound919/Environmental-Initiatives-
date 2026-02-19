@@ -3,7 +3,7 @@ Checklist phase execution helpers for ECOS initiatives.
 Implements executable Level 2 and Level 3 readiness phases.
 """
 
-from typing import Dict, Iterable
+from typing import Any, Dict, Iterable
 
 
 DEFAULT_PROJECT_CODES = [
@@ -22,11 +22,17 @@ DEFAULT_PROJECT_CODES = [
     "P13",
 ]
 
+DEFAULT_CONTROL_LOOP_LATENCY_MS = 150
 
-def execute_level_2(project_code: str, device_id: str = "sim-device") -> Dict[str, object]:
+
+def execute_level_2(
+    project_code: str,
+    device_id: str = "sim-device",
+    checks_override: Dict[str, bool] | None = None,
+) -> Dict[str, Any]:
     """Execute Level 2 (Digital Body) checks for one initiative."""
     mqtt_topic = f"ecos/{project_code}/{device_id}/telemetry"
-    checks = {
+    checks = checks_override or {
         "iot_pipeline": True,
         "shared_auth": True,
         "ui_component": True,
@@ -40,9 +46,11 @@ def execute_level_2(project_code: str, device_id: str = "sim-device") -> Dict[st
     }
 
 
-def execute_level_3(project_code: str) -> Dict[str, object]:
+def execute_level_3(
+    project_code: str,
+    control_loop_latency_ms: int = DEFAULT_CONTROL_LOOP_LATENCY_MS,
+) -> Dict[str, Any]:
     """Execute Level 3 (Physical Twin) checks for one initiative."""
-    control_loop_latency_ms = 150
     checks = {
         "firmware_flash": True,
         "telemetry_flow": True,
@@ -56,7 +64,7 @@ def execute_level_3(project_code: str) -> Dict[str, object]:
     }
 
 
-def execute_checklist_phases(project_code: str) -> Dict[str, object]:
+def execute_checklist_phases(project_code: str) -> Dict[str, Any]:
     """Execute Levels 1-3 and return readiness for one initiative."""
     level_2 = execute_level_2(project_code)
     level_3 = execute_level_3(project_code)
@@ -76,6 +84,7 @@ def execute_checklist_phases(project_code: str) -> Dict[str, object]:
     }
 
 
-def execute_all_initiatives(project_codes: Iterable[str] = DEFAULT_PROJECT_CODES) -> Dict[str, Dict[str, object]]:
+def execute_all_initiatives(codes: Iterable[str] | None = None) -> Dict[str, Dict[str, Any]]:
     """Execute checklist phases for all initiatives."""
-    return {code: execute_checklist_phases(code) for code in project_codes}
+    codes = codes or DEFAULT_PROJECT_CODES
+    return {code: execute_checklist_phases(code) for code in codes}
