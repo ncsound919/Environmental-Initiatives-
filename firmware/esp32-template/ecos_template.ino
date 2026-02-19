@@ -59,7 +59,7 @@ PubSubClient mqttClient(wifiClient);
 
 #ifdef SIMULATION_MODE
   #define SENSOR_READ(pin) (random(0, 1024))
-  #define ACTUATOR_WRITE(pin, value) (Serial.printf("ACTUATOR: Pin %d = %d\\n", pin, value))
+  #define ACTUATOR_WRITE(pin, value) (Serial.printf("ACTUATOR: Pin %d = %d\n", pin, value))
 #else
   #define SENSOR_READ(pin) (analogRead(pin))
   #define ACTUATOR_WRITE(pin, value) (digitalWrite(pin, value))
@@ -91,7 +91,7 @@ String getIsoTimestamp() {
 }
 
 void setupWiFi() {
-    Serial.println("\\n🔌 Connecting to WiFi...");
+    Serial.println("\n🔌 Connecting to WiFi...");
     WiFi.mode(WIFI_STA);
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     
@@ -103,11 +103,11 @@ void setupWiFi() {
     }
     
     if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("\\n✅ WiFi connected!");
-        Serial.printf("   IP: %s\\n", WiFi.localIP().toString().c_str());
-        Serial.printf("   MAC: %s\\n", getMacAddress().c_str());
+        Serial.println("\n✅ WiFi connected!");
+        Serial.printf("   IP: %s\n", WiFi.localIP().toString().c_str());
+        Serial.printf("   MAC: %s\n", getMacAddress().c_str());
     } else {
-        Serial.println("\\n❌ WiFi connection failed");
+        Serial.println("\n❌ WiFi connection failed");
     }
 }
 
@@ -122,11 +122,11 @@ void setupNTP() {
         Serial.print(".");
         attempts++;
     }
-    Serial.println("\\n✅ NTP synchronized");
+    Serial.println("\n✅ NTP synchronized");
 }
 
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
-    Serial.printf("📨 MQTT message on %s\\n", topic);
+    Serial.printf("📨 MQTT message on %s\n", topic);
     
     // Record control command receipt time for latency measurement
     if (String(topic) == controlTopic && !controlCommandPending) {
@@ -139,7 +139,7 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
     DeserializationError error = deserializeJson(doc, payload, length);
     
     if (error) {
-        Serial.printf("❌ JSON parsing failed: %s\\n", error.c_str());
+        Serial.printf("❌ JSON parsing failed: %s\n", error.c_str());
         return;
     }
     
@@ -159,12 +159,12 @@ void connectMQTT() {
             
             // Subscribe to control topic
             mqttClient.subscribe(controlTopic.c_str());
-            Serial.printf("📡 Subscribed to: %s\\n", controlTopic.c_str());
+            Serial.printf("📡 Subscribed to: %s\n", controlTopic.c_str());
             
             // Publish online status
             publishStatus("online");
         } else {
-            Serial.printf("❌ MQTT connection failed, rc=%d\\n", mqttClient.state());
+            Serial.printf("❌ MQTT connection failed, rc=%d\n", mqttClient.state());
             Serial.println("   Retrying in 5 seconds...");
             delay(5000);
         }
@@ -176,18 +176,18 @@ void connectMQTT() {
 // ============================================
 
 void handleControlCommand(const char* action, JsonVariant params) {
-    Serial.printf("🎮 Control Command: %s\\n", action);
+    Serial.printf("🎮 Control Command: %s\n", action);
     
     // Example: Turn on/off an actuator
     if (strcmp(action, "set_power") == 0) {
         bool powerOn = params["enabled"].as<bool>();
         ACTUATOR_WRITE(2, powerOn ? HIGH : LOW);
-        Serial.printf("   Power: %s\\n", powerOn ? "ON" : "OFF");
+        Serial.printf("   Power: %s\n", powerOn ? "ON" : "OFF");
     }
     else if (strcmp(action, "set_brightness") == 0) {
         int brightness = params["value"].as<int>();
         analogWrite(5, brightness);
-        Serial.printf("   Brightness: %d%%\\n", brightness);
+        Serial.printf("   Brightness: %d%%\n", brightness);
     }
     
     // Calculate control loop latency
@@ -217,7 +217,7 @@ void publishTelemetry(const char* measurementType, float value, const char* unit
     serializeJson(doc, buffer);
     
     if (mqttClient.publish(telemetryTopic.c_str(), buffer, true)) {
-        Serial.printf("📤 Telemetry: %s = %.2f %s\\n", measurementType, value, unit);
+        Serial.printf("📤 Telemetry: %s = %.2f %s\n", measurementType, value, unit);
     } else {
         Serial.println("❌ Failed to publish telemetry");
     }
@@ -255,25 +255,25 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
     
-    Serial.println("\\n\\n╔═══════════════════════════════════════╗");
+    Serial.println("\n\n╔═══════════════════════════════════════╗");
     Serial.println("║   ECOS ESP32 Firmware Template       ║");
     Serial.println("║   Level 3: Physical Twin             ║");
-    Serial.println("╚═══════════════════════════════════════╝\\n");
+    Serial.println("╚═══════════════════════════════════════╝\n");
     
-    Serial.printf("Project: %s\\n", PROJECT_CODE);
-    Serial.printf("Device Type: %s\\n", DEVICE_TYPE);
-    Serial.printf("Firmware: %s\\n", FIRMWARE_VERSION);
+    Serial.printf("Project: %s\n", PROJECT_CODE);
+    Serial.printf("Device Type: %s\n", DEVICE_TYPE);
+    Serial.printf("Firmware: %s\n", FIRMWARE_VERSION);
     
     // Generate device ID from MAC
     deviceId = String(DEVICE_TYPE) + "-" + getMacAddress().substring(6);
-    Serial.printf("Device ID: %s\\n", deviceId.c_str());
+    Serial.printf("Device ID: %s\n", deviceId.c_str());
     
     // Configure MQTT topics
     telemetryTopic = "ecos/" + String(PROJECT_CODE) + "/" + deviceId + "/telemetry";
     controlTopic = "ecos/" + String(PROJECT_CODE) + "/" + deviceId + "/control";
     
-    Serial.printf("Telemetry Topic: %s\\n", telemetryTopic.c_str());
-    Serial.printf("Control Topic: %s\\n\\n", controlTopic.c_str());
+    Serial.printf("Telemetry Topic: %s\n", telemetryTopic.c_str());
+    Serial.printf("Control Topic: %s\n\n", controlTopic.c_str());
     
     // Initialize hardware
     #ifndef SIMULATION_MODE
@@ -297,7 +297,7 @@ void setup() {
         connectMQTT();
     }
     
-    Serial.println("\\n✅ Setup complete - entering main loop\\n");
+    Serial.println("\n✅ Setup complete - entering main loop\n");
 }
 
 void loop() {
