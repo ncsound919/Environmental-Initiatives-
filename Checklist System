@@ -28,6 +28,24 @@ Every project (from #1 Foam Homes to #13 Micro-Hydro) must pass these 5 gates. D
 *   [ ] **Telemetry Flow:** Real sensor data appears in the shared PostgreSQL database [10].
 *   [ ] **Control Loop:** A command sent from the UI triggers a physical relay/action within 200ms.
 
+### **Level 2 + Level 3 Execution Across Initiatives**
+
+| Initiative | Level 2 Execution | Level 3 Execution |
+|---|---|---|
+| #1 Foam Homes | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #2 Symbiosis | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #3 Closed-Loop Farm | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #4 Hemp Lab | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #5 Greenhouse | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #6 Fast Reactor | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #7 Bioreactor | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #8 Centennial Bulb | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #9 AWG | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #10 Geothermal | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #11 Reserved | N/A (Reserved placeholder) | N/A (Reserved placeholder) |
+| #12 Solar | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+| #13 Micro-Hydro | ✅ `/api/iot/ingest`, `/api/auth/token`, `/api/billing/estimate` | ✅ `/api/firmware/flash` + telemetry/control loop path |
+
 #### **Level 4: The "RegenCity" Integration (Field Test)**
 *Focus: Does it work in the 20-acre ecosystem?*
 *   [ ] **Zone Deployment:** Hardware installed in its designated zone (e.g., Bulb in Zone A, Reactor Sim in Zone D) [11].
