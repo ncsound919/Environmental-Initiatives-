@@ -33,6 +33,7 @@ from solvers import (
     optimize_fungal_match,
 )
 from dispatcher import dispatch
+from checklist import execute_all_initiatives
 
 app = FastAPI(
     title="ECOS API Gateway",
@@ -182,21 +183,40 @@ async def health_check():
 async def list_projects():
     """List all 13 projects and their status"""
     projects = [
-        {"id": "P01", "name": "EcoHomes OS", "type": "Foam Homes", "readiness": "20%"},
-        {"id": "P02", "name": "AgriConnect", "type": "Symbiosis", "readiness": "20%"},
-        {"id": "P03", "name": "RegeneraFarm", "type": "Closed-Loop Farm", "readiness": "20%"},
-        {"id": "P04", "name": "HempMobility", "type": "Hemp Lab", "readiness": "20%"},
-        {"id": "P05", "name": "LumiFreq", "type": "Resonant Light", "readiness": "20%"},
-        {"id": "P06", "name": "NucleoSim", "type": "Fast Reactor", "readiness": "20%"},
-        {"id": "P07", "name": "PlastiCycle", "type": "Bioreactor", "readiness": "20%"},
-        {"id": "P08", "name": "EverLume", "type": "Centennial Bulb", "readiness": "20%"},
-        {"id": "P09", "name": "AquaGen", "type": "AWG", "readiness": "20%"},
-        {"id": "P10", "name": "ThermalGrid", "type": "Geothermal", "readiness": "20%"},
-        {"id": "P11", "name": "Reserved", "type": "Future", "readiness": "0%"},
-        {"id": "P12", "name": "SolarShare", "type": "Solar Gardens", "readiness": "20%"},
-        {"id": "P13", "name": "MicroHydro", "type": "Micro-Hydro", "readiness": "20%"},
+        {"id": "P01", "name": "EcoHomes OS", "type": "Foam Homes"},
+        {"id": "P02", "name": "AgriConnect", "type": "Symbiosis"},
+        {"id": "P03", "name": "RegeneraFarm", "type": "Closed-Loop Farm"},
+        {"id": "P04", "name": "HempMobility", "type": "Hemp Lab"},
+        {"id": "P05", "name": "LumiFreq", "type": "Resonant Light"},
+        {"id": "P06", "name": "NucleoSim", "type": "Fast Reactor"},
+        {"id": "P07", "name": "PlastiCycle", "type": "Bioreactor"},
+        {"id": "P08", "name": "EverLume", "type": "Centennial Bulb"},
+        {"id": "P09", "name": "AquaGen", "type": "AWG"},
+        {"id": "P10", "name": "ThermalGrid", "type": "Geothermal"},
+        {"id": "P11", "name": "Reserved", "type": "Future"},
+        {"id": "P12", "name": "SolarShare", "type": "Solar Gardens"},
+        {"id": "P13", "name": "MicroHydro", "type": "Micro-Hydro"},
     ]
-    return {"projects": projects, "total": 13, "average_readiness": "18.5%"}
+    phase_results = execute_all_initiatives(project["id"] for project in projects)
+    for project in projects:
+        project["readiness"] = f"{phase_results[project['id']]['readiness']}%"
+    average_readiness = sum(result["readiness"] for result in phase_results.values()) / len(phase_results)
+    return {"projects": projects, "total": 13, "average_readiness": f"{average_readiness:.1f}%"}
+
+
+@app.get("/api/checklist/readiness")
+async def checklist_readiness():
+    """Execute checklist Levels 2 and 3 across all initiatives."""
+    phase_results = execute_all_initiatives()
+    readiness_values = [result["readiness"] for result in phase_results.values()]
+    average_readiness = sum(readiness_values) / len(readiness_values)
+    initiatives_in_target = sum(1 for result in phase_results.values() if result["target_60_to_70"])
+    return {
+        "total_initiatives": len(phase_results),
+        "initiatives_in_60_to_70_band": initiatives_in_target,
+        "average_readiness": f"{average_readiness:.1f}%",
+        "results": phase_results,
+    }
 
 
 # ============================================
