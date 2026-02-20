@@ -7,10 +7,16 @@ Level 2/3: Database persistence with TimescaleDB hypertables
 import os
 import sys
 import subprocess
+import shutil
 from pathlib import Path
 
 def run_command(cmd, description):
-    """Run a shell command and handle errors"""
+    """Run a shell command and handle errors
+    
+    WARNING: This function uses shell=True which can be a security risk.
+    Only use this script in trusted environments with trusted input.
+    For production use, consider refactoring to use shell=False with argument lists.
+    """
     print(f"\n{'='*60}")
     print(f"📦 {description}")
     print(f"{'='*60}")
@@ -41,7 +47,12 @@ def main():
     if not (repo_root / ".env").exists():
         print("⚠️  No .env file found. Copying from .env.example...")
         if (repo_root / ".env.example").exists():
-            run_command("cp .env.example .env", "Copy environment template")
+            try:
+                shutil.copyfile(repo_root / ".env.example", repo_root / ".env")
+                print("✅ Successfully copied .env.example to .env")
+            except Exception as e:
+                print(f"❌ Error copying .env.example: {e}")
+                sys.exit(1)
             print("⚠️  Please edit .env with your database credentials before continuing")
             print("    Default: postgresql://ecos:ecos_password@localhost:5432/ecos_db")
             response = input("\n✓ Press Enter when ready to continue, or 'q' to quit: ")

@@ -104,6 +104,11 @@ class EcosMqttService:
             
             logger.debug(f"📨 Received message on {topic}")
             
+            # Handle dispatcher messages first (before generic parsing)
+            if topic.startswith("ecos/dispatcher/"):
+                self._handle_dispatcher(topic, payload)
+                return
+            
             # Parse topic: ecos/{project_code}/{device_id}/{type}
             parts = topic.split('/')
             
@@ -116,9 +121,6 @@ class EcosMqttService:
                     self._handle_telemetry(project_code, device_id, payload)
                 elif msg_type == "control":
                     self._handle_control(project_code, device_id, payload)
-            
-            elif topic.startswith("ecos/dispatcher/"):
-                self._handle_dispatcher(topic, payload)
             
         except Exception as e:
             logger.error(f"❌ Error processing message on {msg.topic}: {e}")

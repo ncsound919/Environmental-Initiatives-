@@ -4,6 +4,18 @@
 
 This directory contains firmware templates for ESP32 microcontrollers that power the physical devices across all 13 ECOS projects.
 
+## ⚠️ Security Warning
+
+**This template uses unencrypted MQTT for development purposes.** For production deployments:
+
+1. **Enable TLS/SSL**: Use `WiFiClientSecure` instead of `WiFiClient`
+2. **Use encrypted MQTT port**: Change from port 1883 to 8883
+3. **Verify server certificates**: Load CA certificate and verify broker identity
+4. **Secure WiFi credentials**: Store credentials in secure flash, not hardcoded
+5. **Use device-specific passwords**: Generate unique MQTT credentials per device
+
+See the "Production Security" section below for implementation details.
+
 ## Features
 
 - ✅ **MQTT Communication**: Real-time telemetry and control via MQTT broker
@@ -235,13 +247,77 @@ curl -X POST http://localhost:8000/api/firmware/flash \
   }'
 ```
 
+## Production Security
+
+### Enabling TLS for MQTT
+
+**Development (Current)**:
+```cpp
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient);
+const int MQTT_PORT = 1883;  // Unencrypted
+```
+
+**Production (Recommended)**:
+```cpp
+#include <WiFiClientSecure.h>
+
+// Load CA certificate (broker's certificate authority)
+const char* ca_cert = \
+"-----BEGIN CERTIFICATE-----\n" \
+"MIIDxTCCAq2gAwIBAgIBADANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UEBhMCVVMx\n" \
+"...\n" \
+"-----END CERTIFICATE-----\n";
+
+WiFiClientSecure wifiClient;
+PubSubClient mqttClient(wifiClient);
+const int MQTT_PORT = 8883;  // TLS encrypted
+
+void setup() {
+    // Set CA certificate for verification
+    wifiClient.setCACert(ca_cert);
+    
+    // Optional: Verify server hostname
+    // wifiClient.setInsecure();  // Only for testing!
+    
+    // Connect to broker (same as before)
+    mqttClient.setServer(MQTT_BROKER, MQTT_PORT);
+    // ...
+}
+```
+
+### Securing WiFi Credentials
+
+Store credentials in EEPROM or SPIFFS instead of hardcoding:
+```cpp
+#include <Preferences.h>
+
+Preferences preferences;
+
+void loadCredentials() {
+    preferences.begin("ecos", true);  // Read-only
+    String ssid = preferences.getString("wifi_ssid", "");
+    String password = preferences.getString("wifi_pass", "");
+    preferences.end();
+}
+```
+
+### Device-Specific MQTT Credentials
+
+Generate unique credentials per device using device ID:
+```cpp
+String mqtt_username = "device_" + getMacAddress();
+String mqtt_password = generateDevicePassword();  // From secure storage
+```
+
 ## Next Steps
 
 1. **Test in Simulation Mode**: Verify MQTT communication
 2. **Connect Real Sensors**: Replace `SENSOR_READ()` with actual hardware
-3. **Deploy to Device**: Flash to physical ESP32
-4. **Monitor Telemetry**: View in dashboard at http://localhost:3000
-5. **Test Control Loop**: Send commands and verify <200ms latency
+3. **Enable TLS**: Configure certificates for production
+4. **Deploy to Device**: Flash to physical ESP32
+5. **Monitor Telemetry**: View in dashboard at http://localhost:3000
+6. **Test Control Loop**: Send commands and verify <200ms latency
 
 ## License
 

@@ -29,8 +29,14 @@ const char* WIFI_SSID = "ECOS-Network";
 const char* WIFI_PASSWORD = "change_me_in_production";
 
 // MQTT broker configuration
+// WARNING: This template uses unencrypted MQTT (port 1883) for development.
+// For production, use TLS-secured MQTT (port 8883) with WiFiClientSecure:
+//   - Change WiFiClient to WiFiClientSecure
+//   - Set MQTT_PORT to 8883
+//   - Load and verify server certificates
+//   - See: https://github.com/espressif/arduino-esp32/tree/master/libraries/WiFiClientSecure
 const char* MQTT_BROKER = "mqtt.ecos.local";  // Or IP address
-const int MQTT_PORT = 1883;
+const int MQTT_PORT = 1883;  // Use 8883 for TLS in production
 const char* MQTT_USERNAME = "ecos_iot";
 const char* MQTT_PASSWORD = "change_me_in_production";
 

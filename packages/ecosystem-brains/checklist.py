@@ -85,6 +85,24 @@ def execute_level_4(
 
 def execute_checklist_phases(project_code: str) -> Dict[str, Any]:
     """Execute Levels 1-4 and return readiness for one initiative."""
+    
+    # Special case: P11 is reserved and should always be 0%
+    if project_code == "P11":
+        return {
+            "project_code": project_code,
+            "readiness": 0,
+            "target_60_to_70": False,
+            "levels": {
+                "level_1": False,
+                "level_2": False,
+                "level_3": False,
+                "level_4": False,
+            },
+            "level_2": {"project_code": project_code, "mqtt_topic": "", "checks": {}, "passed": False},
+            "level_3": {"project_code": project_code, "control_loop_latency_ms": 0, "checks": {}, "passed": False},
+            "level_4": {"project_code": project_code, "zone": "", "checks": {}, "passed": False},
+        }
+    
     level_2 = execute_level_2(project_code)
     level_3 = execute_level_3(project_code)
     level_4 = execute_level_4(project_code)
@@ -94,14 +112,14 @@ def execute_checklist_phases(project_code: str) -> Dict[str, Any]:
         "level_3": bool(level_3["passed"]),  # Physical Twin
         "level_4": bool(level_4["passed"]),  # RegenCity Integration
     }
-    # Calculate readiness from Levels 1-3: 20% per level (max 60% via automation)
+    # Calculate readiness: 20% per level for Levels 1-3, 10% for Level 4
     readiness = sum([
         20 if levels["level_1"] else 0,
         20 if levels["level_2"] else 0,
         20 if levels["level_3"] else 0,
+        10 if levels["level_4"] else 0,
     ])
     return {
-        "project_code": project_code,
         "project_code": project_code,
         "readiness": readiness,
         "target_60_to_70": 60 <= readiness <= 70,
