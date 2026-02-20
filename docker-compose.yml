@@ -31,12 +31,13 @@ services:
       - "9001:9001"  # WebSocket
     volumes:
       - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./config/mosquitto.passwd:/mosquitto/config/passwd
       - mosquitto_data:/mosquitto/data
       - mosquitto_logs:/mosquitto/log
     networks:
       - ecos-network
     healthcheck:
-      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/#' -C 1 -i healthcheck"]
+      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/#' -C 1 -i healthcheck -u healthcheck -P healthcheck_password"]
       interval: 30s
       timeout: 10s
       retries: 3
