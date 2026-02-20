@@ -17,7 +17,7 @@ Domain Services (per project microservices / dispatcher)
    ↓                                   │
 Event Bus (Kafka + RabbitMQ DLQ) ——┬——┘
    ↓ CloudEvents 1.0 envelopes     │
-Unified Data Layer (Postgres/TimescaleDB/Neo4j/Redis)
+Unified Data Layer (PostgreSQL/TimescaleDB/Neo4j/Redis)
    ↓                               │
 Observability (metrics/logs/traces)│
    ↓                               │
@@ -35,21 +35,21 @@ Edge Devices (ESP32/PLC/Jetson) in RegenCity zones
   - **Operations Console:** fleet status by project/zone, live alarms, and last-ingestion timestamps.
   - **MDM Golden Records:** editable asset/location cards that map device IDs to RegenCity zones and EcoSphere entity IDs.
   - **Energy/Water/Materials Dashboards:** reuse shared charts from `packages/ui-components` with topic-derived metrics (solar → AWG → geothermal loops).
-- **Deployment:** Favor `docker-compose up` for end-to-end bring-up (Keycloak, Kafka, API, web). Ensure `.env` includes broker URLs, Postgres/Neo4j/Redis endpoints, and Keycloak realm settings matching the EcoSphere defaults.
+- **Deployment:** Favor `docker-compose up` for end-to-end bring-up (Keycloak, Kafka, API, web). Ensure `.env` includes broker URLs, PostgreSQL/Neo4j/Redis endpoints, and Keycloak realm settings matching the EcoSphere defaults.
 
 ## Hardware Integration Mappings (topics, storage, control)
 
 | Device Class | MQTT Topic Pattern (hardware-sdk) | EcoSphere Domain Topic Route | Storage Target | Control/Feedback Path |
 |--------------|-----------------------------------|------------------------------|----------------|-----------------------|
-| Sensor/Edge Node (ESP32/STM32) | `ecos/{project}/{deviceId}/telemetry` with `TelemetrySchema` (`sensorId`, `measurementType`, `measurementValue`, `unit`, `timestamp`, `schemaVersion`) | `iot.sensor.telemetry` → project-specific domain topic (e.g., `agriculture.yield.greenhouse`, `water.generation.atmospheric`) | TimescaleDB (metrics) + Postgres (device registry) | Commands on `ecos/{project}/{deviceId}/command` (e.g., setpoint updates) |
+| Sensor/Edge Node (ESP32/STM32) | `ecos/{project}/{deviceId}/telemetry` with `TelemetrySchema` (`sensorId`, `measurementType`, `measurementValue`, `unit`, `timestamp`, `schemaVersion`) | `iot.sensor.telemetry` → project-specific domain topic (e.g., `agriculture.yield.greenhouse`, `water.generation.atmospheric`) | TimescaleDB (metrics) + PostgreSQL (device registry) | Commands on `ecos/{project}/{deviceId}/command` (e.g., setpoint updates) |
 | Industrial Controller (PLC) | `ecos/{project}/{deviceId}/telemetry` (flow/temp/pressure) | `energy.consumption.thermal` / `manufacturing.batch.hemp` | TimescaleDB for continuous signals; Neo4j links assets to loops/nodes | `.../command` for valve/pump actions; dispatcher ensures safety envelopes |
-| Edge Compute (Raspberry Pi/Jetson) | `ecos/{project}/{deviceId}/telemetry` (camera/ML summaries) | `ml.prediction.generated` / `compliance.audit.required` | Postgres (events) + object storage pointer if needed | `.../command` for model version/pipeline toggles |
-| Power & Metering (CT clamps/smart meters) | `ecos/{project}/{deviceId}/telemetry` (kW/kWh, voltage) | `energy.production.solar`, `energy.consumption.thermal`, `commerce.transaction.completed` | TimescaleDB for curves; Postgres for billing snapshots | `.../command` for demand-response throttling |
+| Edge Compute (Raspberry Pi/Jetson) | `ecos/{project}/{deviceId}/telemetry` (camera/ML summaries) | `ml.prediction.generated` / `compliance.audit.required` | PostgreSQL (events) + object storage pointer if needed | `.../command` for model version/pipeline toggles |
+| Power & Metering (CT clamps/smart meters) | `ecos/{project}/{deviceId}/telemetry` (kW/kWh, voltage) | `energy.production.solar`, `energy.consumption.thermal`, `commerce.transaction.completed` | TimescaleDB for curves; PostgreSQL for billing snapshots | `.../command` for demand-response throttling |
 
 **Schema Alignment:** Telemetry must validate against `packages/hardware-sdk` `TelemetrySchema` before publish; the API gateway accepts only CloudEvents-wrapped payloads and stamps `source=project_code` + `traceparent`.
 
 ## Minimal Acceptance Checks
 
-- Telemetry from at least one device per project flows MQTT → Kafka → TimescaleDB/Postgres and is visible on the Operations Console.
+- Telemetry from at least one device per project flows MQTT → Kafka → TimescaleDB/PostgreSQL and is visible on the Operations Console.
 - SSO tokens propagate through API to MQTT command authorization (role-based topic access).
 - Event DLQs are drained (RabbitMQ) and observability traces reach the chosen APM target for dispatcher actions.
