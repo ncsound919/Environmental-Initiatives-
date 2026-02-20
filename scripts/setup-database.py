@@ -111,16 +111,18 @@ def main():
     # Step 4: Create performance indexes
     print("\n📊 Creating performance indexes...")
     indexes = [
-        "CREATE INDEX IF NOT EXISTS idx_telemetry_project_time ON telemetry (sourceSystem, timestamp DESC);",
-        "CREATE INDEX IF NOT EXISTS idx_telemetry_device_time ON telemetry (sensorId, timestamp DESC);",
-        "CREATE INDEX IF NOT EXISTS idx_bulb_device_time ON bulb_telemetry (bulbId, timestamp DESC);",
-        "CREATE INDEX IF NOT EXISTS idx_water_device_time ON water_generation (deviceId, timestamp DESC);",
-        "CREATE INDEX IF NOT EXISTS idx_solar_array_time ON solar_generation (arrayId, timestamp DESC);",
-        "CREATE INDEX IF NOT EXISTS idx_hydro_turbine_time ON hydro_generation (turbineId, timestamp DESC);",
+        'CREATE INDEX IF NOT EXISTS idx_telemetry_project_time ON telemetry ("sourceSystem", "timestamp" DESC);',
+        'CREATE INDEX IF NOT EXISTS idx_telemetry_device_time ON telemetry ("sensorId", "timestamp" DESC);',
+        'CREATE INDEX IF NOT EXISTS idx_bulb_device_time ON bulb_telemetry ("bulbId", "timestamp" DESC);',
+        'CREATE INDEX IF NOT EXISTS idx_water_device_time ON water_generation ("deviceId", "timestamp" DESC);',
+        'CREATE INDEX IF NOT EXISTS idx_solar_array_time ON solar_generation ("arrayId", "timestamp" DESC);',
+        'CREATE INDEX IF NOT EXISTS idx_hydro_turbine_time ON hydro_generation ("turbineId", "timestamp" DESC);',
     ]
     
     for sql in indexes:
-        run_command(f'psql "{db_url}" -c "{sql}"', "Create index")
+        if not run_command(f'psql "{db_url}" -c \'{sql}\'', "Create index"):
+            print("❌ Aborting setup because index creation failed.")
+            sys.exit(1)
     
     # Success message
     print("""
