@@ -31,6 +31,7 @@
 | [Checklist-System.md](./Checklist-System.md) | Readiness checklist | Level 1-5 criteria for each project |
 | [Unified Ecosystem](./Unified%20Ecosystem) | Synergy & integration | Cross-project dependencies |
 | [Build template](./Build%20template) | Module template | Standard project structure |
+| [EcoSphere Full-Stack Readiness](./docs/deployment/EcoSphere_Full_Stack_Readiness.md) | Software + hardware integration layout | Derived from EcoSphere architecture |
 | [Executive_Summary.md](./Executive_Summary.md) | Venture Foundry overview | 3-page executive summary for decision-makers |
 
 ---
