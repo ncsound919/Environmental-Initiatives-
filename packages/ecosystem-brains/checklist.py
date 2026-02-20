@@ -94,14 +94,14 @@ def execute_checklist_phases(project_code: str) -> Dict[str, Any]:
         "level_3": bool(level_3["passed"]),  # Physical Twin
         "level_4": bool(level_4["passed"]),  # RegenCity Integration
     }
-    # Calculate readiness: 20% per level (Level 4 adds 10% to reach 70%)
+    # Calculate readiness from Levels 1-3: 20% per level (max 60% via automation)
     readiness = sum([
         20 if levels["level_1"] else 0,
         20 if levels["level_2"] else 0,
         20 if levels["level_3"] else 0,
-        10 if levels["level_4"] else 0,  # Level 4 is partial (10%)
     ])
     return {
+        "project_code": project_code,
         "project_code": project_code,
         "readiness": readiness,
         "target_60_to_70": 60 <= readiness <= 70,
