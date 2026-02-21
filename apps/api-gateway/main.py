@@ -17,6 +17,7 @@ import re
 import sys
 import os
 import logging
+import threading
 from pathlib import Path
 
 # Add ecosystem-brains to path
@@ -63,7 +64,19 @@ def _load_hardware_manifest() -> Dict[str, Any]:
     return {"metadata": {}, "initiatives": []}
 
 
-HARDWARE_MANIFEST = _load_hardware_manifest()
+def _validate_manifest(raw: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(raw, dict):
+        logging.error("Hardware manifest is not an object; ignoring")
+        return {"metadata": {}, "initiatives": []}
+    initiatives = raw.get("initiatives", [])
+    if not isinstance(initiatives, list):
+        logging.error("Hardware manifest initiatives is not a list; ignoring")
+        return {"metadata": raw.get("metadata", {}), "initiatives": []}
+    return {"metadata": raw.get("metadata", {}), "initiatives": initiatives}
+
+
+HARDWARE_MANIFEST = _validate_manifest(_load_hardware_manifest())
+_mqtt_lock = threading.Lock()
 
 
 # ============================================
@@ -183,22 +196,24 @@ def _sign_token(payload: Dict[str, Any]) -> str:
 def _get_mqtt_service() -> EcosMqttService:
     global _mqtt_service
     if not MQTT_ENABLED:
-        raise ValueError("MQTT disabled via MQTT_ENABLED=false (configuration)")
+        return None
     if _mqtt_service is None:
-        broker_host = os.getenv("MQTT_BROKER_HOST", "localhost")
-        broker_port = int(os.getenv("MQTT_BROKER_PORT", "1883"))
-        try:
-            service = EcosMqttService(broker_host=broker_host, broker_port=broker_port)
-            service.connect()
-            _mqtt_service = service
-        except (ConnectionError, TimeoutError, OSError):
-            logging.error(
-                "Failed to connect MQTT service to %s:%s; MQTT functionality will be unavailable until connection is restored",
-                broker_host,
-                broker_port,
-                exc_info=True,
-            )
-            _mqtt_service = None
+        with _mqtt_lock:
+            if _mqtt_service is None:
+                broker_host = os.getenv("MQTT_BROKER_HOST", "localhost")
+                broker_port = int(os.getenv("MQTT_BROKER_PORT", "1883"))
+                try:
+                    service = EcosMqttService(broker_host=broker_host, broker_port=broker_port)
+                    service.connect()
+                    _mqtt_service = service
+                except (ConnectionError, TimeoutError, OSError):
+                    logging.error(
+                        "Failed to connect MQTT service to %s:%s; MQTT functionality will be unavailable until connection is restored",
+                        broker_host,
+                        broker_port,
+                        exc_info=True,
+                    )
+                    _mqtt_service = None
     return _mqtt_service
 
 
@@ -321,7 +336,7 @@ async def hardware_control(project_code: str, command: ControlCommandRequest):
                 published = False
 
     return {
-        "status": "accepted",
+        "status": "published" if published else "received_unpublished",
         "mqtt_enabled": MQTT_ENABLED,
         "published": published,
         "project_code": project_code,

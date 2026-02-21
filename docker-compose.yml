@@ -90,7 +90,7 @@ services:
     container_name: ecos-keycloak
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/ecos_db
+      KC_DB_URL: jdbc:postgresql://postgres:5432/ecos_db  # Shares DB; change to dedicated DB (e.g., ecos_keycloak) if desired
       KC_DB_USERNAME: ecos
       KC_DB_PASSWORD: ecos_password
       # Supply via .env; required even in development
@@ -118,6 +118,11 @@ services:
     networks:
       - ecos-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "echo stat | nc -w 2 localhost 2181"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
 
   # Kafka broker
   kafka:
@@ -135,6 +140,8 @@ services:
       - KAFKA_CFG_SASL_ENABLED_MECHANISMS=PLAIN
       - KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
       - KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL=SASL_PLAINTEXT
+      - KAFKA_ZOOKEEPER_USER=ecos
+      - KAFKA_ZOOKEEPER_PASSWORD=ecos_password
     ports:
       - "9092:9092"
     depends_on:
