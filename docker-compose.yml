@@ -83,6 +83,57 @@ services:
       - ecos-network
     restart: unless-stopped
 
+  # Keycloak for SSO
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.6
+    command: ["start-dev"]
+    container_name: ecos-keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/ecos_db
+      KC_DB_USERNAME: ecos
+      KC_DB_PASSWORD: ecos_password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ecos-network
+    restart: unless-stopped
+
+  # Zookeeper (for Kafka)
+  zookeeper:
+    image: bitnami/zookeeper:3.9
+    container_name: ecos-zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+    networks:
+      - ecos-network
+    restart: unless-stopped
+
+  # Kafka broker
+  kafka:
+    image: bitnami/kafka:3.7
+    container_name: ecos-kafka
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    networks:
+      - ecos-network
+    restart: unless-stopped
+
   # Next.js Web Frontend
   web:
     build:

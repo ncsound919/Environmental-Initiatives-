@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "ECOS Unified Ecosystem - 13 Environmental Businesses",
   "private": true,
+  "packageManager": "npm@11.6.2",
   "workspaces": [
     "apps/*",
     "packages/*"
