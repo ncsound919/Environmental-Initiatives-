@@ -93,9 +93,9 @@ services:
       KC_DB_URL: jdbc:postgresql://postgres:5432/ecos_db
       KC_DB_USERNAME: ecos
       KC_DB_PASSWORD: ecos_password
-      # Change these for any production deployment
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      # Supply via .env; required even in development
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     ports:
       - "8080:8080"
     depends_on:
@@ -110,7 +110,9 @@ services:
     image: bitnami/zookeeper:3.9
     container_name: ecos-zookeeper
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ALLOW_ANONYMOUS_LOGIN=no
+      - ZOO_CLIENT_USER=ecos
+      - ZOO_CLIENT_PASSWORD=ecos_password
     ports:
       - "2181:2181"
     networks:
@@ -124,9 +126,15 @@ services:
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_LISTENERS=SASL_PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=SASL_PLAINTEXT://kafka:9092
+      - KAFKA_CLIENT_USER=ecos
+      - KAFKA_CLIENT_PASSWORD=ecos_password
+      - KAFKA_INTER_BROKER_USER=ecos
+      - KAFKA_INTER_BROKER_PASSWORD=ecos_password
+      - KAFKA_CFG_SASL_ENABLED_MECHANISMS=PLAIN
+      - KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
+      - KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL=SASL_PLAINTEXT
     ports:
       - "9092:9092"
     depends_on:

@@ -193,7 +193,7 @@ def _get_mqtt_service() -> EcosMqttService:
             _mqtt_service = service
         except Exception:
             logging.exception(
-                "Failed to connect MQTT service to %s:%s; MQTT commands will not be published",
+                "Failed to connect MQTT service to %s:%s; MQTT functionality will be unavailable until connection is restored",
                 broker_host,
                 broker_port,
             )
@@ -310,7 +310,12 @@ async def hardware_control(project_code: str, command: ControlCommandRequest):
                     params=command.params,
                 )
             except Exception:
-                logging.exception("Failed to publish control command")
+                logging.exception(
+                    "Failed to publish control command for device %s in project %s (action: %s)",
+                    command.device_id,
+                    project_code,
+                    command.action,
+                )
                 published = False
 
     return {
