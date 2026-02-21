@@ -16,6 +16,7 @@ import base64
 import re
 import sys
 import os
+import logging
 from pathlib import Path
 
 # Add ecosystem-brains to path
@@ -189,7 +190,8 @@ def _get_mqtt_service() -> EcosMqttService:
             service = EcosMqttService()
             service.connect()
             _mqtt_service = service
-        except Exception:
+        except Exception as exc:
+            logging.exception("Failed to connect MQTT service: %s", exc)
             _mqtt_service = None
     return _mqtt_service
 
@@ -281,7 +283,10 @@ async def hardware_profile(project_code: str):
 @app.post("/hardware/{project_code}/control")
 async def hardware_control(project_code: str, command: ControlCommandRequest):
     if project_code != command.project_code:
-        raise HTTPException(status_code=400, detail="project_code mismatch")
+        raise HTTPException(
+            status_code=400,
+            detail=f"project_code mismatch: url={project_code}, body={command.project_code}",
+        )
     profile = _find_hardware_profile(project_code)
     if not profile:
         raise HTTPException(status_code=404, detail="Unknown project_code")
