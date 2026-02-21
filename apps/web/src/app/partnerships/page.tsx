@@ -5,17 +5,15 @@ import { projects } from '@/lib/data';
 import { withOpacity } from '@/lib/utils';
 
 // All unique resource categories across initiatives
-const ALL_RESOURCE_CATEGORIES = [
-  'Facilities',
-  'Hardware',
-  'Software Dev',
-  'Architecture and Design',
-  'Land',
-  'Labor',
-  'Capital',
-  'Labs',
-  'Hydroponics',
-];
+const ALL_RESOURCE_CATEGORIES = Array.from(
+  new Set(
+    projects.flatMap((project) =>
+      (project.resourceNeeds ?? [])
+        .map((need) => need.category)
+        .filter((category): category is string => Boolean(category)),
+    ),
+  ),
+);
 
 export default function PartnershipsPage() {
   return (
