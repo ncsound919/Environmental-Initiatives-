@@ -190,8 +190,8 @@ def _get_mqtt_service() -> EcosMqttService:
             service = EcosMqttService()
             service.connect()
             _mqtt_service = service
-        except Exception as exc:
-            logging.exception("Failed to connect MQTT service: %s", exc)
+        except Exception:
+            logging.exception("Failed to connect MQTT service")
             _mqtt_service = None
     return _mqtt_service
 
@@ -292,19 +292,26 @@ async def hardware_control(project_code: str, command: ControlCommandRequest):
         raise HTTPException(status_code=404, detail="Unknown project_code")
     allowed_actions = profile.get("controlActions", [])
     if allowed_actions and command.action not in allowed_actions:
-        raise HTTPException(status_code=400, detail=f"Action not allowed. Allowed: {allowed_actions}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"Action '{command.action}' not allowed. Allowed: {allowed_actions}",
+        )
 
     topic = f"ecos/{project_code}/{command.device_id}/control"
     published = False
     if MQTT_ENABLED:
         service = _get_mqtt_service()
         if service:
-            published = service.publish_control(
-                project_code=project_code,
-                device_id=command.device_id,
-                action=command.action,
-                params=command.params,
-            )
+            try:
+                published = service.publish_control(
+                    project_code=project_code,
+                    device_id=command.device_id,
+                    action=command.action,
+                    params=command.params,
+                )
+            except Exception:
+                logging.exception("Failed to publish control command")
+                published = False
 
     return {
         "status": "accepted",
