@@ -12,10 +12,10 @@ export default function Home() {
         {/* Hero Section */}
         <section className="hero">
           <div className="container">
-            <h1 className="hero-title">ECOS Ecosystem</h1>
+            <h1 className="hero-title">Overlay365</h1>
             <p className="hero-subtitle">
-              13 interconnected climate-tech businesses sharing unified infrastructure. 
-              Building a sustainable future through innovation.
+              13 interconnected climate-tech sub-businesses seeking strategic partnerships and affiliate marketing teams. 
+              From facilities and hardware to hydroponics and deep-tech R&D.
             </p>
             <div className="hero-stats">
               <div className="stat-item">
@@ -41,9 +41,9 @@ export default function Home() {
         {/* Projects by Phase */}
         <section className="section">
           <div className="container">
-            <h2 className="section-title">The RegenCity Ecosystem</h2>
+            <h2 className="section-title">The Overlay365 Ecosystem</h2>
             <p className="section-subtitle">
-              Explore our 13 projects organized by deployment phase in the 20-acre compound.
+              Explore our 13 sub-businesses organized by deployment phase. Each seeks strategic partners and affiliate marketing teams.
             </p>
 
             {phases.map((phase) => (
@@ -74,11 +74,16 @@ export default function Home() {
           <div className="container" style={{ textAlign: 'center' }}>
             <h2 className="section-title">Ready to Explore?</h2>
             <p className="section-subtitle" style={{ marginBottom: '2rem' }}>
-              View the system dashboard for real-time monitoring and analytics.
+              View the system dashboard for real-time monitoring and analytics, or explore partnership opportunities.
             </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/dashboard" className="btn btn-primary">
               Open Dashboard
             </Link>
+            <Link href="/partnerships" className="btn btn-secondary">
+              Explore Partnerships
+            </Link>
+            </div>
           </div>
         </section>
       </main>

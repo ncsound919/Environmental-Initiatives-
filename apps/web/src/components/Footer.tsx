@@ -8,6 +8,9 @@ export function Footer() {
           <a href="https://github.com/ncsound919/Environmental-Initiatives-" className="footer-link" target="_blank" rel="noopener noreferrer">
             GitHub
           </a>
+          <Link href="/partnerships" className="footer-link">
+            Partnerships
+          </Link>
           <Link href="/api-docs" className="footer-link">
             API Documentation
           </Link>
@@ -15,7 +18,7 @@ export function Footer() {
             Dashboard
           </Link>
         </div>
-        <p>&copy; {new Date().getFullYear()} ECOS - RegenCity Ecosystem. Built for a sustainable future.</p>
+        <p>&copy; {new Date().getFullYear()} Overlay365 — Environmental Initiatives Ecosystem. Building a sustainable future.</p>
       </div>
     </footer>
   );
