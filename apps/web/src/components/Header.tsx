@@ -24,7 +24,7 @@ export function Header() {
             href="/projects" 
             className={`nav-link ${pathname?.startsWith('/projects') ? 'active' : ''}`}
           >
-            Projects
+            Initiatives
           </Link>
           <Link 
             href="/dashboard" 

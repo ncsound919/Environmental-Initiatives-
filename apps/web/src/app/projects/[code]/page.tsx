@@ -22,7 +22,7 @@ export default function ProjectDetailPage() {
             <h1 className="section-title">Project Not Found</h1>
             <p className="section-subtitle">The requested project does not exist.</p>
             <Link href="/projects" className="btn btn-primary">
-              Back to Projects
+              Back to Initiatives
             </Link>
           </div>
         </main>
@@ -42,7 +42,7 @@ export default function ProjectDetailPage() {
         }}>
           <div className="container">
             <Link href="/projects" style={{ color: '#6b7280', marginBottom: '1rem', display: 'inline-block' }}>
-              ← Back to Projects
+              ← Back to Initiatives
             </Link>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
               <div style={{ 

@@ -20,7 +20,7 @@ export default function Home() {
             <div className="hero-stats">
               <div className="stat-item">
                 <div className="stat-value">13</div>
-                <div className="stat-label">Projects</div>
+                <div className="stat-label">Initiatives</div>
               </div>
               <div className="stat-item">
                 <div className="stat-value">$183M</div>
