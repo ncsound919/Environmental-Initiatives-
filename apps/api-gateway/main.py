@@ -186,13 +186,17 @@ def _get_mqtt_service() -> EcosMqttService:
         return None
     if _mqtt_service is None:
         broker_host = os.getenv("MQTT_BROKER_HOST", "localhost")
-        broker_port = os.getenv("MQTT_BROKER_PORT", "1883")
+        broker_port = int(os.getenv("MQTT_BROKER_PORT", "1883"))
         try:
             service = EcosMqttService(broker_host=broker_host, broker_port=broker_port)
             service.connect()
             _mqtt_service = service
         except Exception:
-            logging.exception("Failed to connect MQTT service to %s:%s", broker_host, broker_port)
+            logging.exception(
+                "Failed to connect MQTT service to %s:%s; MQTT commands will not be published",
+                broker_host,
+                broker_port,
+            )
             _mqtt_service = None
     return _mqtt_service
 
