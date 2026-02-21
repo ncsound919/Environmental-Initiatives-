@@ -1,0 +1,114 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "telemetrySchema": "packages/hardware-sdk/src/index.ts#TelemetrySchema",
+    "controlTopicFormat": "ecos/{project}/{deviceId}/control",
+    "telemetryTopicFormat": "ecos/{project}/{deviceId}/telemetry"
+  },
+  "initiatives": [
+    {
+      "code": "P01",
+      "name": "EcoHomes OS",
+      "deviceTypes": ["hvac-controller", "thermostat", "air-quality"],
+      "sensors": ["temperature", "humidity", "co2", "vocs"],
+      "actuators": ["fan_speed", "damper", "heat_pump_stage"],
+      "controlActions": ["setpoint", "fan-mode", "circulation-boost"]
+    },
+    {
+      "code": "P02",
+      "name": "AgriConnect",
+      "deviceTypes": ["soil-probe", "irrigation-valve"],
+      "sensors": ["soil_moisture", "soil_ph", "n", "p", "k"],
+      "actuators": ["valve_open", "fertigation_mix"],
+      "controlActions": ["irrigate-now", "dose-npk", "set-thresholds"]
+    },
+    {
+      "code": "P03",
+      "name": "RegeneraFarm",
+      "deviceTypes": ["compost-sensor", "nutrient-loop"],
+      "sensors": ["temperature", "moisture", "ph", "n", "p", "k"],
+      "actuators": ["aeration", "pump"],
+      "controlActions": ["balance-loop", "dose-nutrients"]
+    },
+    {
+      "code": "P04",
+      "name": "HempMobility",
+      "deviceTypes": ["material-testbench"],
+      "sensors": ["strain", "stress", "temperature"],
+      "actuators": ["load_cell", "heater"],
+      "controlActions": ["run-test", "ramp-temp"]
+    },
+    {
+      "code": "P05",
+      "name": "LumiFreq",
+      "deviceTypes": ["spectral-controller"],
+      "sensors": ["ppfd", "spectrum"],
+      "actuators": ["channel_uv", "channel_blue", "channel_red", "channel_farred"],
+      "controlActions": ["set-recipe", "dli-hold", "photoperiod"]
+    },
+    {
+      "code": "P06",
+      "name": "NucleoSim",
+      "deviceTypes": ["simulation-node"],
+      "sensors": ["temp_sim", "pressure_sim"],
+      "actuators": ["sim_case"],
+      "controlActions": ["start-sim", "stop-sim", "set-boundary"]
+    },
+    {
+      "code": "P07",
+      "name": "PlastiCycle",
+      "deviceTypes": ["bioreactor"],
+      "sensors": ["ph", "temperature", "dissolved_oxygen"],
+      "actuators": ["agitator", "airflow", "feed_pump"],
+      "controlActions": ["maintain-ph", "ramp-temp", "dose-feed"]
+    },
+    {
+      "code": "P08",
+      "name": "EverLume",
+      "deviceTypes": ["led-bulb"],
+      "sensors": ["voltage", "thermal_cycles", "uptime"],
+      "actuators": ["brightness", "on_off"],
+      "controlActions": ["set-brightness", "firmware-ota"]
+    },
+    {
+      "code": "P09",
+      "name": "AquaGen",
+      "deviceTypes": ["awg-unit"],
+      "sensors": ["humidity", "temperature", "power_draw"],
+      "actuators": ["compressor", "fan", "uv"],
+      "controlActions": ["start-awg", "stop-awg", "optimize-cost"]
+    },
+    {
+      "code": "P10",
+      "name": "ThermalGrid",
+      "deviceTypes": ["geothermal-plc"],
+      "sensors": ["flow_rate", "supply_temp", "return_temp"],
+      "actuators": ["pump_speed", "valve_position"],
+      "controlActions": ["balance-loop", "shed-load", "boost-heat"]
+    },
+    {
+      "code": "P11",
+      "name": "Future",
+      "deviceTypes": ["placeholder"],
+      "sensors": [],
+      "actuators": [],
+      "controlActions": []
+    },
+    {
+      "code": "P12",
+      "name": "SolarShare",
+      "deviceTypes": ["inverter", "string-monitor"],
+      "sensors": ["irradiance", "voltage", "current", "power"],
+      "actuators": ["setpoint_power"],
+      "controlActions": ["curtail", "export", "self-consume"]
+    },
+    {
+      "code": "P13",
+      "name": "MicroHydro",
+      "deviceTypes": ["turbine-controller"],
+      "sensors": ["flow", "head", "power"],
+      "actuators": ["gate", "diverter"],
+      "controlActions": ["spin-up", "spin-down", "island-mode"]
+    }
+  ]
+}

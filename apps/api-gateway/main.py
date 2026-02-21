@@ -16,6 +16,9 @@ import base64
 import re
 import sys
 import os
+import logging
+import threading
+from pathlib import Path
 
 # Add ecosystem-brains to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../packages/ecosystem-brains'))
@@ -34,6 +37,7 @@ from solvers import (
 )
 from dispatcher import dispatch
 from checklist import execute_all_initiatives
+from mqtt_service import EcosMqttService
 
 app = FastAPI(
     title="ECOS API Gateway",
@@ -46,6 +50,33 @@ if not SECRET_KEY:
     if os.environ.get("NODE_ENV") == "production":
         raise RuntimeError("ECOS_JWT_SECRET must be set in production")
     SECRET_KEY = secrets.token_urlsafe(32)
+
+ROOT_DIR = Path(__file__).resolve().parents[2]
+HARDWARE_MANIFEST_PATH = ROOT_DIR / "config" / "hardware-manifests.json"
+MQTT_ENABLED = os.environ.get("MQTT_ENABLED", "false").lower() == "true"
+_mqtt_service = None
+
+
+def _load_hardware_manifest() -> Dict[str, Any]:
+    if HARDWARE_MANIFEST_PATH.exists():
+        with HARDWARE_MANIFEST_PATH.open() as f:
+            return json.load(f)
+    return {"metadata": {}, "initiatives": []}
+
+
+def _validate_manifest(raw: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(raw, dict):
+        logging.warning("Hardware manifest is not an object; ignoring invalid manifest")
+        return {"metadata": {}, "initiatives": []}
+    initiatives = raw.get("initiatives", [])
+    if not isinstance(initiatives, list):
+        logging.warning("Hardware manifest initiatives is not a list; ignoring invalid manifest")
+        return {"metadata": raw.get("metadata", {}), "initiatives": []}
+    return {"metadata": raw.get("metadata", {}), "initiatives": initiatives}
+
+
+HARDWARE_MANIFEST = _validate_manifest(_load_hardware_manifest())
+_mqtt_lock = threading.Lock()
 
 
 # ============================================
@@ -147,6 +178,12 @@ class SaaSTierRequest(BaseModel):
     tier: Literal["free", "pro", "enterprise"]
 
 
+class ControlCommandRequest(BaseModel):
+    device_id: str = Field(min_length=1)
+    action: str = Field(min_length=1)
+    params: Dict[str, Any] = Field(default_factory=dict)
+
+
 def _sign_token(payload: Dict[str, Any]) -> str:
     serialized = json.dumps(payload, sort_keys=True)
     encoded_payload = base64.urlsafe_b64encode(serialized.encode()).decode()
@@ -154,6 +191,30 @@ def _sign_token(payload: Dict[str, Any]) -> str:
     message = f"{encoded_payload}.{nonce}"
     signature = hmac.new(SECRET_KEY.encode(), message.encode(), hashlib.sha256).hexdigest()
     return f"v1.{message}.{signature}"
+
+
+def _get_mqtt_service() -> EcosMqttService:
+    global _mqtt_service
+    if not MQTT_ENABLED:
+        raise RuntimeError("MQTT disabled via MQTT_ENABLED=false")
+    if _mqtt_service is None:
+        with _mqtt_lock:
+            if _mqtt_service is None:
+                broker_host = os.getenv("MQTT_BROKER_HOST", "localhost")
+                broker_port = int(os.getenv("MQTT_BROKER_PORT", "1883"))
+                try:
+                    service = EcosMqttService(broker_host=broker_host, broker_port=broker_port)
+                    service.connect()
+                    _mqtt_service = service
+                except (ConnectionError, TimeoutError, OSError):
+                    logging.error(
+                        "Failed to connect MQTT service to %s:%s; MQTT functionality will be unavailable until connection is restored",
+                        broker_host,
+                        broker_port,
+                        exc_info=True,
+                    )
+                    _mqtt_service = None
+    return _mqtt_service
 
 
 def _validate_tier(tier: str, allowed: Iterable[str]) -> str:
@@ -204,6 +265,13 @@ async def list_projects():
     return {"projects": projects, "total": 13, "average_readiness": f"{average_readiness:.1f}%"}
 
 
+def _find_hardware_profile(project_code: str) -> Dict[str, Any]:
+    for item in HARDWARE_MANIFEST.get("initiatives", []):
+        if item.get("code") == project_code:
+            return item
+    return {}
+
+
 @app.get("/api/checklist/readiness")
 async def checklist_readiness():
     """Execute checklist Levels 2 and 3 across all initiatives."""
@@ -216,6 +284,71 @@ async def checklist_readiness():
         "initiatives_in_60_to_70_band": initiatives_in_target,
         "average_readiness": f"{average_readiness:.1f}%",
         "results": phase_results,
+    }
+
+
+@app.get("/hardware/manifest")
+async def hardware_manifest():
+    """Return hardware scaffolds for all initiatives."""
+    return HARDWARE_MANIFEST
+
+
+@app.get("/hardware/{project_code}")
+async def hardware_profile(project_code: str):
+    profile = _find_hardware_profile(project_code)
+    if not profile:
+        raise HTTPException(status_code=404, detail="Unknown project_code")
+    return profile
+
+
+@app.post("/hardware/{project_code}/control")
+async def hardware_control(project_code: str, command: ControlCommandRequest):
+    profile = _find_hardware_profile(project_code)
+    if not profile:
+        raise HTTPException(status_code=404, detail="Unknown project_code")
+    allowed_actions = profile.get("controlActions", [])
+    if allowed_actions and command.action not in allowed_actions:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Action '{command.action}' not allowed. Allowed: {allowed_actions}",
+        )
+
+    topic = f"ecos/{project_code}/{command.device_id}/control"
+    published = False
+    if MQTT_ENABLED:
+        try:
+            service = _get_mqtt_service()
+        except RuntimeError as exc:
+            logging.warning("MQTT disabled; control not published: %s", exc)
+            service = None
+
+        if service:
+            try:
+                published = service.publish_control(
+                    project_code=project_code,
+                    device_id=command.device_id,
+                    action=command.action,
+                    params=command.params,
+                )
+            except (ConnectionError, TimeoutError, OSError):
+                logging.error(
+                    "Failed to publish control command for device %s in project %s (action: %s)",
+                    command.device_id,
+                    project_code,
+                    command.action,
+                    exc_info=True,
+                )
+                published = False
+
+    return {
+        "status": "published" if published else "received_unpublished",
+        "mqtt_enabled": MQTT_ENABLED,
+        "published": published,
+        "project_code": project_code,
+        "device_id": command.device_id,
+        "action": command.action,
+        "topic": topic,
+        "allowed_actions": allowed_actions,
     }
 
 
