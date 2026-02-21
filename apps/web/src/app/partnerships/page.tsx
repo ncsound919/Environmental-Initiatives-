@@ -135,10 +135,8 @@ export default function PartnershipsPage() {
 
                   {/* Two-column body */}
                   <div
+                    className="dashboard"
                     style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gap: '1.5rem',
                       padding: '1.5rem',
                     }}
                   >
