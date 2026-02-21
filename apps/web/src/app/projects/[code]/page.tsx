@@ -22,7 +22,7 @@ export default function ProjectDetailPage() {
             <h1 className="section-title">Project Not Found</h1>
             <p className="section-subtitle">The requested project does not exist.</p>
             <Link href="/projects" className="btn btn-primary">
-              Back to Projects
+              Back to Initiatives
             </Link>
           </div>
         </main>
@@ -42,7 +42,7 @@ export default function ProjectDetailPage() {
         }}>
           <div className="container">
             <Link href="/projects" style={{ color: '#6b7280', marginBottom: '1rem', display: 'inline-block' }}>
-              ← Back to Projects
+              ← Back to Initiatives
             </Link>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
               <div style={{ 
@@ -113,6 +113,56 @@ export default function ProjectDetailPage() {
                   <p style={{ lineHeight: '1.75', color: '#374151' }}>
                     {project.regenCityRole}
                   </p>
+                </div>
+
+                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                    Strategic Partnership Needs
+                  </h2>
+                  <ul style={{ listStyle: 'none' }}>
+                    {project.partnershipNeeds.map((need, index) => (
+                      <li
+                        key={index}
+                        style={{
+                          padding: '0.6rem 0',
+                          borderBottom: index < project.partnershipNeeds.length - 1 ? '1px solid #e5e7eb' : 'none',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '0.5rem',
+                          fontSize: '0.9rem',
+                          color: '#374151'
+                        }}
+                      >
+                        <span style={{ color: project.color, fontWeight: 'bold', marginTop: '2px' }}>🤝</span>
+                        {need}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                    Affiliate Marketing Opportunities
+                  </h2>
+                  <ul style={{ listStyle: 'none' }}>
+                    {project.affiliateOpportunities.map((opp, index) => (
+                      <li
+                        key={index}
+                        style={{
+                          padding: '0.6rem 0',
+                          borderBottom: index < project.affiliateOpportunities.length - 1 ? '1px solid #e5e7eb' : 'none',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '0.5rem',
+                          fontSize: '0.9rem',
+                          color: '#374151'
+                        }}
+                      >
+                        <span style={{ color: project.color, fontWeight: 'bold', marginTop: '2px' }}>📣</span>
+                        {opp}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 <div className="dashboard-card">
@@ -192,6 +242,40 @@ export default function ProjectDetailPage() {
                 </div>
 
                 <div className="dashboard-card">
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                    Resource Needs
+                  </h2>
+                  {project.resourceNeeds.map((group, gi) => (
+                    <div key={gi} style={{ marginBottom: '1rem' }}>
+                      <div style={{
+                        fontSize: '0.75rem',
+                        fontWeight: '700',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: project.color,
+                        marginBottom: '0.4rem'
+                      }}>
+                        {group.category}
+                      </div>
+                      <ul style={{ listStyle: 'none' }}>
+                        {group.items.map((item, ii) => (
+                          <li key={ii} style={{
+                            fontSize: '0.85rem',
+                            color: '#374151',
+                            padding: '0.25rem 0',
+                            borderBottom: ii < group.items.length - 1 ? '1px solid #f3f4f6' : 'none',
+                            display: 'flex',
+                            gap: '0.4rem'
+                          }}>
+                            <span style={{ color: '#9ca3af' }}>–</span>{item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="dashboard-card" style={{ marginTop: '1.5rem' }}>
                   <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
                     Project Info
                   </h2>

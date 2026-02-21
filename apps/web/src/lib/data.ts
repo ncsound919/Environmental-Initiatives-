@@ -1,4 +1,9 @@
 // Project data based on Business Outline
+export interface ResourceNeed {
+  category: string;
+  items: string[];
+}
+
 export interface Project {
   id: string;
   code: string;
@@ -14,6 +19,9 @@ export interface Project {
   techStack: string[];
   regenCityRole: string;
   apiEndpoints: string[];
+  partnershipNeeds: string[];
+  affiliateOpportunities: string[];
+  resourceNeeds: ResourceNeed[];
 }
 
 export interface Phase {
@@ -61,7 +69,26 @@ export const projects: Project[] = [
     features: ['Predictive Maintenance', 'Bayesian Reliability Model', 'Fleet Management', 'Mesh Network'],
     techStack: ['C++ (ESP32)', 'AWS IoT Core', 'React Dashboard'],
     regenCityRole: 'Streetlights and housing illumination; establishes mesh network for other sensors',
-    apiEndpoints: ['/api/bulb/predict']
+    apiEndpoints: ['/api/bulb/predict'],
+    partnershipNeeds: [
+      'Commercial property management firms for deployment',
+      'Utility companies for grid integration',
+      'IoT hardware manufacturers for custom bulb supply',
+      'Insurance providers for uptime guarantee underwriting',
+    ],
+    affiliateOpportunities: [
+      'Energy efficiency consultants',
+      'Smart building integrators',
+      'Facility management companies',
+      'Municipal procurement partners',
+    ],
+    resourceNeeds: [
+      { category: 'Hardware', items: ['ESP32 microcontrollers', 'LED driver boards', 'Wireless mesh modules'] },
+      { category: 'Facilities', items: ['Assembly / QA lab', 'Warehouse for fleet inventory'] },
+      { category: 'Software Dev', items: ['Embedded firmware engineers', 'Cloud dashboard developers'] },
+      { category: 'Capital', items: ['Seed funding for pilot fleet deployment', 'R&D grants for predictive model'] },
+      { category: 'Labor', items: ['Field installation technicians', 'Data-science interns'] },
+    ]
   },
   {
     id: 'P13',
@@ -77,7 +104,26 @@ export const projects: Project[] = [
     features: ['Stream Flow Forecasting', 'LSTM Neural Networks', 'Battery Management', 'Weather Integration'],
     techStack: ['Go/Node.js', 'TimescaleDB', 'Industrial PLCs'],
     regenCityRole: 'Provides baseload power to construction HQ and server room',
-    apiEndpoints: ['/api/hydro/forecast']
+    apiEndpoints: ['/api/hydro/forecast'],
+    partnershipNeeds: [
+      'Remote-community energy co-ops',
+      'Eco-resort developers',
+      'Hydrology engineering firms',
+      'Battery / storage technology suppliers',
+    ],
+    affiliateOpportunities: [
+      'Off-grid living influencers and media',
+      'Renewable energy brokers',
+      'Rural electrification NGOs',
+      'Carbon credit marketplace platforms',
+    ],
+    resourceNeeds: [
+      { category: 'Land', items: ['Riparian rights / water access agreements', 'Creek or river-adjacent sites'] },
+      { category: 'Hardware', items: ['Turbine runners', 'Industrial PLCs', 'Battery banks'] },
+      { category: 'Capital', items: ['Equipment financing', 'Project-finance lenders for ESCO contracts'] },
+      { category: 'Labs', items: ['Hydraulics testing facility', 'Flow-measurement instrumentation'] },
+      { category: 'Labor', items: ['Civil/mechanical engineers', 'On-site maintenance crew'] },
+    ]
   },
   {
     id: 'P09',
@@ -93,7 +139,26 @@ export const projects: Project[] = [
     features: ['Humidity Forecasting', 'Cost Optimization', 'Prophet ML', 'PuLP Solver'],
     techStack: ['ESP32/MQTT', 'Python', 'Prophet'],
     regenCityRole: 'Distributed drinking water nodes for residential zone',
-    apiEndpoints: ['/api/awg/forecast', '/api/awg/optimize']
+    apiEndpoints: ['/api/awg/forecast', '/api/awg/optimize'],
+    partnershipNeeds: [
+      'Water utility companies for regulatory pathway',
+      'Climate-resilience NGOs for deployment grants',
+      'HVAC manufacturers for condenser-coil integration',
+      'Carbon credit registries for water-production credits',
+    ],
+    affiliateOpportunities: [
+      'Disaster-preparedness equipment retailers',
+      'Sustainable living community networks',
+      'International development organisations',
+      'Green building certification bodies',
+    ],
+    resourceNeeds: [
+      { category: 'Hardware', items: ['Condensation units', 'Filtration assemblies', 'ESP32 sensor nodes'] },
+      { category: 'Facilities', items: ['Clean assembly room', 'Water-quality testing lab'] },
+      { category: 'Capital', items: ['Working capital for unit production runs', 'Grant funding (USDA / EPA)'] },
+      { category: 'Software Dev', items: ['ML forecasting engineers (Prophet/Python)', 'Mobile monitoring app'] },
+      { category: 'Labor', items: ['Water-quality chemists', 'Field deployment technicians'] },
+    ]
   },
   // Phase 2: Biological Layer
   {
@@ -110,7 +175,27 @@ export const projects: Project[] = [
     features: ['Fungal Strain Recommendation', 'Soil Analysis', 'Yield Prediction', 'ML Matching'],
     techStack: ['React Native', 'TimescaleDB', 'scikit-learn'],
     regenCityRole: 'Inoculates Zone C soil to boost initial crop yields by ~30%',
-    apiEndpoints: ['/api/symbiosis/recommend']
+    apiEndpoints: ['/api/symbiosis/recommend'],
+    partnershipNeeds: [
+      'Commercial farms and agri-tech co-operatives',
+      'Soil-science research universities',
+      'Sensor hardware suppliers (IoT soil probes)',
+      'Organic certification bodies',
+    ],
+    affiliateOpportunities: [
+      'Regenerative agriculture educators and YouTubers',
+      'Seed and organic fertiliser retailers',
+      'Farm management software platforms',
+      'Permaculture design consultants',
+    ],
+    resourceNeeds: [
+      { category: 'Land', items: ['Test plots (min 1 acre) for strain trials'] },
+      { category: 'Labs', items: ['Mycology inoculation lab', 'Soil analysis equipment'] },
+      { category: 'Hardware', items: ['Soil-moisture / nutrient sensors', 'Data-logger stations'] },
+      { category: 'Software Dev', items: ['scikit-learn ML pipeline engineers', 'React Native mobile app devs'] },
+      { category: 'Capital', items: ['Lab set-up capital', 'University partnership grants'] },
+      { category: 'Labor', items: ['Mycologists / microbiologists', 'Field agronomists'] },
+    ]
   },
   {
     id: 'P03',
@@ -126,7 +211,27 @@ export const projects: Project[] = [
     features: ['Nutrient Cycle Optimizer', 'Carbon Credits', 'Geospatial Tracking', 'Compost Management'],
     techStack: ['NestJS', 'PostGIS', 'OR-Tools', 'Mapbox'],
     regenCityRole: 'Operating system for the 6-acre main farm',
-    apiEndpoints: ['/api/farm/optimize']
+    apiEndpoints: ['/api/farm/optimize'],
+    partnershipNeeds: [
+      'Carbon credit exchanges and registries',
+      'Precision-ag equipment manufacturers',
+      'Grocery chains and food distributors for off-take agreements',
+      'Insurance providers for crop yield guarantees',
+    ],
+    affiliateOpportunities: [
+      'Regenerative farm influencers and media',
+      'Farm-to-table restaurant networks',
+      'CSA (Community Supported Agriculture) platforms',
+      'Sustainable food certification programmes',
+    ],
+    resourceNeeds: [
+      { category: 'Land', items: ['6+ acres for closed-loop farm operations', 'Water rights for irrigation'] },
+      { category: 'Facilities', items: ['Processing and storage barns', 'Composting infrastructure'] },
+      { category: 'Hydroponics', items: ['Greenhouse hydroponic bays', 'Nutrient dosing systems'] },
+      { category: 'Software Dev', items: ['NestJS / PostGIS backend engineers', 'Geospatial data scientists'] },
+      { category: 'Capital', items: ['USDA farm operating loans', 'Impact-investment capital'] },
+      { category: 'Labor', items: ['Farm managers', 'Composting technicians', 'Data operators'] },
+    ]
   },
   {
     id: 'P07',
@@ -142,7 +247,27 @@ export const projects: Project[] = [
     features: ['Bioprocess Control', 'pH/Temp Management', 'Degradation Forecast', 'XGBoost ML'],
     techStack: ['Industrial PLCs', 'React Dashboard', 'Python'],
     regenCityRole: 'Processes construction waste and community plastic in Zone B',
-    apiEndpoints: ['/api/bioreactor/status']
+    apiEndpoints: ['/api/bioreactor/status'],
+    partnershipNeeds: [
+      'Municipalities for plastic waste tipping-fee contracts',
+      'Petrochemical companies as monomer off-takers',
+      'Biotech research institutions for strain licensing',
+      'Environmental regulators for pilot permits',
+    ],
+    affiliateOpportunities: [
+      'Waste management and recycling companies',
+      'Circular-economy advocacy organisations',
+      'Corporate ESG / sustainability consultants',
+      'Universities with bioengineering programmes',
+    ],
+    resourceNeeds: [
+      { category: 'Labs', items: ['Biosafety Level 1 wet lab', 'Bioreactor vessels (10–500 L)', 'Analytical chemistry equipment'] },
+      { category: 'Facilities', items: ['Industrial bioreactor hall', 'Feedstock pre-processing area'] },
+      { category: 'Hardware', items: ['Industrial PLCs', 'pH / temperature sensors', 'Peristaltic pumps'] },
+      { category: 'Capital', items: ['DOE / EPA grants for bio-remediation R&D', 'Equipment-leasing finance'] },
+      { category: 'Labor', items: ['Bioprocess engineers', 'Microbiologists', 'PLC automation technicians'] },
+      { category: 'Software Dev', items: ['Control-loop engineers (Python)', 'XGBoost ML data scientists'] },
+    ]
   },
   // Phase 3: Habitation Layer
   {
@@ -159,7 +284,28 @@ export const projects: Project[] = [
     features: ['Parametric Design', 'BOM Generation', 'Robot Toolpaths', '3D Visualization'],
     techStack: ['Three.js', 'NestJS', 'Redis', 'Python/Grasshopper'],
     regenCityRole: 'Rapidly constructs 40 tiny homes in Zone A',
-    apiEndpoints: ['/api/foam-homes/status']
+    apiEndpoints: ['/api/foam-homes/status'],
+    partnershipNeeds: [
+      'Affordable-housing developers and non-profits',
+      'Spray-foam insulation material suppliers',
+      'Construction robotics companies',
+      'Architects and parametric-design studios',
+    ],
+    affiliateOpportunities: [
+      'Tiny-home and off-grid living communities',
+      'Real estate investment trusts (REITs) focused on sustainability',
+      'Green building material retailers',
+      'Home builders and contractors networks',
+    ],
+    resourceNeeds: [
+      { category: 'Architecture and Design', items: ['Parametric building designers (Grasshopper/Rhino)', 'Structural engineers', 'Interior designers'] },
+      { category: 'Facilities', items: ['Robotic spray fabrication shed', 'Material storage yard'] },
+      { category: 'Land', items: ['Zoned residential parcels', 'Community layout planning'] },
+      { category: 'Software Dev', items: ['Three.js / WebGL 3D visualisation', 'NestJS BOM generation engine'] },
+      { category: 'Hardware', items: ['CNC foam-cutting robots', 'On-site sensor rigs'] },
+      { category: 'Capital', items: ['Construction finance', 'HUD / affordable-housing grants'] },
+      { category: 'Labor', items: ['Construction foremen', 'Foam-spray operators', 'Electricians and plumbers'] },
+    ]
   },
   {
     id: 'P10',
@@ -175,7 +321,27 @@ export const projects: Project[] = [
     features: ['Heat Flow Optimizer', 'Graph Theory', 'Valve Control', 'Sankey Visualization'],
     techStack: ['Go', 'NetworkX', 'Real-time Control'],
     regenCityRole: 'District heating loop under residential zone',
-    apiEndpoints: ['/api/geothermal/optimize']
+    apiEndpoints: ['/api/geothermal/optimize'],
+    partnershipNeeds: [
+      'District-energy utility operators',
+      'Geothermal drilling companies',
+      'HVAC engineering firms for integration',
+      'Municipal governments for long-term concession agreements',
+    ],
+    affiliateOpportunities: [
+      'Green building certification consultants (LEED/BREEAM)',
+      'Real estate developers building net-zero communities',
+      'Heat-pump equipment distributors',
+      'Energy-efficiency financing platforms',
+    ],
+    resourceNeeds: [
+      { category: 'Land', items: ['Subsurface drilling rights', 'Utility corridor easements'] },
+      { category: 'Facilities', items: ['Plant room for heat exchangers', 'Monitoring control centre'] },
+      { category: 'Hardware', items: ['Ground-loop pipes', 'Heat-exchange units', 'Variable-flow pumps'] },
+      { category: 'Capital', items: ['Infrastructure project-finance', 'Green bonds / PACE financing'] },
+      { category: 'Software Dev', items: ['Go network optimisation engineers', 'Real-time SCADA dashboard'] },
+      { category: 'Labor', items: ['Geothermal drilling crews', 'Mechanical / piping engineers'] },
+    ]
   },
   {
     id: 'P12',
@@ -191,7 +357,26 @@ export const projects: Project[] = [
     features: ['Credit Allocator', 'Irradiance Forecasting', 'Subscriber Portal', 'Grid Injection'],
     techStack: ['Stripe', 'Utility APIs', 'Mobile App'],
     regenCityRole: 'Administers solar array on parking structures',
-    apiEndpoints: ['/api/solar/forecast']
+    apiEndpoints: ['/api/solar/forecast'],
+    partnershipNeeds: [
+      'Community solar project developers',
+      'Utility companies for virtual net metering',
+      'Stripe / payment processors for subscriber billing',
+      'Solar installation and EPC contractors',
+    ],
+    affiliateOpportunities: [
+      'Rooftop solar referral networks',
+      'Sustainable finance and green-banking platforms',
+      'HOA and property-management companies',
+      'Electric vehicle charging network operators',
+    ],
+    resourceNeeds: [
+      { category: 'Hardware', items: ['Solar panels (bifacial)', 'String inverters', 'Smart meters'] },
+      { category: 'Facilities', items: ['Carport / rooftop mounting structures', 'Electrical switchgear room'] },
+      { category: 'Software Dev', items: ['Stripe billing integration', 'Irradiance forecasting ML', 'Subscriber portal (mobile)'] },
+      { category: 'Capital', items: ['Solar project tax-equity financing', 'ITC / IRA investment-tax-credit structures'] },
+      { category: 'Labor', items: ['Licensed electricians', 'Solar project managers'] },
+    ]
   },
   // Phase 4: Innovation Layer
   {
@@ -208,7 +393,27 @@ export const projects: Project[] = [
     features: ['FEA Simulation', 'Lifecycle Assessment', 'Crash Testing', 'WebGL Visualization'],
     techStack: ['AWS Batch/HPC', 'WebGL', 'Python'],
     regenCityRole: 'Garage in Zone D maintaining compound EV fleet',
-    apiEndpoints: ['/api/hemp-lab/status']
+    apiEndpoints: ['/api/hemp-lab/status'],
+    partnershipNeeds: [
+      'OEM automotive partners for material testing contracts',
+      'Hemp fibre cultivation farms and processors',
+      'University materials-science departments',
+      'National labs with HPC simulation facilities',
+    ],
+    affiliateOpportunities: [
+      'Sustainable automotive and EV communities',
+      'Biocomposite material distributors',
+      'Fleet electrification consultants',
+      'Agri-industrial hemp growers associations',
+    ],
+    resourceNeeds: [
+      { category: 'Labs', items: ['FEA / crash-testing simulation cluster (HPC)', 'Physical materials testing lab', 'Lifecycle assessment software (SimaPro)'] },
+      { category: 'Hardware', items: ['3D composite lay-up equipment', 'On-vehicle sensor arrays'] },
+      { category: 'Land', items: ['Hemp cultivation pilot plots (1–5 acres)'] },
+      { category: 'Capital', items: ['SBIR / DOE grants for biocomposites R&D', 'VC funding for commercialisation'] },
+      { category: 'Software Dev', items: ['WebGL / Three.js visualisation engineers', 'AWS Batch HPC job orchestration'] },
+      { category: 'Labor', items: ['Materials scientists', 'Mechanical engineers', 'Hemp agronomists'] },
+    ]
   },
   {
     id: 'P05',
@@ -224,7 +429,28 @@ export const projects: Project[] = [
     features: ['Light Recipe Control', 'Computer Vision', 'Frequency Generation', 'Plant Response'],
     techStack: ['Rust/C++', 'Go', 'DDS'],
     regenCityRole: 'Accelerates medicinal crop growth in Zone C greenhouses',
-    apiEndpoints: ['/api/greenhouse/status']
+    apiEndpoints: ['/api/greenhouse/status'],
+    partnershipNeeds: [
+      'Commercial greenhouse and vertical-farm operators',
+      'LED grow-light hardware manufacturers',
+      'Botanical research institutions',
+      'Cannabis / medicinal-herb licensed producers',
+    ],
+    affiliateOpportunities: [
+      'Controlled-environment agriculture (CEA) communities',
+      'Hydroponic supply retailers',
+      'Plant-science educators and course creators',
+      'Agri-tech investment syndicates',
+    ],
+    resourceNeeds: [
+      { category: 'Hydroponics', items: ['NFT / DWC hydroponic channels', 'Nutrient reservoir systems', 'pH and EC controllers'] },
+      { category: 'Facilities', items: ['Climate-controlled greenhouse', 'Dark-room calibration chamber'] },
+      { category: 'Hardware', items: ['Custom LED frequency boards', 'Computer-vision cameras', 'Frequency generator circuits'] },
+      { category: 'Labs', items: ['Plant-response measurement lab', 'Spectral analysis equipment'] },
+      { category: 'Software Dev', items: ['Rust/C++ firmware engineers', 'Go control-loop developers', 'CV model training pipeline'] },
+      { category: 'Capital', items: ['Hardware R&D seed funding', 'USDA specialty-crop grants'] },
+      { category: 'Labor', items: ['Horticulturists', 'Electronics engineers', 'Computer-vision ML engineers'] },
+    ]
   },
   {
     id: 'P06',
@@ -240,7 +466,26 @@ export const projects: Project[] = [
     features: ['Physics Engine', 'Neutronics Simulation', 'Safety Validation', '3D Visualization'],
     techStack: ['OpenMC', 'Kafka', 'Python'],
     regenCityRole: 'Server room simulation lab (no physical reactor yet)',
-    apiEndpoints: ['/api/reactor/status']
+    apiEndpoints: ['/api/reactor/status'],
+    partnershipNeeds: [
+      'Nuclear regulatory bodies (NRC, IAEA) for data-sharing agreements',
+      'Utility companies for training-simulator licensing',
+      'National nuclear laboratories (INL, ANL, ORNL)',
+      'University nuclear-engineering departments',
+    ],
+    affiliateOpportunities: [
+      'Nuclear energy advocacy organisations',
+      'Clean-energy investment platforms',
+      'Defence / national-security research contractors',
+      'Advanced reactor developer consortia (TerraPower, X-energy)',
+    ],
+    resourceNeeds: [
+      { category: 'Labs', items: ['HPC cluster for neutronics simulation', 'Validation test-data sets from NRC'] },
+      { category: 'Software Dev', items: ['OpenMC neutronics engineers', 'Kafka streaming data pipeline', 'Python physics modelling team'] },
+      { category: 'Capital', items: ['DOE Advanced Reactor Demonstration Programme funding', 'University research grants'] },
+      { category: 'Facilities', items: ['Secure server room with redundant power', 'Collaborative simulation centre'] },
+      { category: 'Labor', items: ['Nuclear engineers (PhD level)', 'Thermal-hydraulics modellers', 'Regulatory affairs specialists'] },
+    ]
   },
   {
     id: 'P11',
@@ -256,7 +501,26 @@ export const projects: Project[] = [
     features: ['Chemistry Simulator', 'Molten-Salt Modeling', 'Fuel Burnup Cycles'],
     techStack: ['Java Spring Boot', 'Python', 'C++ Physics'],
     regenCityRole: 'R&D lab in Zone D designing future power source',
-    apiEndpoints: []
+    apiEndpoints: [],
+    partnershipNeeds: [
+      'Molten-salt chemistry research institutions',
+      'Thorium fuel-cycle technology developers',
+      'Nuclear regulatory consultants',
+      'Advanced materials suppliers (refractory alloys)',
+    ],
+    affiliateOpportunities: [
+      'Next-gen nuclear investor networks',
+      'Clean-energy policy think tanks',
+      'Deep-tech accelerators and incubators',
+      'University nuclear-engineering research partnerships',
+    ],
+    resourceNeeds: [
+      { category: 'Labs', items: ['Corrosion-testing lab for molten-salt materials', 'Chemistry analysis equipment'] },
+      { category: 'Capital', items: ['Long-term R&D endowment funding', 'ARPA-E grants'] },
+      { category: 'Software Dev', items: ['Java Spring Boot simulation engine', 'C++ physics kernel team', 'Python thermo-chemistry modellers'] },
+      { category: 'Facilities', items: ['Contained R&D lab (radiation shielding)', 'Secure data centre for simulation outputs'] },
+      { category: 'Labor', items: ['Nuclear chemists', 'Materials engineers (high-temp alloys)', 'Regulatory strategy team'] },
+    ]
   }
 ];
 

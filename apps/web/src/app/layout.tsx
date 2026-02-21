@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ECOS - Environmental Initiatives Ecosystem',
-  description: '13 Interconnected Climate-Tech Businesses | Unified Ecosystem for Sustainable Future',
+  title: 'Overlay365 - Environmental Initiatives Ecosystem',
+  description: '13 Interconnected Climate-Tech Sub-Businesses | Strategic Partnerships & Affiliate Marketing | Overlay365',
 };
 
 export default function RootLayout({

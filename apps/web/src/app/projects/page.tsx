@@ -12,9 +12,9 @@ export default function ProjectsPage() {
       <Header />
       <main className="section">
         <div className="container">
-          <h1 className="section-title">All Projects</h1>
+          <h1 className="section-title">All Initiatives</h1>
           <p className="section-subtitle">
-            Explore all 13 projects in the ECOS ecosystem
+            Explore all 13 Overlay365 sub-businesses. Click any card to view partnership and resource details.
           </p>
 
           {phases.map((phase) => (

@@ -109,7 +109,7 @@ export default function Dashboard() {
                   <span style={{ color: '#10b981', fontWeight: 'bold' }}>Operational</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #e5e7eb' }}>
-                  <span>Active Projects</span>
+                  <span>Active Initiatives</span>
                   <span style={{ fontWeight: 'bold' }}>12</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 0', borderBottom: '1px solid #e5e7eb' }}>

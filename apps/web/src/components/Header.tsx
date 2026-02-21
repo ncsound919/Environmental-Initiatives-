@@ -10,8 +10,8 @@ export function Header() {
     <header className="header">
       <div className="container header-content">
         <Link href="/" className="logo">
-          <span>🌍</span>
-          <span>ECOS</span>
+          <span>🌐</span>
+          <span>Overlay365</span>
         </Link>
         <nav className="nav">
           <Link 
@@ -24,7 +24,7 @@ export function Header() {
             href="/projects" 
             className={`nav-link ${pathname?.startsWith('/projects') ? 'active' : ''}`}
           >
-            Projects
+            Initiatives
           </Link>
           <Link 
             href="/dashboard" 
@@ -37,6 +37,12 @@ export function Header() {
             className={`nav-link ${pathname === '/api-docs' ? 'active' : ''}`}
           >
             API
+          </Link>
+          <Link 
+            href="/partnerships" 
+            className={`nav-link ${pathname === '/partnerships' ? 'active' : ''}`}
+          >
+            Partnerships
           </Link>
         </nav>
       </div>
