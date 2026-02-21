@@ -183,7 +183,7 @@ def _sign_token(payload: Dict[str, Any]) -> str:
 def _get_mqtt_service() -> EcosMqttService:
     global _mqtt_service
     if not MQTT_ENABLED:
-        raise RuntimeError("MQTT disabled via MQTT_ENABLED=false")
+        raise ValueError("MQTT disabled via MQTT_ENABLED=false (configuration)")
     if _mqtt_service is None:
         broker_host = os.getenv("MQTT_BROKER_HOST", "localhost")
         broker_port = int(os.getenv("MQTT_BROKER_PORT", "1883"))
@@ -192,10 +192,11 @@ def _get_mqtt_service() -> EcosMqttService:
             service.connect()
             _mqtt_service = service
         except (ConnectionError, TimeoutError, OSError):
-            logging.exception(
+            logging.error(
                 "Failed to connect MQTT service to %s:%s; MQTT functionality will be unavailable until connection is restored",
                 broker_host,
                 broker_port,
+                exc_info=True,
             )
             _mqtt_service = None
     return _mqtt_service
@@ -310,11 +311,12 @@ async def hardware_control(project_code: str, command: ControlCommandRequest):
                     params=command.params,
                 )
             except (ConnectionError, TimeoutError, OSError):
-                logging.exception(
+                logging.error(
                     "Failed to publish control command for device %s in project %s (action: %s)",
                     command.device_id,
                     project_code,
                     command.action,
+                    exc_info=True,
                 )
                 published = False
 
