@@ -66,11 +66,11 @@ def _load_hardware_manifest() -> Dict[str, Any]:
 
 def _validate_manifest(raw: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(raw, dict):
-        logging.error("Hardware manifest is not an object; ignoring")
+        logging.warning("Hardware manifest is not an object; ignoring invalid manifest")
         return {"metadata": {}, "initiatives": []}
     initiatives = raw.get("initiatives", [])
     if not isinstance(initiatives, list):
-        logging.error("Hardware manifest initiatives is not a list; ignoring")
+        logging.warning("Hardware manifest initiatives is not a list; ignoring invalid manifest")
         return {"metadata": raw.get("metadata", {}), "initiatives": []}
     return {"metadata": raw.get("metadata", {}), "initiatives": initiatives}
 
@@ -196,7 +196,7 @@ def _sign_token(payload: Dict[str, Any]) -> str:
 def _get_mqtt_service() -> EcosMqttService:
     global _mqtt_service
     if not MQTT_ENABLED:
-        return None
+        raise RuntimeError("MQTT disabled via MQTT_ENABLED=false")
     if _mqtt_service is None:
         with _mqtt_lock:
             if _mqtt_service is None:
@@ -316,7 +316,12 @@ async def hardware_control(project_code: str, command: ControlCommandRequest):
     topic = f"ecos/{project_code}/{command.device_id}/control"
     published = False
     if MQTT_ENABLED:
-        service = _get_mqtt_service()
+        try:
+            service = _get_mqtt_service()
+        except RuntimeError as exc:
+            logging.warning("MQTT disabled; control not published: %s", exc)
+            service = None
+
         if service:
             try:
                 published = service.publish_control(
