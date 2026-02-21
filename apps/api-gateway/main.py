@@ -166,7 +166,6 @@ class SaaSTierRequest(BaseModel):
 
 
 class ControlCommandRequest(BaseModel):
-    project_code: str = Field(min_length=1)
     device_id: str = Field(min_length=1)
     action: str = Field(min_length=1)
     params: Dict[str, Any] = Field(default_factory=dict)
@@ -186,12 +185,14 @@ def _get_mqtt_service() -> EcosMqttService:
     if not MQTT_ENABLED:
         return None
     if _mqtt_service is None:
+        broker_host = os.getenv("MQTT_BROKER_HOST", "localhost")
+        broker_port = os.getenv("MQTT_BROKER_PORT", "1883")
         try:
-            service = EcosMqttService()
+            service = EcosMqttService(broker_host=broker_host, broker_port=broker_port)
             service.connect()
             _mqtt_service = service
         except Exception:
-            logging.exception("Failed to connect MQTT service")
+            logging.exception("Failed to connect MQTT service to %s:%s", broker_host, broker_port)
             _mqtt_service = None
     return _mqtt_service
 
@@ -282,11 +283,6 @@ async def hardware_profile(project_code: str):
 
 @app.post("/hardware/{project_code}/control")
 async def hardware_control(project_code: str, command: ControlCommandRequest):
-    if project_code != command.project_code:
-        raise HTTPException(
-            status_code=400,
-            detail=f"project_code mismatch: url={project_code}, body={command.project_code}",
-        )
     profile = _find_hardware_profile(project_code)
     if not profile:
         raise HTTPException(status_code=404, detail="Unknown project_code")

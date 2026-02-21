@@ -93,7 +93,7 @@ services:
       KC_DB_URL: jdbc:postgresql://postgres:5432/ecos_db
       KC_DB_USERNAME: ecos
       KC_DB_PASSWORD: ecos_password
-      # Change these for any non-local deployment
+      # Change these for any production deployment
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
