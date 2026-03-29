@@ -717,6 +717,10 @@ async def bioreactor_status():
     }
 
 
+# ── Register Level 5 Routers ──
+from routers import register_level5_routers
+register_level5_routers(app)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
