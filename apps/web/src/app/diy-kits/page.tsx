@@ -1,5 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { PageHeader } from '@/components/PageHeader';
+import { StatBand } from '@/components/StatBand';
+import { KpiCard } from '@/components/KpiCard';
+import { Card } from '@/components/Card';
+import { Badge } from '@/components/Badge';
+import { Skeleton } from '@/components/Skeleton';
 import { diyKitsApi, type DiyKit } from '@/lib/api';
 
 export default function DiyKitsPage() {
@@ -15,79 +21,65 @@ export default function DiyKitsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="flex items-center justify-center min-h-screen bg-gray-950"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-emerald-500" /></div>;
-
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      <section className="bg-gradient-to-br from-emerald-900 to-teal-700 py-20 px-6 text-center">
-        <h1 className="text-5xl font-bold mb-4">DIY Hardware Kits</h1>
-        <p className="text-xl text-emerald-100 max-w-2xl mx-auto">
-          Build real environmental monitoring & energy hardware. Full BOM, firmware, community builds.
-        </p>
-        <div className="flex justify-center gap-8 mt-10">
-          {['total_kits', 'total_revenue_usd', 'community_builds'].map((k) => (
-            <div key={k} className="bg-white/10 rounded-xl p-6 min-w-[140px]">
-              <div className="text-3xl font-bold text-emerald-200">{String(stats[k] ?? '—')}</div>
-              <div className="text-sm text-emerald-100 mt-1 capitalize">{k.replace(/_/g, ' ')}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+    <>
+      <PageHeader title="DIY Hardware Kits" subtitle="Build real environmental monitoring & energy hardware. Full BOM, firmware, community builds." accent="teal">
+        <StatBand>
+          {loading
+            ? [1, 2, 3].map((i) => <Skeleton key={i} height={90} />)
+            : ['total_kits', 'total_revenue_usd', 'community_builds'].map((k) => (
+                <KpiCard key={k} value={String(stats[k] ?? '—')} label={k.replace(/_/g, ' ')} accent="teal" />
+              ))}
+        </StatBand>
+      </PageHeader>
 
-      <section className="max-w-6xl mx-auto py-16 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {kits.map((kit) => {
-            const k = kit as Record<string, unknown>;
-            const bom = (k.bom as Array<Record<string, unknown>>) ?? [];
-            return (
-              <div
-                key={String(k.id)}
-                className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-emerald-500 transition-all cursor-pointer"
-                onClick={() => setSelected(selected?.id === k.id ? null : k)}
-              >
-                <div className="bg-gradient-to-r from-emerald-800 to-teal-600 h-3" />
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold bg-emerald-900 text-emerald-300 px-3 py-1 rounded-full">
-                      {String(k.category ?? 'Hardware')}
-                    </span>
-                    <span className="text-xs text-gray-400">{String(k.difficulty ?? 'Intermediate')}</span>
+      <div className="page-container page-section">
+        {loading ? (
+          <div className="grid grid-3"><Skeleton height={200} /><Skeleton height={200} /><Skeleton height={200} /></div>
+        ) : (
+          <div className="grid grid-3">
+            {kits.map((kit) => {
+              const k = kit as Record<string, unknown>;
+              const bom = (k.bom as Array<Record<string, unknown>>) ?? [];
+              const isOpen = selected?.id === k.id;
+              return (
+                <Card key={String(k.id)} hoverable accent="var(--teal)" accentBar style={{ padding: '1.5rem', cursor: 'pointer' }} className="" >
+                  <div onClick={() => setSelected(isOpen ? null : k)}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                      <Badge tone="teal">{String(k.category ?? 'Hardware')}</Badge>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>{String(k.difficulty ?? 'Intermediate')}</span>
+                    </div>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>{String(k.title ?? 'Kit')}</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '1rem' }}>{String(k.description ?? '')}</p>
                   </div>
-                  <h3 className="text-xl font-bold mb-2">{String(k.title ?? 'Kit')}</h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">{String(k.description ?? '')}</p>
 
-                  {selected?.id === k.id && (
-                    <div className="mt-2 mb-4 bg-gray-800 rounded-xl p-4">
-                      <div className="text-sm font-semibold text-emerald-300 mb-2">Bill of Materials</div>
-                      <ul className="space-y-1">
+                  {isOpen && (
+                    <div style={{ marginBottom: '1rem', background: 'var(--panel-raised)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '1rem' }}>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--teal)', marginBottom: '0.5rem' }}>Bill of Materials</div>
+                      <ul style={{ listStyle: 'none' }}>
                         {bom.map((part, i) => (
-                          <li key={i} className="flex justify-between text-xs text-gray-300">
+                          <li key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', padding: '0.2rem 0' }}>
                             <span>{String(part.component ?? '')}</span>
-                            <span className="text-gray-500">${String(part.unit_cost_usd ?? 0)} x{String(part.qty ?? 1)}</span>
+                            <span style={{ color: 'var(--text-dim)' }}>${String(part.unit_cost_usd ?? 0)} x{String(part.qty ?? 1)}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between mt-4">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
-                      <div className="text-emerald-400 font-bold text-xl">${String(k.price_usd ?? 0)}</div>
-                      <div className="text-xs text-gray-500">{String(k.units_sold ?? 0)} sold &bull; {String(k.community_builds ?? 0)} community builds</div>
+                      <div style={{ color: 'var(--teal)', fontWeight: 700, fontFamily: 'var(--font-mono)', fontSize: '1.1rem' }}>${String(k.price_usd ?? 0)}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>{String(k.units_sold ?? 0)} sold &bull; {String(k.community_builds ?? 0)} community builds</div>
                     </div>
-                    <button
-                      className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
-                      onClick={(e) => { e.stopPropagation(); }}
-                    >
-                      Order Kit
-                    </button>
+                    <button className="btn btn-primary" style={{ fontSize: '0.85rem', padding: '0.45rem 1.1rem', background: 'var(--teal)', borderColor: 'var(--teal)', color: '#042f2e' }}>Order Kit</button>
                   </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-    </main>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
