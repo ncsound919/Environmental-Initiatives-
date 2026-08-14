@@ -244,6 +244,7 @@ code, pre, .mono {
 .kpi-card[data-accent="amber"]   { border-color: rgba(251,191,36,0.4);  box-shadow: 0 0 14px rgba(251,191,36,0.14); }
 .kpi-card[data-accent="rose"]    { border-color: rgba(251,113,133,0.4); box-shadow: 0 0 14px rgba(251,113,133,0.14); }
 .kpi-card[data-accent="blue"]    { border-color: rgba(59,130,246,0.4);  box-shadow: 0 0 14px rgba(59,130,246,0.14); }
+.kpi-card[data-accent="teal"]    { border-color: rgba(20,184,166,0.4);  box-shadow: 0 0 14px rgba(20,184,166,0.14); }
 
 .kpi-value {
   font-family: var(--font-mono);

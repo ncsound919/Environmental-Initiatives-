@@ -1,6 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { PageHeader } from '@/components/PageHeader';
+import { StatBand } from '@/components/StatBand';
+import { KpiCard } from '@/components/KpiCard';
+import { Card } from '@/components/Card';
+import { Skeleton } from '@/components/Skeleton';
 import {
   challengesApi,
   membershipApi,
@@ -9,12 +14,14 @@ import {
   diyKitsApi,
 } from '@/lib/api';
 
-type StatCard = {
-  label: string;
-  value: string;
-  color: string;
-  href: string;
-  icon: string;
+type StatCard = { label: string; value: string; accent: string; href: string; icon: string };
+
+const ACCENTS: Record<string, string> = {
+  'Challenge Prize Pool': 'emerald',
+  'Membership MRR': 'violet',
+  'Marketplace GMV': 'blue',
+  'XP Awarded': 'amber',
+  'Kit Revenue': 'teal',
 };
 
 export default function RevenueDashboard() {
@@ -36,96 +43,53 @@ export default function RevenueDashboard() {
         }
         return '—';
       };
-
-      setCards([
-        {
-          label: 'Challenge Prize Pool',
-          value: `$${get(results[0], 'total_prize_pool')}`,
-          color: 'from-green-700 to-emerald-500',
-          href: '/challenges',
-          icon: '🏆',
-        },
-        {
-          label: 'Membership MRR',
-          value: `$${get(results[1], 'monthly_recurring_revenue')}`,
-          color: 'from-purple-700 to-violet-500',
-          href: '/membership',
-          icon: '👑',
-        },
-        {
-          label: 'Marketplace GMV',
-          value: `$${get(results[2], 'total_gmv_usd')}`,
-          color: 'from-blue-700 to-cyan-500',
-          href: '/marketplace',
-          icon: '🛒',
-        },
-        {
-          label: 'XP Awarded',
-          value: get(results[3], 'total_xp_awarded'),
-          color: 'from-yellow-700 to-orange-500',
-          href: '/gamification',
-          icon: '⭐',
-        },
-        {
-          label: 'Kit Revenue',
-          value: `$${get(results[4], 'total_revenue_usd')}`,
-          color: 'from-emerald-700 to-teal-500',
-          href: '/diy-kits',
-          icon: '🔧',
-        },
-      ]);
+      const raw = [
+        { label: 'Challenge Prize Pool', value: `$${get(results[0], 'total_prize_pool')}`, href: '/challenges', icon: '🏆' },
+        { label: 'Membership MRR', value: `$${get(results[1], 'monthly_recurring_revenue')}`, href: '/membership', icon: '👑' },
+        { label: 'Marketplace GMV', value: `$${get(results[2], 'total_gmv_usd')}`, href: '/marketplace', icon: '🛒' },
+        { label: 'XP Awarded', value: get(results[3], 'total_xp_awarded'), href: '/gamification', icon: '⭐' },
+        { label: 'Kit Revenue', value: `$${get(results[4], 'total_revenue_usd')}`, href: '/diy-kits', icon: '🔧' },
+      ];
+      setCards(raw.map((c) => ({ ...c, accent: ACCENTS[c.label] ?? 'emerald' })));
     }).finally(() => setLoading(false));
   }, []);
 
   const modules = [
-    { name: 'Public Challenges', desc: 'Bounties, submissions, leaderboards', href: '/challenges', color: 'green' },
-    { name: 'Membership', desc: '4 tiers: Free / Pro / EcoChampion / PlanetGuardian', href: '/membership', color: 'purple' },
-    { name: 'Marketplace', desc: 'Green goods, IP licenses, digital products', href: '/marketplace', color: 'blue' },
-    { name: 'Gamification', desc: 'XP, 9 levels, quests, badges, leaderboard', href: '/gamification', color: 'yellow' },
-    { name: 'DIY Kits', desc: '5 hardware kits with full BOM & firmware', href: '/diy-kits', color: 'emerald' },
+    { name: 'Public Challenges', desc: 'Bounties, submissions, leaderboards', href: '/challenges', icon: '🏆' },
+    { name: 'Membership', desc: '4 tiers: Free / Pro / EcoChampion / PlanetGuardian', href: '/membership', icon: '👑' },
+    { name: 'Marketplace', desc: 'Green goods, IP licenses, digital products', href: '/marketplace', icon: '🛒' },
+    { name: 'Gamification', desc: 'XP, 9 levels, quests, badges, leaderboard', href: '/gamification', icon: '⭐' },
+    { name: 'DIY Kits', desc: '5 hardware kits with full BOM & firmware', href: '/diy-kits', icon: '🔧' },
   ];
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      <section className="bg-gradient-to-br from-gray-900 to-gray-800 py-20 px-6 text-center border-b border-gray-800">
-        <h1 className="text-5xl font-bold mb-4">Revenue Dashboard</h1>
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          All 5 revenue streams live — real-time metrics across the entire platform.
-        </p>
-      </section>
+    <>
+      <PageHeader title="Revenue Dashboard" subtitle="All 5 revenue streams live — real-time metrics across the entire platform." accent="emerald">
+        <StatBand>
+          {loading
+            ? [1, 2, 3, 4, 5].map((i) => <Skeleton key={i} height={90} />)
+            : cards.map((c) => (
+                <KpiCard key={c.label} value={c.value} label={c.label} accent={c.accent as 'emerald' | 'cyan' | 'violet' | 'amber' | 'rose' | 'blue' | 'teal'} icon={c.icon} />
+              ))}
+        </StatBand>
+      </PageHeader>
 
-      {/* KPI Cards */}
-      <section className="max-w-6xl mx-auto py-12 px-6">
-        {loading ? (
-          <div className="flex justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-white" /></div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {cards.map((c) => (
-              <Link key={c.href} href={c.href} className={`bg-gradient-to-br ${c.color} rounded-2xl p-6 hover:scale-105 transition-transform`}>
-                <div className="text-3xl mb-2">{c.icon}</div>
-                <div className="text-2xl font-bold">{c.value}</div>
-                <div className="text-sm mt-1 opacity-80">{c.label}</div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* Module Links */}
-      <section className="max-w-6xl mx-auto pb-16 px-6">
-        <h2 className="text-2xl font-bold mb-6">Revenue Modules</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="page-container page-section">
+        <h2 className="section-heading">Revenue Modules</h2>
+        <p className="section-sub">Each module is live and wired to the revenue API.</p>
+        <div className="grid grid-3">
           {modules.map((m) => (
-            <Link key={m.href} href={m.href} className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-white/30 transition-all group">
-              <h3 className="text-xl font-bold mb-2 group-hover:text-white">{m.name}</h3>
-              <p className="text-gray-400 text-sm">{m.desc}</p>
-              <div className="mt-4 text-sm text-gray-500 group-hover:text-white transition-colors">
-                View module &rarr;
-              </div>
+            <Link key={m.href} href={m.href}>
+              <Card hoverable style={{ padding: '1.5rem', height: '100%' }}>
+                <div style={{ fontSize: '1.6rem', marginBottom: '0.5rem' }}>{m.icon}</div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.3rem' }}>{m.name}</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{m.desc}</p>
+                <div style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-dim)' }}>View module &rarr;</div>
+              </Card>
             </Link>
           ))}
         </div>
-      </section>
-    </main>
+      </div>
+    </>
   );
 }
