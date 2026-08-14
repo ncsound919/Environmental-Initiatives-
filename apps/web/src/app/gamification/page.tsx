@@ -1,8 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { PageHeader } from '@/components/PageHeader';
+import { StatBand } from '@/components/StatBand';
+import { KpiCard } from '@/components/KpiCard';
+import { Card } from '@/components/Card';
+import { Badge } from '@/components/Badge';
+import { Skeleton } from '@/components/Skeleton';
 import { gamificationApi } from '@/lib/api';
 
-const LEVEL_COLORS = ['gray', 'green', 'blue', 'purple', 'yellow', 'orange', 'red', 'pink', 'cyan', 'emerald'];
+const LEVEL_TONES = ['emerald', 'cyan', 'violet', 'amber', 'rose', 'blue', 'teal', 'amber', 'rose'] as const;
 
 export default function GamificationPage() {
   const [leaderboard, setLeaderboard] = useState<Record<string, unknown>[]>([]);
@@ -25,69 +31,67 @@ export default function GamificationPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="flex items-center justify-center min-h-screen bg-gray-950"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-yellow-500" /></div>;
+  const rankColor = (i: number) => (i === 0 ? 'var(--amber)' : i === 1 ? 'var(--text-muted)' : i === 2 ? '#fb923c' : 'var(--text-dim)');
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      <section className="bg-gradient-to-br from-yellow-900 to-orange-700 py-20 px-6 text-center">
-        <h1 className="text-5xl font-bold mb-4">Gamification & XP System</h1>
-        <p className="text-xl text-yellow-100 max-w-2xl mx-auto">
-          Earn XP, level up, complete quests, collect badges. Make saving the planet fun.
-        </p>
-        <div className="flex justify-center gap-8 mt-10">
-          {['total_users', 'total_xp_awarded', 'total_quests'].map((k) => (
-            <div key={k} className="bg-white/10 rounded-xl p-6 min-w-[140px]">
-              <div className="text-3xl font-bold text-yellow-200">{String(stats[k] ?? '—')}</div>
-              <div className="text-sm text-yellow-100 mt-1 capitalize">{k.replace(/_/g, ' ')}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+    <>
+      <PageHeader title="Gamification & XP System" subtitle="Earn XP, level up, complete quests, collect badges. Make saving the planet fun." accent="amber">
+        <StatBand>
+          {loading
+            ? [1, 2, 3].map((i) => <Skeleton key={i} height={90} />)
+            : ['total_users', 'total_xp_awarded', 'total_quests'].map((k) => (
+                <KpiCard key={k} value={String(stats[k] ?? '—')} label={k.replace(/_/g, ' ')} accent="amber" />
+              ))}
+        </StatBand>
+      </PageHeader>
 
-      <div className="max-w-6xl mx-auto py-16 px-6 grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Leaderboard */}
-        <section>
-          <h2 className="text-2xl font-bold mb-6">Global Leaderboard</h2>
-          <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800">
-            {leaderboard.slice(0, 10).map((entry, i) => (
-              <div key={String(entry.user_id ?? i)} className={`flex items-center gap-4 p-4 border-b border-gray-800 last:border-0 ${i < 3 ? 'bg-yellow-900/20' : ''}`}>
-                <span className={`text-2xl font-bold w-8 text-center ${i === 0 ? 'text-yellow-400' : i === 1 ? 'text-gray-300' : i === 2 ? 'text-orange-400' : 'text-gray-600'}`}>
-                  {i + 1}
-                </span>
-                <div className="flex-1">
-                  <div className="font-semibold">{String(entry.user_id ?? 'User')}</div>
-                  <div className="text-xs text-gray-400">Level {String(entry.level ?? 1)} &bull; {String(entry.title ?? 'Eco Starter')}</div>
-                </div>
-                <div className="text-yellow-400 font-bold">{String(entry.total_xp ?? 0)} XP</div>
+      <div className="page-container page-section">
+        <div className="grid grid-2" style={{ alignItems: 'start' }}>
+          <section>
+            <h2 className="section-heading">Global Leaderboard</h2>
+            {loading ? (
+              <Skeleton height={300} />
+            ) : (
+              <Card style={{ overflow: 'hidden' }}>
+                {leaderboard.slice(0, 10).map((entry, i) => (
+                  <div key={String(entry.user_id ?? i)} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.9rem 1.2rem', borderBottom: i < 9 ? '1px solid var(--border)' : 'none', background: i < 3 ? 'rgba(251,191,36,0.07)' : undefined }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, width: '1.6rem', textAlign: 'center', color: rankColor(i) }}>{i + 1}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600 }}>{String(entry.user_id ?? 'User')}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Level {String(entry.level ?? 1)} &bull; {String(entry.title ?? 'Eco Starter')}</div>
+                    </div>
+                    <div style={{ color: 'var(--amber)', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>{String(entry.total_xp ?? 0)} XP</div>
+                  </div>
+                ))}
+              </Card>
+            )}
+          </section>
+
+          <section>
+            <h2 className="section-heading">XP Levels</h2>
+            {loading ? (
+              <Skeleton height={300} />
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {levels.map((lv) => {
+                  const lvl = lv as Record<string, unknown>;
+                  const idx = (Number(lvl.level ?? 1) - 1) % LEVEL_TONES.length;
+                  const tone = LEVEL_TONES[idx];
+                  return (
+                    <Card key={String(lvl.level)} style={{ padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <Badge tone={tone} style={{ fontSize: '0.9rem' }}>{String(lvl.level)}</Badge>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600 }}>{String(lvl.title ?? 'Level')}</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>{String(lvl.xp_required ?? 0)} XP required</div>
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Levels */}
-        <section>
-          <h2 className="text-2xl font-bold mb-6">XP Levels</h2>
-          <div className="space-y-3">
-            {levels.map((lv) => {
-              const lvl = lv as Record<string, unknown>;
-              const colorIdx = (Number(lvl.level ?? 1) - 1) % LEVEL_COLORS.length;
-              const color = LEVEL_COLORS[colorIdx];
-              return (
-                <div key={String(lvl.level)} className="bg-gray-900 rounded-xl p-4 border border-gray-800 flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-full bg-${color}-600 flex items-center justify-center font-bold text-sm`}>
-                    {String(lvl.level)}
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-semibold">{String(lvl.title ?? 'Level')}</div>
-                    <div className="text-xs text-gray-400">{String(lvl.xp_required ?? 0)} XP required</div>
-                  </div>
-                  <div className="text-sm text-gray-400">{String(lvl.perks ?? '')}</div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+            )}
+          </section>
+        </div>
       </div>
-    </main>
+    </>
   );
 }
