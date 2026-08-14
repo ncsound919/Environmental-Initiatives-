@@ -1,8 +1,8 @@
 'use client';
 
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import { apiEndpoints } from '@/lib/data';
+import { PageHeader } from '@/components/PageHeader';
+import { Card } from '@/components/Card';
+import { Badge } from '@/components/Badge';
 
 const endpointDocs = [
   {
@@ -228,102 +228,51 @@ const endpointDocs = [
 export default function ApiDocsPage() {
   return (
     <>
-      <Header />
-      <main className="section">
-        <div className="container">
-          <h1 className="section-title">API Documentation</h1>
-          <p className="section-subtitle">
-            REST API for the ECOS ecosystem. Base URL: <code style={{ background: '#f3f4f6', padding: '0.25rem 0.5rem', borderRadius: '0.25rem' }}>http://localhost:8000</code>
-          </p>
+      <PageHeader title="API Documentation" subtitle="REST API for the ECOS ecosystem." accent="cyan">
+        <div style={{ marginTop: '1rem' }}>
+          <span className="code-block" style={{ display: 'inline-block', padding: '0.4rem 0.8rem' }}>
+            Base URL: http://localhost:8000
+          </span>
+        </div>
+      </PageHeader>
 
-          <div className="dashboard-card" style={{ marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-              Getting Started
-            </h2>
-            <p style={{ marginBottom: '1rem' }}>
-              The ECOS API Gateway provides unified access to all 13 project APIs. 
-              Start the server with:
-            </p>
-            <pre style={{ 
-              background: '#1f2937', 
-              color: '#f9fafb', 
-              padding: '1rem', 
-              borderRadius: '0.5rem',
-              overflow: 'auto',
-              fontSize: '0.875rem'
-            }}>
-{`cd apps/api-gateway
+      <div className="page-container page-section">
+        <Card style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>Getting Started</h2>
+          <p style={{ marginBottom: '1rem', color: 'var(--text-muted)' }}>
+            The ECOS API Gateway provides unified access to all 13 project APIs. Start the server with:
+          </p>
+          <pre className="code-block">{`cd apps/api-gateway
 python main.py
 
 # Server running at http://localhost:8000
-# Interactive docs at http://localhost:8000/docs`}
-            </pre>
-          </div>
+# Interactive docs at http://localhost:8000/docs`}</pre>
+        </Card>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            {endpointDocs.map((endpoint, index) => (
-              <div key={index} className="dashboard-card">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                  <span style={{ 
-                    background: endpoint.method === 'GET' ? '#10b98120' : '#3b82f620',
-                    color: endpoint.method === 'GET' ? '#10b981' : '#3b82f6',
-                    padding: '0.25rem 0.75rem',
-                    borderRadius: '0.25rem',
-                    fontWeight: 'bold',
-                    fontSize: '0.875rem'
-                  }}>
-                    {endpoint.method}
-                  </span>
-                  <code style={{ 
-                    background: '#f3f4f6', 
-                    padding: '0.25rem 0.5rem', 
-                    borderRadius: '0.25rem',
-                    fontSize: '0.875rem'
-                  }}>
-                    {endpoint.path}
-                  </code>
-                </div>
-                <p style={{ marginBottom: '1rem', color: '#374151' }}>{endpoint.description}</p>
-                
-                {endpoint.request && (
-                  <div style={{ marginBottom: '1rem' }}>
-                    <h4 style={{ fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#6b7280' }}>
-                      Request Body
-                    </h4>
-                    <pre style={{ 
-                      background: '#1f2937', 
-                      color: '#f9fafb', 
-                      padding: '1rem', 
-                      borderRadius: '0.5rem',
-                      overflow: 'auto',
-                      fontSize: '0.75rem'
-                    }}>
-                      {endpoint.request}
-                    </pre>
-                  </div>
-                )}
-                
-                <div>
-                  <h4 style={{ fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#6b7280' }}>
-                    Response
-                  </h4>
-                  <pre style={{ 
-                    background: '#1f2937', 
-                    color: '#f9fafb', 
-                    padding: '1rem', 
-                    borderRadius: '0.5rem',
-                    overflow: 'auto',
-                    fontSize: '0.75rem'
-                  }}>
-                    {endpoint.response}
-                  </pre>
-                </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {endpointDocs.map((endpoint, index) => (
+            <Card key={index} style={{ padding: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+                <Badge tone={endpoint.method === 'GET' ? 'emerald' : 'blue'}>{endpoint.method}</Badge>
+                <code className="mono-value" style={{ fontSize: '0.85rem' }}>{endpoint.path}</code>
               </div>
-            ))}
-          </div>
+              <p style={{ marginBottom: '1rem', color: 'var(--text-muted)' }}>{endpoint.description}</p>
+
+              {endpoint.request && (
+                <div style={{ marginBottom: '1rem' }}>
+                  <h4 style={{ fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.5rem', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Request Body</h4>
+                  <pre className="code-block">{endpoint.request}</pre>
+                </div>
+              )}
+
+              <div>
+                <h4 style={{ fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.5rem', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Response</h4>
+                <pre className="code-block">{endpoint.response}</pre>
+              </div>
+            </Card>
+          ))}
         </div>
-      </main>
-      <Footer />
+      </div>
     </>
   );
 }
