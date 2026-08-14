@@ -1,93 +1,70 @@
 import Link from 'next/link';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+import { PageHeader } from '@/components/PageHeader';
+import { StatBand } from '@/components/StatBand';
+import { KpiCard } from '@/components/KpiCard';
+import { Card } from '@/components/Card';
+import { Badge } from '@/components/Badge';
 import { ProjectCard } from '@/components/ProjectCard';
 import { projects, phases } from '@/lib/data';
+
+const PHASE_TONES = ['emerald', 'cyan', 'violet', 'amber'] as const;
 
 export default function Home() {
   return (
     <>
-      <Header />
-      <main>
-        {/* Hero Section */}
-        <section className="hero">
-          <div className="container">
-            <h1 className="hero-title">Overlay365</h1>
-            <p className="hero-subtitle">
-              13 interconnected climate-tech sub-businesses seeking strategic partnerships and affiliate marketing teams. 
-              From facilities and hardware to hydroponics and deep-tech R&D.
-            </p>
-            <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-value">13</div>
-                <div className="stat-label">Initiatives</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-value">$183M</div>
-                <div className="stat-label">Year 3 ARR Target</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-value">41%</div>
-                <div className="stat-label">Cost Reduction</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-value">20%</div>
-                <div className="stat-label">Current Readiness</div>
+      <PageHeader
+        title="13 Interconnected Climate-Tech Businesses"
+        subtitle="From facilities and hardware to hydroponics and deep-tech R&D — one unified ecosystem building a sustainable future."
+        accent="emerald"
+      >
+        <StatBand>
+          <KpiCard value="13" label="Initiatives" accent="emerald" />
+          <KpiCard value="$183M" label="Year 3 ARR Target" accent="cyan" />
+          <KpiCard value="70%" label="Readiness" accent="violet" />
+          <KpiCard value="5" label="Revenue Streams" accent="amber" />
+        </StatBand>
+      </PageHeader>
+
+      <div className="page-container page-section">
+        <h2 className="section-heading">The Overlay365 Ecosystem</h2>
+        <p className="section-sub">
+          Explore our 13 sub-businesses organized by deployment phase. Each seeks strategic partners and affiliate marketing teams.
+        </p>
+
+        {phases.map((phase, pi) => (
+          <section key={phase.id} style={{ marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
+              <span className="badge badge-emerald" style={{ fontSize: '0.9rem' }}>Phase {phase.id}</span>
+              <div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>{phase.name}</h3>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{phase.description}</div>
               </div>
             </div>
-          </div>
-        </section>
+            <div className="grid grid-3">
+              {projects
+                .filter((p) => p.phase === phase.id)
+                .map((project) => (
+                  <Link key={project.id} href={`/projects/${project.code}`}>
+                    <ProjectCard project={project} />
+                  </Link>
+                ))}
+            </div>
+          </section>
+        ))}
 
-        {/* Projects by Phase */}
-        <section className="section">
-          <div className="container">
-            <h2 className="section-title">The Overlay365 Ecosystem</h2>
-            <p className="section-subtitle">
-              Explore our 13 sub-businesses organized by deployment phase. Each seeks strategic partners and affiliate marketing teams.
-            </p>
-
-            {phases.map((phase) => (
-              <div key={phase.id} className="phase-section">
-                <div className="phase-header">
-                  <div className="phase-number">{phase.id}</div>
-                  <div>
-                    <h3 className="phase-title">{phase.name}</h3>
-                    <p className="phase-subtitle">{phase.description}</p>
-                  </div>
-                </div>
-                <div className="projects-grid">
-                  {projects
-                    .filter(p => p.phase === phase.id)
-                    .map(project => (
-                      <Link key={project.id} href={`/projects/${project.code}`}>
-                        <ProjectCard project={project} />
-                      </Link>
-                    ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="section" style={{ background: '#10b98110', padding: '4rem 0' }}>
-          <div className="container" style={{ textAlign: 'center' }}>
-            <h2 className="section-title">Ready to Explore?</h2>
-            <p className="section-subtitle" style={{ marginBottom: '2rem' }}>
-              View the system dashboard for real-time monitoring and analytics, or explore partnership opportunities.
+        <section style={{ marginTop: '3rem', textAlign: 'center' }}>
+          <Card hoverable accent="var(--emerald)" style={{ padding: '2.5rem' }}>
+            <h2 className="section-heading">Ready to Explore?</h2>
+            <p className="section-sub" style={{ maxWidth: '480px', margin: '0.4rem auto 1.5rem' }}>
+              View the system dashboard for real-time monitoring, or explore partnership opportunities.
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/dashboard" className="btn btn-primary">
-              Open Dashboard
-            </Link>
-            <Link href="/partnerships" className="btn btn-secondary">
-              Explore Partnerships
-            </Link>
+              <Link href="/dashboard" className="btn btn-primary">Open Dashboard</Link>
+              <Link href="/partnerships" className="btn btn-outline">Explore Partnerships</Link>
             </div>
-          </div>
+          </Card>
         </section>
-      </main>
-      <Footer />
+      </div>
     </>
   );
 }
