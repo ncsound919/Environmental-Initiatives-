@@ -50,3 +50,6 @@ ENV/
 
 # Prisma
 packages/core/database-schema/migrations/
+
+# Brainstorming session artifacts
+.superpowers/
