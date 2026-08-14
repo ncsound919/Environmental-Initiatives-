@@ -31,7 +31,7 @@ export default function Home() {
           Explore our 13 sub-businesses organized by deployment phase. Each seeks strategic partners and affiliate marketing teams.
         </p>
 
-        {phases.map((phase, pi) => (
+        {phases.map((phase) => (
           <section key={phase.id} style={{ marginBottom: '2.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
               <span className="badge badge-emerald" style={{ fontSize: '0.9rem' }}>Phase {phase.id}</span>
