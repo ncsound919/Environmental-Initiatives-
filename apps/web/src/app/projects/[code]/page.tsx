@@ -2,310 +2,135 @@
 
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+import { PageHeader } from '@/components/PageHeader';
+import { Card } from '@/components/Card';
+import { Badge } from '@/components/Badge';
 import { projects } from '@/lib/data';
 import { withOpacity } from '@/lib/utils';
 
 export default function ProjectDetailPage() {
   const params = useParams();
   const code = params.code as string;
-  
-  const project = projects.find(p => p.code === code);
+  const project = projects.find((p) => p.code === code);
 
   if (!project) {
     return (
-      <>
-        <Header />
-        <main className="section">
-          <div className="container">
-            <h1 className="section-title">Project Not Found</h1>
-            <p className="section-subtitle">The requested project does not exist.</p>
-            <Link href="/projects" className="btn btn-primary">
-              Back to Initiatives
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </>
+      <div className="page-container page-section">
+        <h1 className="page-title">Project Not Found</h1>
+        <p className="section-sub">The requested project does not exist.</p>
+        <Link href="/projects" className="btn btn-primary">Back to Initiatives</Link>
+      </div>
     );
   }
 
   return (
     <>
-      <Header />
-      <main>
-        {/* Hero Section */}
-        <section style={{ 
-          background: `linear-gradient(135deg, ${withOpacity(project.color, 12)} 0%, ${withOpacity(project.color, 6)} 100%)`,
-          padding: '3rem 0'
-        }}>
-          <div className="container">
-            <Link href="/projects" style={{ color: '#6b7280', marginBottom: '1rem', display: 'inline-block' }}>
-              ← Back to Initiatives
-            </Link>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <div style={{ 
-                fontSize: '3rem', 
-                width: '80px', 
-                height: '80px', 
-                borderRadius: '1rem',
-                background: withOpacity(project.color, 19),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {project.icon}
+      <PageHeader title={`${project.icon} ${project.name}`} subtitle={project.type} accent="emerald">
+        <div style={{ display: 'flex', gap: '0.8rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+          <Badge tone={project.readiness > 0 ? 'emerald' : 'dim'}>{project.readiness}% Ready</Badge>
+          <Badge tone="cyan">Phase {project.phase}</Badge>
+        </div>
+      </PageHeader>
+
+      <div className="page-container page-section">
+        <div className="grid grid-2" style={{ gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', alignItems: 'start' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            {[
+              ['Description', project.description],
+              ['Business Model', project.businessModel],
+              ['RegenCity Role', project.regenCityRole],
+            ].map(([title, body]) => (
+              <Card key={title} style={{ padding: '1.5rem' }}>
+                <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>{title}</h2>
+                <p style={{ lineHeight: 1.7, color: 'var(--text-muted)' }}>{body}</p>
+              </Card>
+            ))}
+
+            <Card style={{ padding: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>Strategic Partnership Needs</h2>
+              <ul style={{ listStyle: 'none' }}>
+                {project.partnershipNeeds.map((need, i) => (
+                  <li key={i} style={{ padding: '0.6rem 0', borderBottom: i < project.partnershipNeeds.length - 1 ? '1px solid var(--border)' : 'none', display: 'flex', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                    <span style={{ color: project.color }}>🤝</span>{need}
+                  </li>
+                ))}
+              </ul>
+            </Card>
+
+            <Card style={{ padding: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>Affiliate Marketing Opportunities</h2>
+              <ul style={{ listStyle: 'none' }}>
+                {project.affiliateOpportunities.map((opp, i) => (
+                  <li key={i} style={{ padding: '0.6rem 0', borderBottom: i < project.affiliateOpportunities.length - 1 ? '1px solid var(--border)' : 'none', display: 'flex', gap: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                    <span style={{ color: project.color }}>📣</span>{opp}
+                  </li>
+                ))}
+              </ul>
+            </Card>
+
+            <Card style={{ padding: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>Features</h2>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {project.features.map((feature, i) => (
+                  <span key={i} className="badge badge-emerald" style={{ background: withOpacity(project.color, 14), color: project.color }}>{feature}</span>
+                ))}
               </div>
-              <div>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>
-                  {project.name}
-                </h1>
-                <p style={{ color: '#6b7280', fontSize: '1.125rem' }}>{project.type}</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-              <span className={`project-badge ${project.readiness > 0 ? 'badge-active' : 'badge-reserved'}`} style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
-                {project.readiness}% Ready
-              </span>
-              <span style={{ 
-                background: '#3b82f620', 
-                color: '#3b82f6', 
-                padding: '0.5rem 1rem', 
-                borderRadius: '9999px',
-                fontSize: '0.875rem',
-                fontWeight: 'bold'
-              }}>
-                Phase {project.phase}
-              </span>
-            </div>
+            </Card>
           </div>
-        </section>
 
-        {/* Project Details */}
-        <section className="section">
-          <div className="container">
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
-              {/* Main Content */}
-              <div>
-                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    Description
-                  </h2>
-                  <p style={{ lineHeight: '1.75', color: '#374151' }}>
-                    {project.description}
-                  </p>
-                </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <Card style={{ padding: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>Tech Stack</h2>
+              <ul style={{ listStyle: 'none' }}>
+                {project.techStack.map((tech, i) => (
+                  <li key={i} style={{ padding: '0.7rem 0', borderBottom: i < project.techStack.length - 1 ? '1px solid var(--border)' : 'none', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                    <span style={{ color: project.color }}>•</span>{tech}
+                  </li>
+                ))}
+              </ul>
+            </Card>
 
-                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    Business Model
-                  </h2>
-                  <p style={{ lineHeight: '1.75', color: '#374151' }}>
-                    {project.businessModel}
-                  </p>
-                </div>
-
-                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    RegenCity Role
-                  </h2>
-                  <p style={{ lineHeight: '1.75', color: '#374151' }}>
-                    {project.regenCityRole}
-                  </p>
-                </div>
-
-                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    Strategic Partnership Needs
-                  </h2>
-                  <ul style={{ listStyle: 'none' }}>
-                    {project.partnershipNeeds.map((need, index) => (
-                      <li
-                        key={index}
-                        style={{
-                          padding: '0.6rem 0',
-                          borderBottom: index < project.partnershipNeeds.length - 1 ? '1px solid #e5e7eb' : 'none',
-                          display: 'flex',
-                          alignItems: 'flex-start',
-                          gap: '0.5rem',
-                          fontSize: '0.9rem',
-                          color: '#374151'
-                        }}
-                      >
-                        <span style={{ color: project.color, fontWeight: 'bold', marginTop: '2px' }}>🤝</span>
-                        {need}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    Affiliate Marketing Opportunities
-                  </h2>
-                  <ul style={{ listStyle: 'none' }}>
-                    {project.affiliateOpportunities.map((opp, index) => (
-                      <li
-                        key={index}
-                        style={{
-                          padding: '0.6rem 0',
-                          borderBottom: index < project.affiliateOpportunities.length - 1 ? '1px solid #e5e7eb' : 'none',
-                          display: 'flex',
-                          alignItems: 'flex-start',
-                          gap: '0.5rem',
-                          fontSize: '0.9rem',
-                          color: '#374151'
-                        }}
-                      >
-                        <span style={{ color: project.color, fontWeight: 'bold', marginTop: '2px' }}>📣</span>
-                        {opp}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="dashboard-card">
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    Features
-                  </h2>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {project.features.map((feature, index) => (
-                      <span 
-                        key={index} 
-                        style={{ 
-                          background: withOpacity(project.color, 12),
-                          color: project.color,
-                          padding: '0.5rem 1rem',
-                          borderRadius: '0.5rem',
-                          fontSize: '0.875rem',
-                          fontWeight: '500'
-                        }}
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Sidebar */}
-              <div>
-                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    Tech Stack
-                  </h2>
-                  <ul style={{ listStyle: 'none' }}>
-                    {project.techStack.map((tech, index) => (
-                      <li 
-                        key={index} 
-                        style={{ 
-                          padding: '0.75rem 0',
-                          borderBottom: index < project.techStack.length - 1 ? '1px solid #e5e7eb' : 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem'
-                        }}
-                      >
-                        <span style={{ color: project.color }}>•</span>
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    API Endpoints
-                  </h2>
-                  {project.apiEndpoints.length > 0 ? (
-                    <ul style={{ listStyle: 'none' }}>
-                      {project.apiEndpoints.map((endpoint, index) => (
-                        <li 
-                          key={index} 
-                          style={{ 
-                            padding: '0.75rem',
-                            background: '#f9fafb',
-                            borderRadius: '0.375rem',
-                            marginBottom: '0.5rem',
-                            fontFamily: 'monospace',
-                            fontSize: '0.875rem'
-                          }}
-                        >
-                          {endpoint}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p style={{ color: '#6b7280' }}>No API endpoints available yet.</p>
-                  )}
-                </div>
-
-                <div className="dashboard-card">
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    Resource Needs
-                  </h2>
-                  {project.resourceNeeds.map((group, gi) => (
-                    <div key={gi} style={{ marginBottom: '1rem' }}>
-                      <div style={{
-                        fontSize: '0.75rem',
-                        fontWeight: '700',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        color: project.color,
-                        marginBottom: '0.4rem'
-                      }}>
-                        {group.category}
-                      </div>
-                      <ul style={{ listStyle: 'none' }}>
-                        {group.items.map((item, ii) => (
-                          <li key={ii} style={{
-                            fontSize: '0.85rem',
-                            color: '#374151',
-                            padding: '0.25rem 0',
-                            borderBottom: ii < group.items.length - 1 ? '1px solid #f3f4f6' : 'none',
-                            display: 'flex',
-                            gap: '0.4rem'
-                          }}>
-                            <span style={{ color: '#9ca3af' }}>–</span>{item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+            <Card style={{ padding: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>API Endpoints</h2>
+              {project.apiEndpoints.length > 0 ? (
+                <ul style={{ listStyle: 'none' }}>
+                  {project.apiEndpoints.map((endpoint, i) => (
+                    <li key={i} className="code-block" style={{ marginBottom: '0.5rem' }}>{endpoint}</li>
                   ))}
-                </div>
+                </ul>
+              ) : (
+                <p style={{ color: 'var(--text-dim)' }}>No API endpoints available yet.</p>
+              )}
+            </Card>
 
-                <div className="dashboard-card" style={{ marginTop: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    Project Info
-                  </h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#6b7280' }}>Project ID</span>
-                      <span style={{ fontWeight: '500' }}>{project.id}</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#6b7280' }}>Code</span>
-                      <span style={{ fontFamily: 'monospace', fontSize: '0.875rem' }}>{project.code}</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#6b7280' }}>Phase</span>
-                      <span style={{ fontWeight: '500' }}>{project.phase}</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: '#6b7280' }}>Readiness</span>
-                      <span style={{ fontWeight: '500', color: project.readiness > 0 ? '#10b981' : '#6b7280' }}>
-                        {project.readiness}%
-                      </span>
-                    </div>
-                  </div>
+            <Card style={{ padding: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>Resource Needs</h2>
+              {project.resourceNeeds.map((group, gi) => (
+                <div key={gi} style={{ marginBottom: '1rem' }}>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: project.color, marginBottom: '0.4rem' }}>{group.category}</div>
+                  <ul style={{ listStyle: 'none' }}>
+                    {group.items.map((item, ii) => (
+                      <li key={ii} style={{ fontSize: '0.85rem', color: 'var(--text-muted)', padding: '0.25rem 0', borderBottom: ii < group.items.length - 1 ? '1px solid var(--border)' : 'none', display: 'flex', gap: '0.4rem' }}>
+                        <span style={{ color: 'var(--text-dim)' }}>–</span>{item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-            </div>
+              ))}
+            </Card>
+
+            <Card style={{ padding: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem' }}>Project Info</h2>
+              {[['Project ID', project.id], ['Code', project.code], ['Phase', String(project.phase)], ['Readiness', `${project.readiness}%`]].map(([label, value]) => (
+                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0' }}>
+                  <span style={{ color: 'var(--text-dim)' }}>{label}</span>
+                  <span style={{ fontWeight: 500 }}>{value}</span>
+                </div>
+              ))}
+            </Card>
           </div>
-        </section>
-      </main>
-      <Footer />
+        </div>
+      </div>
     </>
   );
 }
