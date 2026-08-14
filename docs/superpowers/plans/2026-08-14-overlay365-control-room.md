@@ -23,28 +23,46 @@
 ### Task 0: Install deps and establish a clean baseline build
 
 **Files:**
-- No source changes
+- Modify: `tsconfig.json` (web) — add `target`
+- No page source changes
 
-- [ ] **Step 1: Install web dependencies**
+> **Note for implementer:** this repo is an **npm workspaces monorepo** (root `package.json` `"workspaces": ["apps/*", "packages/*"]`). `npm install` hoists deps to the **repo-root** `node_modules` and creates the lockfile at the **repo root** (`package-lock.json`), NOT in `apps/web`. Adjust the commit step accordingly.
 
-Run: `npm install`
-Expected: completes without error; creates `apps/web/node_modules` and `apps/web/package-lock.json`.
+- [ ] **Step 1: Install web dependencies (from repo root)**
 
-- [ ] **Step 2: Baseline production build**
+Run (from repo root `C:\Users\User\Downloads\Uplift\01_Platforms\ECOS-Environmental-Initiatives`): `npm install`
+Expected: completes without error; creates/updates the root `package-lock.json` and root `node_modules`.
+
+- [ ] **Step 2: Fix pre-existing tsconfig target (unblocks baseline build)**
+
+`apps/web/tsconfig.json` currently sets no `target` (defaults to ES5), which makes `[...new Set(...)]` in `src/app/marketplace/page.tsx:18` a type error. Add `"target": "es2017"` to the `compilerOptions` block:
+
+```json
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es2017",
+    "allowJs": true,
+    ...
+```
+
+(Insert `"target": "es2017",` as the first line inside `compilerOptions`.)
+
+- [ ] **Step 3: Baseline production build**
 
 Run: `npm run build`
-Expected: SUCCESS. Note: the current build may warn about the layout, but must not hard-fail. If it hard-fails, stop and report — do not proceed.
+Expected: SUCCESS. If it still hard-fails, stop and report — do not proceed.
 
-- [ ] **Step 3: Baseline lint**
+- [ ] **Step 4: Baseline lint**
 
 Run: `npm run lint`
-Expected: completes (may print warnings). Record current warnings count in a note for comparison.
+Expected: completes (may print warnings). Record the warnings/errors count in a note for comparison.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add package-lock.json
-git commit -m "chore(web): install dependencies and lockfile"
+git add package-lock.json apps/web/tsconfig.json
+git commit -m "chore(web): install dependencies and fix tsconfig target for baseline build"
 ```
 
 ---
