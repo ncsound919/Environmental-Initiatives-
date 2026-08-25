@@ -112,9 +112,28 @@ async def get_profile(user_id: str):
     return USERS_DB[user_id]
 
 
+class AddXpRequest(BaseModel):
+    """JSON body for POST /gamification/xp/add (web-contract shape)."""
+    user_id: Optional[str] = None
+    action: Optional[str] = None
+    multiplier: float = 1.0
+
+
 @router.post("/award-xp")
-async def award_xp(user_id: str, action: str, multiplier: float = 1.0):
+@router.post("/xp/add")
+async def award_xp(
+    body: Optional[AddXpRequest] = None,
+    user_id: Optional[str] = None,
+    action: Optional[str] = None,
+    multiplier: float = 1.0,
+):
     """Award XP for a specific action"""
+    user_id = (body.user_id if body and body.user_id else user_id)
+    action = (body.action if body and body.action else action)
+    if body and body.multiplier != 1.0:
+        multiplier = body.multiplier
+    if not user_id or not action:
+        raise HTTPException(400, "user_id and action are required")
     if action not in XP_TABLE:
         raise HTTPException(400, f"Unknown action: {action}. Valid: {list(XP_TABLE.keys())}")
 
@@ -156,6 +175,12 @@ async def list_quests(project_id: Optional[int] = None):
     return quests
 
 
+@router.get("/quests/{user_id}", response_model=List[Quest])
+async def list_quests_for_user(user_id: str):
+    """Web-contract alias: quests scoped to a user."""
+    return await list_quests()
+
+
 @router.post("/quests/{quest_id}/complete")
 async def complete_quest(quest_id: str, user_id: str):
     if quest_id not in QUESTS_DB:
@@ -186,19 +211,51 @@ async def complete_quest(quest_id: str, user_id: str):
 
 @router.get("/leaderboard")
 async def get_leaderboard(limit: int = 100, project_id: Optional[int] = None):
+    """Returns an array (web-contract) of leaderboard entries."""
     users = list(USERS_DB.values())
     leaderboard = [
         {
             "rank": i + 1,
             "user_id": u.user_id,
             "xp": u.xp,
+            "total_xp": u.xp,
+            "level": u.level,
             "level_name": u.level_name,
+            "title": u.level_name,
             "badges_count": len(u.badges),
             "quests_completed": len(u.quests_completed),
         }
         for i, u in enumerate(sorted(users, key=lambda x: x.xp, reverse=True)[:limit])
     ]
-    return {"leaderboard": leaderboard, "total_users": len(users)}
+    return leaderboard
+
+
+@router.get("/levels")
+async def get_levels():
+    """Web-contract levels table."""
+    return [
+        {
+            "level": i + 1,
+            "title": name,
+            "name": name,
+            "xp_required": threshold,
+            "perks": "",
+        }
+        for i, (threshold, name) in enumerate(LEVEL_THRESHOLDS)
+    ]
+
+
+@router.get("/stats/overview")
+async def get_gamification_stats():
+    total_xp = sum(u.xp for u in USERS_DB.values())
+    return {
+        "total_users": len(USERS_DB),
+        "total_xp_awarded": total_xp,
+        "total_quests": len(QUESTS_DB),
+        "active_quests": sum(1 for q in QUESTS_DB.values() if q.is_active),
+        "total_badges": len(BADGES),
+        "quests_completed": sum(len(u.quests_completed) for u in USERS_DB.values()),
+    }
 
 
 @router.get("/badges")

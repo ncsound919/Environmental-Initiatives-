@@ -13,7 +13,7 @@ import os
 import math
 from dataclasses import dataclass, field
 from typing import Optional
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 
 # Optional: real HTTP client for production API calls
 try:
@@ -50,7 +50,7 @@ class CarbonEvent:
     event_type: str        # solar_gen / hydro_gen / geothermal_saving / soil_carbon / bio_carbon
     quantity_kwh_or_kg: float
     unit: str              # kwh / kg / ha / tonne_co2e
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     methodology: str = "IPCC_AR6"
 
 

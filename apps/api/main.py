@@ -22,12 +22,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Revenue routers
-app.include_router(challenges.router, prefix="/api", tags=["challenges"])
-app.include_router(membership.router, prefix="/api", tags=["membership"])
-app.include_router(marketplace.router, prefix="/api", tags=["marketplace"])
-app.include_router(gamification.router, prefix="/api", tags=["gamification"])
-app.include_router(diy_kits.router, prefix="/api", tags=["diy-kits"])
+# Revenue routers (routers already declare /api/... prefixes)
+app.include_router(challenges.router, tags=["challenges"])
+app.include_router(membership.router, tags=["membership"])
+app.include_router(marketplace.router, tags=["marketplace"])
+app.include_router(gamification.router, tags=["gamification"])
+app.include_router(diy_kits.router, tags=["diy-kits"])
 
 
 @app.get("/")

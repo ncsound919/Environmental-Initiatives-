@@ -58,11 +58,11 @@ services:
       timeout: 5s
       retries: 5
 
-  # FastAPI Gateway
+  # Revenue API (FastAPI, apps/api)
   api:
     build:
       context: .
-      dockerfile: apps/api-gateway/Dockerfile
+      dockerfile: apps/api/Dockerfile
     container_name: ecos-api
     ports:
       - "8000:8000"
@@ -72,6 +72,33 @@ services:
       - MQTT_BROKER_PORT=1883
       - REDIS_URL=redis://redis:6379
       - NODE_ENV=production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mqtt:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ecos-network
+    restart: unless-stopped
+
+  # API Gateway (13 project brains + Level 5 routers, apps/api-gateway)
+  api-gateway:
+    build:
+      context: .
+      dockerfile: apps/api-gateway/Dockerfile
+    container_name: ecos-api-gateway
+    ports:
+      - "8001:8000"
+    environment:
+      - DATABASE_URL=postgresql://ecos:ecos_password@postgres:5432/ecos_db
+      - MQTT_BROKER_HOST=mqtt
+      - MQTT_BROKER_PORT=1883
+      - REDIS_URL=redis://redis:6379
+      - MQTT_ENABLED=false
+      - NODE_ENV=production
+      - ECOS_JWT_SECRET=change-me-in-production
     depends_on:
       postgres:
         condition: service_healthy
@@ -153,13 +180,15 @@ services:
   # Next.js Web Frontend
   web:
     build:
-      context: .
-      dockerfile: apps/web/Dockerfile
+      context: apps/web
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:8000/api
     container_name: ecos-web
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://api:8000
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
       - NODE_ENV=production
     depends_on:
       - api

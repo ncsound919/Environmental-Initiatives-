@@ -2,8 +2,8 @@
 ECOS Revenue Engine - Challenges & Dev Bounties Router
 Public challenges, dev bounties with escrow, milestone-based payouts
 """
-from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, HTTPException, Depends, Query
+from pydantic import BaseModel, Field, computed_field
 from typing import List, Optional, Literal
 from datetime import datetime, timedelta
 from enum import Enum
@@ -54,6 +54,22 @@ class Challenge(BaseModel):
     winner_id: Optional[str] = None
     completed_at: Optional[datetime] = None
 
+    # Web-contract aliases (see apps/web/src/lib/api.ts)
+    @computed_field
+    @property
+    def category(self) -> str:
+        return self.challenge_type.value
+
+    @computed_field
+    @property
+    def prize_usd(self) -> float:
+        return self.bounty_usd
+
+    @computed_field
+    @property
+    def participants(self) -> int:
+        return self.submission_count
+
 
 class Submission(BaseModel):
     id: str
@@ -76,7 +92,7 @@ class ChallengeCreate(BaseModel):
     challenge_type: ChallengeType
     difficulty: DifficultyLevel
     bounty_usd: float = Field(ge=50, le=25000)
-    milestones: List[str] = Field(min_items=1, max_items=10)
+    milestones: List[str] = Field(min_length=1, max_length=10)
     required_skills: List[str] = []
     deadline_days: int = Field(ge=3, le=90, default=30)
 
@@ -95,7 +111,7 @@ SUBMISSIONS_DB: dict[str, Submission] = {}
 
 # ============= ENDPOINTS =============
 
-@router.get("/", response_model=List[Challenge])
+@router.get("", response_model=List[Challenge])
 async def list_challenges(
     project_id: Optional[int] = None,
     status: Optional[ChallengeStatus] = None,
@@ -178,7 +194,7 @@ async def submit_solution(challenge_id: str, submission: SubmissionCreate, devel
 
 
 @router.post("/{challenge_id}/review/{submission_id}")
-async def review_submission(challenge_id: str, submission_id: str, score: float = Field(ge=0, le=100), feedback: str = ""):
+async def review_submission(challenge_id: str, submission_id: str, score: float = Query(ge=0, le=100), feedback: str = ""):
     """Review and score a submission (admin only)"""
     if submission_id not in SUBMISSIONS_DB:
         raise HTTPException(404, "Submission not found")
@@ -210,6 +226,25 @@ async def get_submissions(challenge_id: str):
     return [s for s in SUBMISSIONS_DB.values() if s.challenge_id == challenge_id]
 
 
+@router.get("/{challenge_id}/leaderboard")
+async def get_challenge_leaderboard(challenge_id: str):
+    """Web-contract endpoint: leaderboard for a specific challenge."""
+    if challenge_id not in CHALLENGES_DB:
+        raise HTTPException(404, f"Challenge {challenge_id} not found")
+    submissions = [s for s in SUBMISSIONS_DB.values() if s.challenge_id == challenge_id]
+    entries = []
+    for s in submissions:
+        entries.append({
+            "developer_id": s.developer_id,
+            "score": s.score,
+            "reviewed": s.reviewed,
+            "payout_released": s.payout_released,
+            "submitted_at": s.submitted_at.isoformat(),
+        })
+    entries.sort(key=lambda x: x["score"] if x["score"] is not None else -1, reverse=True)
+    return {"challenge_id": challenge_id, "leaderboard": entries}
+
+
 @router.get("/leaderboard/top-earners")
 async def get_top_earners(limit: int = 50):
     """Get top bounty earners (gamification)"""
@@ -238,6 +273,8 @@ async def get_challenge_stats():
     
     return {
         "total_challenges": len(CHALLENGES_DB),
+        "active_challenges": sum(1 for c in CHALLENGES_DB.values() if c.status == ChallengeStatus.OPEN),
+        "total_prize_pool": total_bounties,
         "total_bounty_pool_usd": total_bounties,
         "paid_out_usd": paid_out,
         "escrow_held_usd": total_bounties - paid_out,

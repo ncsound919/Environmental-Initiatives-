@@ -3,8 +3,15 @@
 ECOS Level 1 Structure Validation
 Validates that all 13 projects have the required structure for 20% readiness
 """
-
 import os
+import sys
+
+if sys.stdout and not sys.stdout.encoding.lower().startswith("utf"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except AttributeError:
+        pass
 
 def check_file_exists(path):
     """Check if a file exists"""

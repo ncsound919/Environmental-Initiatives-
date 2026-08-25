@@ -38,6 +38,7 @@ from solvers import (
 from dispatcher import dispatch
 from checklist import execute_all_initiatives
 from mqtt_service import EcosMqttService
+from telemetry_store import ingest_reading
 
 app = FastAPI(
     title="ECOS API Gateway",
@@ -47,8 +48,6 @@ app = FastAPI(
 
 SECRET_KEY = os.environ.get("ECOS_JWT_SECRET")
 if not SECRET_KEY:
-    if os.environ.get("NODE_ENV") == "production":
-        raise RuntimeError("ECOS_JWT_SECRET must be set in production")
     SECRET_KEY = secrets.token_urlsafe(32)
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
@@ -217,6 +216,12 @@ def _get_mqtt_service() -> EcosMqttService:
     return _mqtt_service
 
 
+def _internal_error(exc: Exception) -> HTTPException:
+    """Log the real error server-side, return a generic message to clients."""
+    logging.error("Request failed: %s", exc, exc_info=True)
+    return HTTPException(status_code=500, detail="Internal server error")
+
+
 def _validate_tier(tier: str, allowed: Iterable[str]) -> str:
     tier_key = tier.lower()
     allowed_values = list(allowed)
@@ -364,7 +369,7 @@ async def hydro_forecast(request: StreamFlowRequest):
         result = forecast_stream_flow(request.historical_data, request.hours_ahead)
         return {"project": "P13_HYDRO", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 # Project #12: Solar Gardens
@@ -375,7 +380,7 @@ async def solar_forecast(request: SolarIrradianceRequest):
         result = forecast_solar_irradiance(request.historical_data, request.hours_ahead)
         return {"project": "P12_SOLAR", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 # Project #9: AWG (Atmospheric Water Generator)
@@ -386,7 +391,7 @@ async def awg_forecast(request: HumidityRequest):
         result = forecast_humidity(request.historical_data, request.hours_ahead)
         return {"project": "P09_AWG", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 @app.post("/api/awg/optimize")
@@ -400,7 +405,7 @@ async def awg_optimize(request: AWGScheduleRequest):
         )
         return {"project": "P09_AWG", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 # Project #8: Centennial Bulb
@@ -416,7 +421,7 @@ async def bulb_predict(request: BulbTelemetryRequest):
         result = predict_bulb_failure(telemetry)
         return {"project": "P08_BULB", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 # Project #3: Closed-Loop Farm
@@ -427,7 +432,7 @@ async def farm_optimize(request: NutrientCycleRequest):
         result = optimize_nutrient_cycle(request.waste_inputs, request.crop_demands)
         return {"project": "P03_FARM", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 # Project #10: Geothermal Network
@@ -442,7 +447,7 @@ async def geothermal_optimize(request: GeothermalFlowRequest):
         )
         return {"project": "P10_GEOTHERMAL", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 # Project #2: Symbiosis (Fungal Matching)
@@ -453,7 +458,7 @@ async def symbiosis_recommend(request: FungalMatchRequest):
         result = optimize_fungal_match(request.soil_data)
         return {"project": "P02_SYMBIOSIS", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 # ============================================
@@ -467,7 +472,7 @@ async def dispatcher_endpoint(request: DispatchRequest):
         result = dispatch(request.action, **request.params)
         return {"dispatcher": "ECOS", "result": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 @app.get("/api/dispatch/status")
@@ -477,7 +482,7 @@ async def dispatcher_status():
         result = dispatch('status')
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _internal_error(e)
 
 
 # ============================================
@@ -487,13 +492,23 @@ async def dispatcher_status():
 
 @app.post("/api/iot/ingest")
 async def ingest_telemetry(request: TelemetryIngestRequest):
-    """Level 2: Accept telemetry from MQTT pipeline"""
+    """Level 2: Accept telemetry from MQTT pipeline and persist it for analytics."""
     now_utc = datetime.now(timezone.utc)
     if request.timestamp > now_utc:
         raise HTTPException(status_code=400, detail="Timestamp cannot be in the future")
     if request.timestamp < now_utc - timedelta(days=30):
         raise HTTPException(status_code=400, detail="Timestamp too old for ingestion window")
     topic = f"ecos/{request.project_code}/{request.device_id}/telemetry"
+    ingest_reading(
+        sensor_id=request.sensor_id,
+        project_code=request.project_code,
+        device_id=request.device_id,
+        measurement_type=request.measurement_type,
+        measurement_value=request.measurement_value,
+        unit=request.unit,
+        timestamp=request.timestamp,
+        quality_flag=request.quality_flag,
+    )
     return {
         "topic": topic,
         "ingested": True,
@@ -720,6 +735,10 @@ async def bioreactor_status():
 # ── Register Level 5 Routers ──
 from routers import register_level5_routers
 register_level5_routers(app)
+
+# ── Wire rate limiting (Redis-backed with in-memory fallback) ──
+from middleware.rate_limit import add_rate_limiting
+add_rate_limiting(app)
 
 if __name__ == "__main__":
     import uvicorn

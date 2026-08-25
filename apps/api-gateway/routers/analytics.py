@@ -2,13 +2,26 @@
 Level 5 – Advanced Analytics & Predictive Maintenance
 Cross-project analytics, anomaly detection, and predictive maintenance
 for all 13 ECOS initiatives. Multi-tenant aware.
+
+Analytics are computed from REAL ingested telemetry (see telemetry_store.py,
+fed by POST /api/iot/ingest and the MQTT bridge). No values are fabricated:
+when a project has no stored data, the API reports no_data explicitly instead
+of inventing readings.
 """
 from fastapi import APIRouter, Query
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone
 import math
-import random
+
+from telemetry_store import (
+    readings_for,
+    measurement_types,
+    project_energy_kwh,
+    project_count,
+    totals,
+)
+from carbon_credits.registry import calculate_carbon_credit, CarbonEvent, CARBON_PRICES
 
 router = APIRouter(prefix="/api/analytics", tags=["Analytics"])
 
@@ -29,22 +42,73 @@ PROJECTS = [
     {"id": "P13", "name": "MicroHydro", "zone": "B"},
 ]
 
+# Map project code to the carbon-credit event type its energy readings generate.
+CARBON_EVENT_TYPE_BY_PROJECT = {
+    "P12": "solar_gen",
+    "P13": "hydro_gen",
+    "P10": "geothermal_saving",
+    "P03": "soil_carbon",
+    "P11": "bio_carbon",
+}
 
-def _simulate_health(project_id: str) -> Dict[str, Any]:
-    """Deterministic-ish simulated telemetry for demo."""
-    seed = sum(ord(c) for c in project_id)
-    rng = random.Random(seed + int(datetime.now().hour))
-    score = round(rng.uniform(72, 99), 2)
-    anomaly = score < 80
+
+def _zscore_anomaly_rate(readings: List[Dict[str, Any]]) -> float:
+    """Anomaly rate (0.0-1.0) computed from real readings via rolling z-score."""
+    values = [r["measurement_value"] for r in readings]
+    if len(values) < 2:
+        return 0.0
+    mean = sum(values) / len(values)
+    variance = sum((v - mean) ** 2 for v in values) / len(values)
+    std = math.sqrt(variance) if variance > 0 else 0.0
+    if std == 0:
+        return 0.0
+    outliers = sum(1 for v in values if abs(v - mean) / std > 2.5)
+    return round(outliers / len(values), 4)
+
+
+def _project_health(project_code: str) -> Dict[str, Any]:
+    """Health metrics derived from real stored telemetry for one project."""
+    readings = readings_for(project_code)
+    if not readings:
+        return {
+            "has_data": False,
+            "reading_count": 0,
+            "anomaly_rate": 0.0,
+            "health_score": None,
+            "energy_kwh": 0.0,
+            "measurement_types": [],
+            "latest_reading_at": None,
+        }
+    latest = max(readings, key=lambda r: r["timestamp"])
     return {
-        "health_score": score,
-        "anomaly_detected": anomaly,
-        "mtbf_hours": round(rng.uniform(800, 8760), 0),
-        "next_maintenance_days": round(rng.uniform(1, 90), 0) if anomaly else round(rng.uniform(30, 365), 0),
-        "efficiency_pct": round(rng.uniform(78, 97), 2),
-        "carbon_kg_saved": round(rng.uniform(50, 5000), 1),
-        "energy_kwh": round(rng.uniform(100, 50000), 1),
+        "has_data": True,
+        "reading_count": len(readings),
+        "anomaly_rate": _zscore_anomaly_rate(readings),
+        "health_score": round(max(0.0, 100.0 * (1.0 - _zscore_anomaly_rate(readings))), 2),
+        "energy_kwh": round(project_energy_kwh(project_code), 2),
+        "measurement_types": measurement_types(project_code),
+        "latest_reading_at": latest["timestamp"],
     }
+
+
+def _carbon_events_from_telemetry() -> List[CarbonEvent]:
+    """Build carbon credit events ONLY from real stored energy readings."""
+    events: List[CarbonEvent] = []
+    for project_code, event_type in CARBON_EVENT_TYPE_BY_PROJECT.items():
+        energy_kwh = project_energy_kwh(project_code)
+        if energy_kwh <= 0:
+            continue
+        events.append(
+            CarbonEvent(
+                project_id=int(project_code[1:]),
+                project_code=project_code,
+                event_type=event_type,
+                quantity_kwh_or_kg=energy_kwh,
+                unit="kwh",
+                methodology="IPCC_AR6",
+            )
+        )
+    return events
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────
@@ -65,23 +129,27 @@ class MaintenancePrediction(BaseModel):
 # ── Endpoints ─────────────────────────────────────────────────────────────
 @router.get("/ecosystem", summary="Ecosystem-wide health dashboard")
 def ecosystem_health(tenant_id: str = Query("default")):
-    metrics = [{"project": p, **_simulate_health(p["id"])} for p in PROJECTS]
-    anomalies = [m for m in metrics if m["anomaly_detected"]]
-    total_carbon = round(sum(m["carbon_kg_saved"] for m in metrics), 1)
-    total_energy = round(sum(m["energy_kwh"] for m in metrics), 1)
-    avg_health = round(sum(m["health_score"] for m in metrics) / len(metrics), 2)
+    metrics = []
+    for project in PROJECTS:
+        health = _project_health(project["id"])
+        metrics.append({"project": project, **health})
+
+    with_data = [m for m in metrics if m["has_data"]]
+    healthy_count = sum(1 for m in with_data if m["health_score"] is not None and m["health_score"] >= 80)
+    store_totals = totals()
+
     return {
         "tenant_id": tenant_id,
         "as_of": datetime.now(timezone.utc).isoformat(),
+        "data_source": "REAL_TELEMETRY",
         "summary": {
             "projects_total": len(PROJECTS),
-            "projects_healthy": len(PROJECTS) - len(anomalies),
-            "projects_anomalous": len(anomalies),
-            "avg_health_score": avg_health,
-            "total_carbon_kg_saved": total_carbon,
-            "total_energy_kwh": total_energy,
+            "projects_with_data": len(with_data),
+            "projects_healthy": healthy_count,
+            "projects_anomalous": len(with_data) - healthy_count,
+            "total_readings": store_totals["total_readings"],
+            "total_energy_kwh": store_totals["total_energy_kwh"],
         },
-        "anomalies": anomalies,
         "projects": metrics,
     }
 
@@ -91,11 +159,12 @@ def project_analytics(project_id: str, tenant_id: str = Query("default")):
     project = next((p for p in PROJECTS if p["id"] == project_id), None)
     if not project:
         return {"error": f"Unknown project {project_id}"}
-    health = _simulate_health(project_id)
+    health = _project_health(project_id)
     return {
         "tenant_id": tenant_id,
         "project": project,
         "as_of": datetime.now(timezone.utc).isoformat(),
+        "data_source": "REAL_TELEMETRY",
         **health,
         "recommendations": _get_recommendations(project_id, health),
     }
@@ -103,13 +172,15 @@ def project_analytics(project_id: str, tenant_id: str = Query("default")):
 
 def _get_recommendations(pid: str, health: dict) -> List[str]:
     recs = []
-    if health["health_score"] < 85:
-        recs.append(f"Schedule maintenance within {int(health['next_maintenance_days'])} days")
-    if health["efficiency_pct"] < 85:
-        recs.append("Efficiency below 85% – inspect actuators and sensors")
-    if health["anomaly_detected"]:
-        recs.append("Anomaly detected – review recent telemetry and run diagnostics")
-    recs.append(f"Carbon savings on track: {health['carbon_kg_saved']} kg CO₂ avoided")
+    if not health.get("has_data"):
+        recs.append("No telemetry ingested yet – connect devices via POST /api/iot/ingest")
+        return recs
+    if health.get("anomaly_rate", 0) > 0.05:
+        recs.append(f"Anomaly rate {health['anomaly_rate']:.1%} exceeds 5% – inspect recent telemetry")
+    if health.get("energy_kwh", 0) > 0:
+        recs.append(f"Energy generation on record: {health['energy_kwh']} kWh")
+    else:
+        recs.append("No energy readings stored yet for this project")
     return recs
 
 
@@ -128,6 +199,7 @@ def detect_anomalies(req: AnomalyRequest):
             results.append({"index": i, "value": req.readings[i], "z_score": round(z, 3)})
     return {
         "project_id": req.project_id,
+        "data_source": "REAL_TELEMETRY",
         "total_points": len(req.readings),
         "anomaly_count": len(results),
         "threshold": req.z_threshold,
@@ -156,17 +228,41 @@ def predict_maintenance(req: MaintenancePrediction):
 
 @router.get("/carbon-credits", summary="Cross-project carbon credit summary")
 def carbon_summary(tenant_id: str = Query("default")):
-    metrics = [_simulate_health(p["id"]) for p in PROJECTS]
-    total_kg = sum(m["carbon_kg_saved"] for m in metrics)
-    vcs_credits = round(total_kg / 1000, 4)  # 1 VCS credit = 1 tonne CO2
+    events = _carbon_events_from_telemetry()
+    credits = [calculate_carbon_credit(e) for e in events]
+    total_avoided = sum(c.tonnes_co2e_avoided for c in credits)
+    total_sequestered = sum(c.tonnes_co2e_sequestered for c in credits)
+    total = total_avoided + total_sequestered
     return {
         "tenant_id": tenant_id,
         "as_of": datetime.now(timezone.utc).isoformat(),
-        "total_co2_avoided_kg": round(total_kg, 1),
-        "vcs_credits_earned": vcs_credits,
-        "estimated_market_value_usd": round(vcs_credits * 18.5, 2),  # ~$18.50/credit
+        "data_source": "REAL_TELEMETRY",
+        "total_co2_avoided_kg": round(total_avoided * 1000.0, 1),
+        "total_tonnes_co2e": round(total, 4),
+        "vcs_credits_earned": round(total, 4),
+        "estimated_market_value_usd": {
+            market: round(total * price, 2)
+            for market, price in CARBON_PRICES.items()
+        },
+        "verification_status": "unverified",
+        "credits": [
+            {
+                "project_code": c.event.project_code,
+                "event_type": c.event.event_type,
+                "tonnes_co2e": c.total_tonnes_co2e,
+                "verra_methodology": c.verra_methodology,
+                "gold_standard_methodology": c.gold_standard_methodology,
+            }
+            for c in credits
+        ],
         "projects": [
-            {"project_id": PROJECTS[i]["id"], "co2_kg": round(metrics[i]["carbon_kg_saved"], 1)}
-            for i in range(len(PROJECTS))
+            {
+                "project_id": p["id"],
+                "tonnes_co2e": round(
+                    sum(c.total_tonnes_co2e for c in credits if c.event.project_code == p["id"]),
+                    4,
+                ),
+            }
+            for p in PROJECTS
         ],
     }

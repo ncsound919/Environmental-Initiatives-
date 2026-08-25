@@ -3,7 +3,7 @@ ECOS Revenue Engine - Marketplace Router
 Listing, purchasing, royalties for algorithms, datasets, templates, services
 """
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 from typing import List, Optional
 from datetime import datetime
 from enum import Enum
@@ -44,6 +44,22 @@ class MarketplaceProduct(BaseModel):
     preview_url: Optional[str] = None
     demo_url: Optional[str] = None
 
+    # Web-contract aliases (see apps/web/src/lib/api.ts)
+    @computed_field
+    @property
+    def category(self) -> str:
+        return self.product_type.value
+
+    @computed_field
+    @property
+    def listing_type(self) -> str:
+        return self.status.value
+
+    @computed_field
+    @property
+    def units_sold(self) -> int:
+        return self.downloads
+
 
 class Purchase(BaseModel):
     id: str
@@ -74,7 +90,8 @@ PURCHASES_DB: dict = {}
 PLATFORM_FEE = 0.15  # 15% platform cut
 
 
-@router.get("/", response_model=List[MarketplaceProduct])
+@router.get("", response_model=List[MarketplaceProduct])
+@router.get("/listings", response_model=List[MarketplaceProduct])
 async def list_products(
     project_id: Optional[int] = None,
     product_type: Optional[ProductType] = None,
@@ -93,7 +110,8 @@ async def list_products(
     return sorted(products, key=lambda x: x.downloads, reverse=True)
 
 
-@router.post("/list", response_model=MarketplaceProduct)
+@router.post("", response_model=MarketplaceProduct)
+@router.post("/listings", response_model=MarketplaceProduct)
 async def list_product(product: ProductCreate):
     product_id = f"MP{len(PRODUCTS_DB) + 1:05d}"
     new_product = MarketplaceProduct(
@@ -111,8 +129,17 @@ async def list_product(product: ProductCreate):
     return new_product
 
 
+class PurchaseRequest(BaseModel):
+    """JSON body for POST /marketplace/listings/{id}/purchase (web-contract shape)."""
+    buyer_id: Optional[str] = None
+
+
 @router.post("/{product_id}/purchase", response_model=Purchase)
-async def purchase_product(product_id: str, buyer_id: str):
+@router.post("/listings/{product_id}/purchase", response_model=Purchase)
+async def purchase_product(product_id: str, body: Optional[PurchaseRequest] = None, buyer_id: Optional[str] = None):
+    buyer_id = (body.buyer_id if body and body.buyer_id else buyer_id)
+    if not buyer_id:
+        raise HTTPException(400, "buyer_id is required")
     if product_id not in PRODUCTS_DB:
         raise HTTPException(404, "Product not found")
     product = PRODUCTS_DB[product_id]
@@ -155,6 +182,14 @@ async def get_seller_earnings(seller_id: str):
     }
 
 
+@router.get("/listings/{product_id}", response_model=MarketplaceProduct)
+async def get_listing(product_id: str):
+    """Web-contract alias for fetching a single listing."""
+    if product_id not in PRODUCTS_DB:
+        raise HTTPException(404, "Product not found")
+    return PRODUCTS_DB[product_id]
+
+
 @router.get("/stats/overview")
 async def get_marketplace_stats():
     total_gmv = sum(p.price_paid for p in PURCHASES_DB.values())
@@ -164,9 +199,12 @@ async def get_marketplace_stats():
         by_type[p.product_type] = by_type.get(p.product_type, 0) + 1
     return {
         "total_products": len(PRODUCTS_DB),
+        "total_listings": len(PRODUCTS_DB),
         "total_transactions": len(PURCHASES_DB),
         "gross_merchandise_value_usd": total_gmv,
+        "total_gmv_usd": total_gmv,
         "platform_revenue_usd": platform_revenue,
+        "active_sellers": len({p.seller_id for p in PRODUCTS_DB.values()}),
         "products_by_type": by_type,
         "top_products": sorted(
             [{"id": p.id, "title": p.title, "downloads": p.downloads}
