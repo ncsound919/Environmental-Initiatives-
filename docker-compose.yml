@@ -27,7 +27,7 @@ services:
     image: eclipse-mosquitto:2
     container_name: ecos-mqtt
     ports:
-      - "1883:1883"  # MQTT
+      - "127.0.0.1:1883:1883"  # MQTT
       - "9001:9001"  # WebSocket
     volumes:
       - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf
@@ -46,7 +46,7 @@ services:
     image: redis:7-alpine
     container_name: ecos-redis
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - redis_data:/data
     networks:
@@ -98,7 +98,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - MQTT_ENABLED=false
       - NODE_ENV=production
-      - ECOS_JWT_SECRET=change-me-in-production
+      - ECOS_JWT_SECRET=${ECOS_JWT_SECRET:?set_in_env}
     depends_on:
       postgres:
         condition: service_healthy

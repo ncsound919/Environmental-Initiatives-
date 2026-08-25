@@ -4,7 +4,7 @@ Exposes all 13 project brains as REST APIs
 Completes Level 1 requirement: API Exposed
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel, EmailStr, Field
 from typing import Dict, List, Any, Literal, Iterable
 from datetime import datetime, timedelta, timezone
@@ -47,6 +47,11 @@ app = FastAPI(
 )
 
 SECRET_KEY = os.environ.get("ECOS_JWT_SECRET")
+_KNOWN_DEFAULT_JWT_SECRET = "change-me-in-production"
+if os.environ.get("NODE_ENV") == "production" and (
+    not SECRET_KEY or SECRET_KEY == _KNOWN_DEFAULT_JWT_SECRET
+):
+    raise RuntimeError("ECOS_JWT_SECRET must be set to a strong unique value in production")
 if not SECRET_KEY:
     SECRET_KEY = secrets.token_urlsafe(32)
 
@@ -524,8 +529,13 @@ async def ingest_telemetry(request: TelemetryIngestRequest):
 
 
 @app.post("/api/auth/token")
-async def issue_auth_token(request: AuthTokenRequest):
+async def issue_auth_token(request: AuthTokenRequest, x_internal_signing_key: str = Header(default="")):
     """Level 2: Shared auth token issuance (versioned HMAC-signed token)"""
+    signing_key = os.environ.get("ECOS_TOKEN_SIGNING_KEY")
+    if not signing_key:
+        raise HTTPException(status_code=503, detail="token signing disabled")
+    if not hmac.compare_digest(x_internal_signing_key.encode(), signing_key.encode()):
+        raise HTTPException(status_code=403, detail="Invalid internal signing key")
     issued_at = datetime.now(timezone.utc).replace(microsecond=0)
     expires_at = issued_at + timedelta(hours=24)
     payload = {
