@@ -30,9 +30,9 @@ def optimize_nutrient_cycle(
         return {'status': 'error', 'message': 'Solver not available'}
     
     # Variables: how much of each nutrient to allocate
-    n_alloc = solver.NumVar(0, waste_inputs['N'], 'n_alloc')
-    p_alloc = solver.NumVar(0, waste_inputs['P'], 'p_alloc')
-    k_alloc = solver.NumVar(0, waste_inputs['K'], 'k_alloc')
+    n_alloc = solver.NumVar(0, waste_inputs.get('N', 0.0), 'n_alloc')
+    p_alloc = solver.NumVar(0, waste_inputs.get('P', 0.0), 'p_alloc')
+    k_alloc = solver.NumVar(0, waste_inputs.get('K', 0.0), 'k_alloc')
     
     # Constraints: meet crop demands
     solver.Add(n_alloc >= crop_demands['N'])
@@ -168,7 +168,7 @@ def optimize_geothermal_flow(
             'status': 'optimal',
             'allocations': {b: allocations[b].solution_value() for b in buildings},
             'total_allocated': sum([allocations[b].solution_value() for b in buildings]),
-            'capacity_utilization': sum([allocations[b].solution_value() for b in buildings]) / available_capacity,
+            'capacity_utilization': sum([allocations[b].solution_value() for b in buildings]) / max(available_capacity, 1e-9),
         }
         
         # Calculate unmet demand
