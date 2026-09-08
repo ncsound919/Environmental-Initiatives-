@@ -33,8 +33,8 @@ export function Sidebar() {
   const nav = (
     <>
       <div className="sidebar-logo">
-        <span>🌐</span>
-        <span>Overlay365</span>
+        <img src="/overlay-ecos-logo.png" alt="Overlay ECOS logo" width={32} height={32} style={{ borderRadius: 8, objectFit: 'cover' }} />
+        <span>Overlay ECOS</span>
       </div>
       <nav className="sidebar-nav">
         <div className="sidebar-group-label">Platform</div>
