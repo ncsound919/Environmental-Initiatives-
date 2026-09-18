@@ -23,12 +23,12 @@ import {
 export default function Dashboard() {
   return (
     <>
-      <PageHeader title="System Dashboard" subtitle="Real-time monitoring of the ECOS ecosystem" accent="cyan">
+      <PageHeader title="System Dashboard" subtitle="Demo dashboard — illustrative telemetry, not live device feeds." accent="cyan">
         <StatBand>
-          <KpiCard value={`${systemMetrics.totalPowerGeneration} kW`} label="Total Power Generation" accent="cyan" trend={{ dir: 'up', text: '12% vs yesterday' }} />
-          <KpiCard value={`${systemMetrics.waterProduction} L/hr`} label="Water Production" accent="cyan" trend={{ dir: 'up', text: '8% vs yesterday' }} />
-          <KpiCard value={`${systemMetrics.carbonOffset} t/day`} label="Carbon Offset" accent="cyan" trend={{ dir: 'up', text: '5% vs yesterday' }} />
-          <KpiCard value={`${systemMetrics.activeDevices}`} label="Active Devices" accent="cyan" trend={{ dir: 'flat', text: `Uptime ${systemMetrics.systemUptime}%` }} />
+          <KpiCard value={`${systemMetrics.totalPowerGeneration} kW`} label="Power (demo)" accent="cyan" />
+          <KpiCard value={`${systemMetrics.waterProduction} L/hr`} label="Water (demo)" accent="cyan" />
+          <KpiCard value={`${systemMetrics.carbonOffset} t/day`} label="Carbon Offset (demo)" accent="cyan" />
+          <KpiCard value={`${systemMetrics.activeDevices}`} label="Devices (demo)" accent="cyan" />
         </StatBand>
       </PageHeader>
 

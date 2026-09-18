@@ -1,0 +1,201 @@
+{
+  "code": "P06_REACTOR",
+  "id": "P06",
+  "name": "NucleoSim",
+  "type": "Fast Reactor Twin",
+  "phase": 4,
+  "stage": "concept",
+  "tracks": [
+    "Grant",
+    "Strategic Partner"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "neutronics-sim",
+        "name": "Neutronics + thermal-hydraulics",
+        "api": "/api/reactor/status",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "NucleoSim Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "Mini-PC (8-core)",
+          "qty": 1,
+          "unitUsd": 450,
+          "supplier": "Hardware vendor",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "32 GB RAM",
+          "qty": 1,
+          "unitUsd": 80,
+          "supplier": "Hardware vendor",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "1 TB NVMe",
+          "qty": 1,
+          "unitUsd": 70,
+          "supplier": "Hardware vendor",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "UPS",
+          "qty": 1,
+          "unitUsd": 90,
+          "supplier": "Hardware vendor",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "Network switch",
+          "qty": 1,
+          "unitUsd": 30,
+          "supplier": "Hardware vendor",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P06/{deviceId}/telemetry",
+        "controlTopic": "ecos/P06/{deviceId}/control",
+        "deviceTypes": [
+          "simulation-node"
+        ],
+        "sensors": [
+          "temp_sim",
+          "pressure_sim"
+        ],
+        "actuators": [
+          "sim_case"
+        ]
+      },
+      "power": "~120 W",
+      "powerBudget": "~120 W",
+      "buildHours": 3,
+      "sla": null,
+      "verification": [
+        "compute-node: undefined — no device firmware; verified as compute hardware",
+        "interfaces cross-check against config/hardware-manifests.json (undefined)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "NucleoSim Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "simulation nodes -> scheduler -> results store",
+      "bom": [
+        {
+          "part": "HPC node (dual CPU)",
+          "qty": 1,
+          "unitUsd": 12000,
+          "supplier": "OEM",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "GPU accelerator",
+          "qty": 1,
+          "unitUsd": 8000,
+          "supplier": "OEM",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Rack + PDU",
+          "qty": 1,
+          "unitUsd": 2500,
+          "supplier": "Datacenter supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Cooling",
+          "qty": 1,
+          "unitUsd": 1800,
+          "supplier": "Datacenter supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Networking (100GbE)",
+          "qty": 1,
+          "unitUsd": 3000,
+          "supplier": "Datacenter supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P06/{deviceId}/telemetry",
+        "controlTopic": "ecos/P06/{deviceId}/control",
+        "deviceTypes": [
+          "simulation-node"
+        ],
+        "sensors": [
+          "temp_sim",
+          "pressure_sim"
+        ],
+        "actuators": [
+          "sim_case"
+        ]
+      },
+      "power": "~4 kW per node",
+      "powerBudget": "~4 kW per node",
+      "buildHours": 40,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "compute-node: undefined — no device firmware; verified as compute hardware",
+        "interfaces cross-check against config/hardware-manifests.json (undefined)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "NucleoSim",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

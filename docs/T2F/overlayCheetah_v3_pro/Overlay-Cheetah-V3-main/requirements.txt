@@ -1,0 +1,8 @@
+PyYAML>=6.0
+jinja2
+pyyaml
+watchdog
+black
+pytest
+fastapi
+uvicorn[standard]

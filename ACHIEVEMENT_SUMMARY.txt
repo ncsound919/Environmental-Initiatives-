@@ -28,7 +28,7 @@ BRANCH: copilot/update-readiness-checklist-process
 🎯 PROJECT READINESS STATUS
 
 Infrastructure Layer (3 projects):
-  #8  EverLume (Centennial Bulb)      ✅ 20%  Bayesian failure prediction
+  #8  EverLume (Centennial Bulb)      ✅ 20%  Heuristic failure prediction (Bayesian planned)
   #13 MicroHydro                      ✅ 20%  LSTM stream flow forecasting
   #9  AquaGen (AWG)                   ✅ 20%  Prophet + PuLP cost optimization
 

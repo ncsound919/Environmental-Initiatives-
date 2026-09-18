@@ -1,0 +1,7 @@
+{
+  "task_id": "generate_wsl_build_script",
+  "generated": [
+    "../../../kernel-rust-uefi/wsl_build_and_run.sh"
+  ],
+  "errors": []
+}

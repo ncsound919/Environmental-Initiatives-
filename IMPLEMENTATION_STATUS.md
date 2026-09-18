@@ -11,11 +11,11 @@ This monorepo implements a unified ecosystem of 13 interconnected climate-tech b
 | 2 | Symbiosis | AgriConnect | ✅ 70% | Fungal strain recommendation || 3 | Farm | RegeneraFarm | ✅ 20% | Nutrient cycle optimization |
 | 4 | Hemp Lab | HempMobility | ✅ 20% | Material testing framework |
 | 3 | Farm | RegeneraFarm | ✅ 70% | Nutrient cycle optimization || 6 | Reactor | NucleoSim | ✅ 20% | Physics simulation |
-| 4 | Hemp Lab | HempMobility | ✅ 70% | Material testing framework || 8 | Bulb | EverLume | ✅ 20% | Failure prediction (Bayesian) |
+| 4 | Hemp Lab | HempMobility | ✅ 70% | Material testing framework || 8 | Bulb | EverLume | ✅ 20% | Failure prediction (heuristic) |
 | 5 | Greenhouse | LumiFreq | ✅ 70% | Light recipe control || 10 | Geothermal | ThermalGrid | ✅ 20% | Flow optimization |
 | 6 | Reactor | NucleoSim | ✅ 70% | Physics simulation || 12 | Solar | SolarShare | ✅ 20% | Irradiance forecasting |
 | 7 | Bioreactor | PlastiCycle | ✅ 70% | Bioprocess control |
-| 8 | Bulb | EverLume | ✅ 70% | Failure prediction (Bayesian) |
+| 8 | Bulb | EverLume | ✅ 70% | Failure prediction (heuristic) |
 | 9 | AWG | AquaGen | ✅ 70% | Humidity forecasting, cost optimization |
 | 10 | Geothermal | ThermalGrid | ✅ 70% | Flow optimization |
 | 11 | BioSynth | BioSynth (P11) | ✅ 70% | Microbiome analytics, CRISPR tracking |
@@ -111,7 +111,7 @@ python tests/test_dispatcher.py
 ### Infrastructure Layer
 
 #### #8 EverLume (Centennial Bulb)
-- **Brain**: Bayesian reliability model
+- **Brain**: heuristic reliability model (Bayesian model planned)
 - **API**: `POST /api/bulb/predict`
 - **Function**: Predicts failure probability from voltage, thermal cycles, uptime
 

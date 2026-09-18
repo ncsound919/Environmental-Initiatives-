@@ -5,6 +5,7 @@ Completes Level 1 requirement: API Exposed
 """
 
 from fastapi import FastAPI, HTTPException, Header
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field
 from typing import Dict, List, Any, Literal, Iterable
 from datetime import datetime, timedelta, timezone
@@ -44,6 +45,21 @@ app = FastAPI(
     title="ECOS API Gateway",
     description="Unified API for all 13 Environmental Businesses",
     version="1.0.0"
+)
+
+# CORS - origins are configured via ECOS_ALLOWED_ORIGINS (comma-separated).
+# Defaults to local development only; no production origin is hardcoded.
+_allowed_origins = [
+    origin.strip()
+    for origin in os.environ.get("ECOS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    if origin.strip()
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 SECRET_KEY = os.environ.get("ECOS_JWT_SECRET")
@@ -416,7 +432,7 @@ async def awg_optimize(request: AWGScheduleRequest):
 # Project #8: Centennial Bulb
 @app.post("/api/bulb/predict")
 async def bulb_predict(request: BulbTelemetryRequest):
-    """Predict bulb failure probability using Bayesian model"""
+    """Predict bulb failure probability using a heuristic reliability score (Bayesian model planned)"""
     try:
         telemetry = {
             'voltage': request.voltage,

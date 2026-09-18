@@ -94,7 +94,7 @@ Full API docs: http://localhost:8000/docs
 - `forecast_stream_flow()` - LSTM for hydro
 - `forecast_solar_irradiance()` - Prophet for solar
 - `forecast_humidity()` - Prophet for AWG
-- `predict_bulb_failure()` - Bayesian for bulbs
+- `predict_bulb_failure()` - heuristic reliability score for bulbs
 
 ### Optimization
 - `optimize_nutrient_cycle()` - OR-Tools for farm
@@ -146,7 +146,7 @@ curl -X POST http://localhost:8000/api/awg/optimize \
   -d '{
     "humidity_forecast": [60, 75, 80, 70],
     "energy_prices": [0.10, 0.08, 0.12, 0.09],
-    "target_liters": 100
+    "target_liters": 25
   }'
 ```
 

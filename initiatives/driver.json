@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "dir": "../../../recourse",
+  "script": "ecos:propose",
+  "note": "Recourse proposes IDS improvements; every proposal must pass initiatives/gate.mjs. `dir` is resolved relative to the ECOS repo, so no absolute machine path is stored. When the local model is offline the driver is an honest no-op. Override with ECOS_DRIVER_CMD."
+}

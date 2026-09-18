@@ -1,0 +1,9 @@
+{
+  "task_id": "build_overlay_cheetah_exe",
+  "generated": [
+    "../../Overlay_Cheetah/overlay_cheetah.spec",
+    "../../Overlay_Cheetah/build_exe.bat",
+    "../../Overlay_Cheetah/EXE_README.md"
+  ],
+  "errors": []
+}

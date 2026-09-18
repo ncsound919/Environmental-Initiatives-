@@ -1,0 +1,221 @@
+{
+  "code": "P01_FOAM_HOMES",
+  "id": "P01",
+  "name": "EcoHomes OS",
+  "type": "Foam Homes",
+  "phase": 3,
+  "stage": "prototype",
+  "tracks": [
+    "Strategic Partner",
+    "Revenue"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "parametric-bom",
+        "name": "Parametric design + BOM engine",
+        "api": "/api/foam-homes/status",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "EcoHomes OS Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "DHT22 temp/humidity",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/385 — $9.95 (discontinued)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "SGP30 TVOC/CO2",
+          "qty": 1,
+          "unitUsd": 17.5,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3709 — SGP30 VOC/eCO2 $17.50 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "5V relay module",
+          "qty": 1,
+          "unitUsd": 6.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "5V fan",
+          "qty": 1,
+          "unitUsd": 3.5,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3368 — miniature 5V fan $3.50 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Breadboard + jumpers",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3314 — half-size breadboard + 78-piece jumper bundle $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P01/{deviceId}/telemetry",
+        "controlTopic": "ecos/P01/{deviceId}/control",
+        "deviceTypes": [
+          "hvac-controller",
+          "thermostat",
+          "air-quality"
+        ],
+        "sensors": [
+          "temperature",
+          "humidity",
+          "co2",
+          "vocs"
+        ],
+        "actuators": [
+          "fan_speed",
+          "damper",
+          "heat_pump_stage"
+        ]
+      },
+      "power": "USB 5V 0.5A (2.5 W)",
+      "powerBudget": "USB 5V 0.5A (2.5 W)",
+      "buildHours": 3,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (hvac-controller)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "EcoHomes OS Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "thermostat -> HVAC controller -> BMS gateway -> MQTT",
+      "bom": [
+        {
+          "part": "Commercial thermostat (0-10V)",
+          "qty": 1,
+          "unitUsd": 120,
+          "supplier": "HVAC distributor",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "CO2/VOC sensor",
+          "qty": 1,
+          "unitUsd": 45,
+          "supplier": "Digi-Key",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Damper actuator",
+          "qty": 4,
+          "unitUsd": 60,
+          "supplier": "HVAC distributor",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Heat-pump control board",
+          "qty": 1,
+          "unitUsd": 55,
+          "supplier": "HVAC distributor",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "BMS edge gateway",
+          "qty": 1,
+          "unitUsd": 150,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P01/{deviceId}/telemetry",
+        "controlTopic": "ecos/P01/{deviceId}/control",
+        "deviceTypes": [
+          "hvac-controller",
+          "thermostat",
+          "air-quality"
+        ],
+        "sensors": [
+          "temperature",
+          "humidity",
+          "co2",
+          "vocs"
+        ],
+        "actuators": [
+          "fan_speed",
+          "damper",
+          "heat_pump_stage"
+        ]
+      },
+      "power": "~120 W per home",
+      "powerBudget": "~120 W per home",
+      "buildHours": 8,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (hvac-controller)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "EcoHomes OS",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

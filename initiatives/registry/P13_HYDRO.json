@@ -1,0 +1,214 @@
+{
+  "code": "P13_HYDRO",
+  "id": "P13",
+  "name": "MicroHydro",
+  "type": "Micro-Hydro Power",
+  "phase": 1,
+  "stage": "concept",
+  "tracks": [
+    "Grant",
+    "Strategic Partner",
+    "Revenue"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "streamflow-forecast",
+        "name": "Stream flow forecast (LSTM)",
+        "api": "/api/hydro/forecast",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "MicroHydro Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Flow sensor",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/828 — liquid flow meter $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Pressure/head sensor",
+          "qty": 1,
+          "unitUsd": 30,
+          "supplier": "Generic",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "Servo/gate actuator",
+          "qty": 1,
+          "unitUsd": 12,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/155 — TowerPro SG-5010 standard servo $12.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Relay module",
+          "qty": 1,
+          "unitUsd": 6.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Turbine runner (small)",
+          "qty": 1,
+          "unitUsd": 45,
+          "supplier": "Hydro supplier",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P13/{deviceId}/telemetry",
+        "controlTopic": "ecos/P13/{deviceId}/control",
+        "deviceTypes": [
+          "turbine-controller"
+        ],
+        "sensors": [
+          "flow",
+          "head",
+          "power"
+        ],
+        "actuators": [
+          "gate",
+          "diverter"
+        ]
+      },
+      "power": "USB 5V 0.5A (~2.5 W)",
+      "powerBudget": "USB 5V 0.5A (~2.5 W)",
+      "buildHours": 6,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (turbine-controller)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "MicroHydro Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "turbine -> PLC -> gate -> island/grid",
+      "bom": [
+        {
+          "part": "Turbine + generator (5 kW)",
+          "qty": 1,
+          "unitUsd": 45000,
+          "supplier": "Hydro supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "PLC/controls",
+          "qty": 1,
+          "unitUsd": 8000,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Gate actuator",
+          "qty": 1,
+          "unitUsd": 6000,
+          "supplier": "Hydro supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Flow/head sensors",
+          "qty": 1,
+          "unitUsd": 3000,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Civil works",
+          "qty": 1,
+          "unitUsd": 40000,
+          "supplier": "EPC",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P13/{deviceId}/telemetry",
+        "controlTopic": "ecos/P13/{deviceId}/control",
+        "deviceTypes": [
+          "turbine-controller"
+        ],
+        "sensors": [
+          "flow",
+          "head",
+          "power"
+        ],
+        "actuators": [
+          "gate",
+          "diverter"
+        ]
+      },
+      "power": "5 kW nominal",
+      "powerBudget": "5 kW nominal",
+      "buildHours": 300,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (turbine-controller)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "MicroHydro",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

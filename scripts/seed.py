@@ -26,7 +26,7 @@ PROJECTS = [
     {"id": 5,  "code": "P05", "name": "LumiFreq",       "description": "Spectral light recipe control for greenhouse crops", "zone": "C", "status": "active"},
     {"id": 6,  "code": "P06", "name": "NucleoSim",      "description": "Small modular reactor physics simulation", "zone": "D", "status": "active"},
     {"id": 7,  "code": "P07", "name": "PlastiCycle",    "description": "Microbial plastic degradation bioprocess control", "zone": "D", "status": "active"},
-    {"id": 8,  "code": "P08", "name": "EverLume",       "description": "Bayesian LED failure prediction & maintenance", "zone": "A", "status": "active"},
+    {"id": 8,  "code": "P08", "name": "EverLume",       "description": "Heuristic LED failure prediction & maintenance (Bayesian planned)", "zone": "A", "status": "active"},
     {"id": 9,  "code": "P09", "name": "AquaGen",        "description": "Atmospheric water generation with humidity forecasting", "zone": "B", "status": "active"},
     {"id": 10, "code": "P10", "name": "ThermalGrid",    "description": "Geothermal heat flow optimization for buildings", "zone": "B", "status": "active"},
     {"id": 11, "code": "P11", "name": "BioSynth",       "description": "Microbiome analytics & CRISPR strain tracking platform", "zone": "D", "status": "active"},

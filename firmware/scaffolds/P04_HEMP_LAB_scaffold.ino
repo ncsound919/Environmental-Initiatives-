@@ -1,0 +1,12 @@
+/*
+ * ECOS firmware scaffold — P04 (material-testbench)
+ * Verify-only scaffold: satisfies the IDS gate that a matching PROJECT_CODE
+ * exists. Implement readSensors()/applyControl() per config/hardware-manifests.json
+ * and packages/hardware-sdk TelemetrySchema before a real build.
+ */
+#define PROJECT_CODE "P04"
+#define DEVICE_TYPE "material-testbench"
+#define FIRMWARE_VERSION "v0.1.0-scaffold"
+
+// Telemetry: ecos/P04/<deviceId>/telemetry   Control: ecos/P04/<deviceId>/control
+// See firmware/esp32-template/ecos_template.ino for the full template.

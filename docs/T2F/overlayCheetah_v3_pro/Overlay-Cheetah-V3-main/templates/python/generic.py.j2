@@ -1,0 +1,69 @@
+"""{{ description }}
+
+{% if author is defined %}Author: {{ author }}
+{% endif %}{% if date is defined %}Date: {{ date }}
+{% endif %}"""
+
+{% if imports is defined %}
+# Imports
+{% for imp in imports %}
+{{ imp }}
+{% endfor %}
+
+{% endif %}
+
+{% if constants is defined %}
+# Constants
+{% for const_name, const_value in constants.items() %}
+{{ const_name }} = {{ const_value }}
+{% endfor %}
+
+{% endif %}
+
+{% if classes is defined %}
+# Classes
+{% for class_info in classes %}
+class {{ class_info.name }}{% if class_info.get('base') %}({{ class_info.base }}){% endif %}:
+    """{{ class_info.get('docstring', 'Class docstring') }}"""
+    
+    def __init__(self{% if class_info.get('init_params') %}, {{ class_info.init_params }}{% endif %}):
+        """Initialize {{ class_info.name }}"""
+        {% for attr in class_info.get('attributes', []) %}
+        self.{{ attr }} = {{ attr }}
+        {% endfor %}
+        pass
+    
+    {% for method in class_info.get('methods', []) %}
+    def {{ method.name }}(self{% if method.get('params') %}, {{ method.params }}{% endif %}){% if method.get('return_type') %} -> {{ method.return_type }}{% endif %}:
+        """{{ method.get('docstring', 'Method docstring') }}"""
+        {% if method.get('body') %}
+        {{ method.body | indent(8) }}
+        {% else %}
+        pass
+        {% endif %}
+    
+    {% endfor %}
+
+{% endfor %}
+{% endif %}
+
+{% if functions is defined %}
+# Functions
+{% for func in functions %}
+def {{ func.name }}({% if func.get('params') %}{{ func.params }}{% endif %}){% if func.get('return_type') %} -> {{ func.return_type }}{% endif %}:
+    """{{ func.get('docstring', 'Function docstring') }}"""
+    {% if func.get('body') %}
+    {{ func.body | indent(4) }}
+    {% else %}
+    pass
+    {% endif %}
+
+
+{% endfor %}
+{% endif %}
+
+{% if main is defined %}
+# Main
+if __name__ == "__main__":
+    {{ main | indent(4) }}
+{% endif %}

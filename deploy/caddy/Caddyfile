@@ -1,0 +1,47 @@
+# ECOS single entrypoint.
+#
+# Routes the Next.js web app (and its own /api/partnership route) and the two
+# FastAPI backends (apps/api revenue + apps/api-gateway forecasting) behind one
+# address. Matchers are explicit because both FastAPI apps use /api/* prefixes,
+# which would otherwise shadow the Next.js API route.
+#
+# TLS: the default site is plain HTTP on :8088 for local use. Set SITE_ADDRESS
+# to a real domain (e.g. ecos.example.com) and publish 80/443 to get Caddy's
+# automatic public HTTPS. The :8443 block demonstrates TLS with Caddy's
+# internal CA for local testing.
+
+(site_routes) {
+	encode zstd gzip
+
+	# Next.js-owned API routes (must NOT be shadowed by the FastAPI prefixes)
+	@next_api path /api/partnership*
+	handle @next_api {
+		reverse_proxy {$WEB_UPSTREAM}
+	}
+
+	# Revenue API (apps/api): challenges, membership, marketplace, gamification, kits
+	@revenue path /api/challenges* /api/membership* /api/marketplace* /api/gamification* /api/kits*
+	handle @revenue {
+		reverse_proxy {$API_UPSTREAM}
+	}
+
+	# Forecasting/gateway API (apps/api-gateway): the 13 project brains
+	@gateway path /api/hydro* /api/solar* /api/awg* /api/bulb* /api/farm* /api/geothermal* /api/symbiosis* /api/dispatch* /api/bioreactor* /api/foam-homes* /api/hemp-lab* /api/reactor* /api/greenhouse* /projects
+	handle @gateway {
+		reverse_proxy {$GATEWAY_UPSTREAM}
+	}
+
+	# Everything else -> Next.js web app
+	handle {
+		reverse_proxy {$WEB_UPSTREAM}
+	}
+}
+
+{$SITE_ADDRESS:http://localhost:8088} {
+	import site_routes
+}
+
+localhost:8443 {
+	tls internal
+	import site_routes
+}

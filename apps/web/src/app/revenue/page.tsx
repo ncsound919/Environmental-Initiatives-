@@ -64,7 +64,7 @@ export default function RevenueDashboard() {
 
   return (
     <>
-      <PageHeader title="Revenue Dashboard" subtitle="All 5 revenue streams live — real-time metrics across the entire platform." accent="emerald">
+      <PageHeader title="Revenue Dashboard" subtitle="Reference implementation — metrics come from the demo API. Storage is in-memory and is not connected to live transactions." accent="emerald">
         <StatBand>
           {loading
             ? [1, 2, 3, 4, 5].map((i) => <Skeleton key={i} height={90} />)
@@ -76,7 +76,7 @@ export default function RevenueDashboard() {
 
       <div className="page-container page-section">
         <h2 className="section-heading">Revenue Modules</h2>
-        <p className="section-sub">Each module is live and wired to the revenue API.</p>
+        <p className="section-sub">Each module is a working reference implementation wired to the demo API (no auth, no persistent storage yet).</p>
         <div className="grid grid-3">
           {modules.map((m) => (
             <Link key={m.href} href={m.href}>

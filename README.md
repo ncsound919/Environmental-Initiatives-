@@ -45,7 +45,7 @@ The Venture Foundry Engine is a strategic expansion that enables distributed tea
 | 5 | Greenhouse | LumiFreq | 70% | Light recipe control |
 | 6 | Reactor | NucleoSim | 70% | Physics simulation |
 | 7 | Bioreactor | PlastiCycle | 70% | Bioprocess control |
-| 8 | Bulb | EverLume | 70% | Failure prediction (Bayesian) |
+| 8 | Bulb | EverLume | 70% | Failure prediction (heuristic) |
 | 9 | AWG | AquaGen | 70% | Humidity forecasting, cost optimization |
 | 10 | Geothermal | ThermalGrid | 70% | Flow optimization |
 | 11 | Reserved | Future | 0% 🔒 | Placeholder for expansion |
@@ -210,7 +210,7 @@ ecos-monorepo/
 - **#13 Micro-Hydro**: LSTM stream flow forecasting
 - **#12 Solar**: Prophet solar irradiance forecasting
 - **#9 AWG**: Humidity forecasting + PuLP cost optimization
-- **#8 Bulb**: Bayesian failure prediction
+- **#8 Bulb**: heuristic reliability score (Bayesian model planned)
 - **#3 Farm**: OR-Tools nutrient cycle optimization
 - **#10 Geothermal**: Graph-based heat flow optimization
 - **#2 Symbiosis**: ML fungal strain recommendation

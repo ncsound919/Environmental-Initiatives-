@@ -1,0 +1,15 @@
+{
+  "task_id": "build_overlay_chat",
+  "generated": [
+    "../../overlay_chat/main.py",
+    "../../overlay_chat/requirements.txt",
+    "../../overlay_chat/Dockerfile",
+    "../../docker-compose.overlay.yml",
+    "../../overlay_chat/static/index.html",
+    "../../overlay_chat/static/chat.js",
+    "../../overlay_chat/setup_autocoder.sh",
+    "../../overlay_chat/goose_config.yaml",
+    "../../overlay_chat/README.md"
+  ],
+  "errors": []
+}

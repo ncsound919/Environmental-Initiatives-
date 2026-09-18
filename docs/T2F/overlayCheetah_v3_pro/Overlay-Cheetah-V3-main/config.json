@@ -1,0 +1,60 @@
+{
+  "testRuns": 3,
+  "sampleRate": 100,
+  "timeout": 300000,
+  "autoSave": true,
+  "phases": {
+    "scaffolding": {
+      "weight": 0.5,
+      "enabled": true,
+      "description": "Project initialization and setup"
+    },
+    "coding": {
+      "weight": 2.0,
+      "enabled": true,
+      "description": "Core component and API development"
+    },
+    "debugging": {
+      "weight": 1.5,
+      "enabled": true,
+      "description": "Bug fixing and error handling"
+    },
+    "refactoring": {
+      "weight": 1.0,
+      "enabled": true,
+      "description": "Code improvement and optimization"
+    },
+    "testing": {
+      "weight": 1.5,
+      "enabled": true,
+      "description": "Unit, integration, and E2E tests"
+    },
+    "documentation": {
+      "weight": 0.5,
+      "enabled": true,
+      "description": "README, API docs, and component docs"
+    },
+    "organizing": {
+      "weight": 0.3,
+      "enabled": true,
+      "description": "File structure and import optimization"
+    },
+    "brainstorming": {
+      "weight": 0.7,
+      "enabled": true,
+      "description": "Architecture and feature planning"
+    }
+  },
+  "quality": {
+    "runTests": true,
+    "runLinter": true,
+    "runTypeCheck": true,
+    "calculateComplexity": true
+  },
+  "globalImpact": {
+    "githubCopilotUsers": 1500000,
+    "averageHoursPerDay": 4,
+    "costPerComputeHour": 0.10,
+    "co2PerThousandHours": 2.3
+  }
+}

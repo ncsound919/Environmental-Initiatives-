@@ -42,12 +42,12 @@ jobs:
           ENVIRONMENT: test
         run: |
           cd apps/api-gateway
-          pytest tests/ -v --tb=short 2>/dev/null || pytest . -v --tb=short -k 'test' || echo 'No tests found - add tests!'
+          pytest tests/ -v --tb=short
       - name: Run ecosystem-brains tests
         run: |
-          pip install pytest numpy scipy scikit-learn pulp
+          pip install pytest numpy pandas scipy scikit-learn pulp prophet ortools
           cd packages/ecosystem-brains
-          pytest tests/ -v --tb=short 2>/dev/null || echo 'No ecosystem-brains tests found'
+          pytest tests/ -v --tb=short
 
   # ── TypeScript / Node build ─────────────────────────────────────────────
   build-node:
@@ -80,9 +80,13 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
+      - name: Validate IDS + web export sync
+        run: |
+          node initiatives/verify.mjs
+          node initiatives/export-web.mjs --check
       - name: Build web app
         env:
-          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_API_URL: http://localhost:8000/api
           NEXT_PUBLIC_APP_NAME: ECOS
         run: |
           cd apps/web

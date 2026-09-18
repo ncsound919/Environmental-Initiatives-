@@ -15,7 +15,7 @@ Here is the structural outline for each business, its specific software requirem
 
 #### **1. Centennial Bulb (#8) – "EverLume"**
 *   **Business Structure:** **Lighting-as-a-Service (LaaS).** Commercial clients pay a monthly subscription for guaranteed uptime, rather than buying bulbs [6].
-*   **Software "Brain":** **Predictive Maintenance Model.** Uses Bayesian reliability models to predict failure years in advance based on thermal cycles and voltage stability [7].
+*   **Software "Brain":** **Predictive Maintenance Model.** Currently a heuristic reliability score based on thermal cycles and voltage stability; a Bayesian reliability model is planned to predict failure years in advance [7].
 *   **Tech Stack:**
     *   *Firmware:* C++ (ESP32/STM32) with OTA update capability.
     *   *Cloud:* AWS IoT Core for telemetry; React dashboard for fleet management [8].

@@ -1,0 +1,93 @@
+<svg width="400" height="120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4A4A4A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6B6B6B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="400" height="120" fill="url(#bgGrad)"/>
+  
+  <!-- Powerful Cheetah Silhouette in Full Sprint -->
+  <g transform="translate(15, 25)">
+    <!-- Dynamic cheetah in powerful running pose -->
+    <path d="M 10 45 
+             Q 12 38 18 35
+             L 28 32
+             Q 35 30 42 32
+             L 52 35
+             Q 62 37 70 35
+             L 78 32
+             Q 82 30 85 28
+             Q 88 26 90 22
+             L 92 18
+             Q 93 15 91 13
+             L 88 10
+             Q 85 8 82 9
+             L 78 11
+             Q 76 12 75 15
+             L 74 20
+             Q 73 24 70 27
+             L 65 30
+             Q 58 33 50 34
+             L 40 35
+             Q 30 36 22 38
+             L 15 42
+             Q 12 44 10 45
+             Z" 
+             fill="#FFC845" stroke="#4A4A4A" stroke-width="0.5"/>
+    
+    <!-- Head with aggressive forward lean -->
+    <path d="M 88 10
+             L 85 8
+             Q 83 7 82 9
+             L 80 12
+             Q 79 14 78 16
+             L 77 19
+             Q 76 21 78 22
+             L 82 23
+             Q 85 23 87 21
+             L 90 18
+             Q 92 15 91 13
+             Z"
+             fill="#FFC845" stroke="#4A4A4A" stroke-width="0.5"/>
+    
+    <!-- Muscular shoulders and back -->
+    <ellipse cx="68" cy="30" rx="10" ry="8" fill="#FFC845" opacity="0.9"/>
+    <ellipse cx="48" cy="33" rx="12" ry="9" fill="#FFC845" opacity="0.9"/>
+    
+    <!-- Front legs in full extension -->
+    <path d="M 75 35 Q 78 42 80 48 L 82 55" stroke="#FFC845" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M 65 35 Q 60 45 58 52" stroke="#FFC845" stroke-width="4" fill="none" stroke-linecap="round"/>
+    
+    <!-- Rear legs pushing off -->
+    <path d="M 40 38 Q 35 48 32 56" stroke="#FFC845" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M 30 40 Q 22 50 18 58" stroke="#FFC845" stroke-width="4" fill="none" stroke-linecap="round"/>
+    
+    <!-- Long powerful tail -->
+    <path d="M 15 40 Q 8 38 3 35 Q -2 32 -5 28" stroke="#FFC845" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    
+    <!-- Cheetah spots for authenticity -->
+    <circle cx="70" cy="28" r="1.5" fill="#4A4A4A" opacity="0.7"/>
+    <circle cx="65" cy="32" r="1.5" fill="#4A4A4A" opacity="0.7"/>
+    <circle cx="55" cy="30" r="1.5" fill="#4A4A4A" opacity="0.7"/>
+    <circle cx="50" cy="35" r="1.5" fill="#4A4A4A" opacity="0.7"/>
+    <circle cx="45" cy="33" r="1.5" fill="#4A4A4A" opacity="0.7"/>
+    <circle cx="38" cy="36" r="1.5" fill="#4A4A4A" opacity="0.7"/>
+    <circle cx="25" cy="42" r="1.5" fill="#4A4A4A" opacity="0.7"/>
+    
+    <!-- Speed motion lines -->
+    <line x1="-8" y1="25" x2="5" y2="25" stroke="#FFDAB9" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+    <line x1="-5" y1="35" x2="8" y2="35" stroke="#FFDAB9" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+    <line x1="-3" y1="45" x2="10" y2="45" stroke="#FFDAB9" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+    <line x1="0" y1="55" x2="12" y2="55" stroke="#FFDAB9" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Text: Overlay Cheetah -->
+  <text x="130" y="55" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#FFC845">Overlay</text>
+  <text x="130" y="85" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#DDA0DD">Cheetah</text>
+  
+  <!-- Motto -->
+  <text x="130" y="105" font-family="Arial, sans-serif" font-size="11" fill="#FFDAB9" font-style="italic">"The code of the streets"</text>
+</svg>

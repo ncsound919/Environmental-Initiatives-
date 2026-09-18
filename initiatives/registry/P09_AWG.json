@@ -1,0 +1,208 @@
+{
+  "code": "P09_AWG",
+  "id": "P09",
+  "name": "AquaGen",
+  "type": "Atmospheric Water Generator",
+  "phase": 1,
+  "stage": "prototype",
+  "tracks": [
+    "Grant",
+    "Strategic Partner",
+    "Revenue"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "awg-forecast",
+        "name": "Humidity forecast + cost optimizer",
+        "api": "/api/awg/forecast",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "AquaGen Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "SHT31 humidity/temp",
+          "qty": 1,
+          "unitUsd": 13.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/2857 — $13.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "INA219 power monitor",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/904 — $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Peltier condenser module",
+          "qty": 1,
+          "unitUsd": 34.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/1335 — 12V 5A Peltier + heatsink $34.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Fan",
+          "qty": 1,
+          "unitUsd": 5.5,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/6103 — 5V 6cm fan $5.50 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "UV LED",
+          "qty": 1,
+          "unitUsd": 8,
+          "supplier": "Generic",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P09/{deviceId}/telemetry",
+        "controlTopic": "ecos/P09/{deviceId}/control",
+        "deviceTypes": [
+          "awg-unit"
+        ],
+        "sensors": [
+          "humidity",
+          "temperature",
+          "power_draw"
+        ],
+        "actuators": [
+          "compressor",
+          "fan",
+          "uv"
+        ]
+      },
+      "power": "12V 5A (~60 W)",
+      "powerBudget": "12V 5A (~60 W)",
+      "buildHours": 4,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (awg-unit)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "AquaGen Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "AWG units -> controller -> MQTT",
+      "bom": [
+        {
+          "part": "AWG unit (1000 L/day)",
+          "qty": 10,
+          "unitUsd": 12000,
+          "supplier": "Water tech supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Water-quality lab kit",
+          "qty": 1,
+          "unitUsd": 3000,
+          "supplier": "Lab supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Controls + sensors",
+          "qty": 1,
+          "unitUsd": 1500,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Installation",
+          "qty": 1,
+          "unitUsd": 4000,
+          "supplier": "Contractor",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P09/{deviceId}/telemetry",
+        "controlTopic": "ecos/P09/{deviceId}/control",
+        "deviceTypes": [
+          "awg-unit"
+        ],
+        "sensors": [
+          "humidity",
+          "temperature",
+          "power_draw"
+        ],
+        "actuators": [
+          "compressor",
+          "fan",
+          "uv"
+        ]
+      },
+      "power": "~12 kW per campus",
+      "powerBudget": "~12 kW per campus",
+      "buildHours": 40,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (awg-unit)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "AquaGen",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ecos/initiative-development-spec",
+  "title": "ECOS Initiative Development Spec (IDS)",
+  "description": "One continuous-development unit for an Overlay Environmental initiative: software capabilities, community (individual) + commercial (enterprise) hardware setups, and a founding track under Overlay 365. Enforced by initiatives/verify.mjs.",
+  "type": "object",
+  "required": ["code", "id", "name", "type", "phase", "stage", "tracks", "version", "software", "hardware", "founding", "provenance"],
+  "additionalProperties": false,
+  "properties": {
+    "code": { "type": "string", "pattern": "^P[0-9]{2}_[A-Z_]+$" },
+    "id": { "type": "string", "pattern": "^P[0-9]{2}$", "description": "Must exist in config/hardware-manifests.json" },
+    "name": { "type": "string", "minLength": 2 },
+    "type": { "type": "string", "minLength": 2 },
+    "phase": { "type": "integer", "minimum": 1, "maximum": 4 },
+    "stage": { "enum": ["research", "concept", "prototype", "pilot", "verified", "revenue"] },
+    "tracks": {
+      "type": "array",
+      "items": { "enum": ["Grant", "Strategic Partner", "Revenue", "Affiliate"] },
+      "minItems": 1
+    },
+    "version": { "type": "integer", "minimum": 1 },
+    "updatedAt": { "type": "string" },
+    "software": {
+      "type": "object",
+      "required": ["capabilities"],
+      "additionalProperties": false,
+      "properties": {
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "status"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "api": { "type": ["string", "null"] },
+              "status": { "enum": ["planned", "scaffold", "heuristic", "trained", "validated"] },
+              "evidence": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "hardware": {
+      "type": "object",
+      "required": ["individual", "enterprise"],
+      "additionalProperties": false,
+      "properties": {
+        "individual": { "$ref": "#/$defs/tier" },
+        "enterprise": { "$ref": "#/$defs/tier" }
+      }
+    },
+    "founding": {
+      "type": "object",
+      "required": ["status", "parent", "division", "ventureName", "structure", "capitalAsk", "readiness"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["not_started", "readiness_assessed", "venture_launched"] },
+        "parent": { "type": "string", "description": "Must equal portfolio.json parent" },
+        "division": { "type": "string", "description": "Must equal portfolio.json division" },
+        "ventureName": { "type": "string" },
+        "structure": { "enum": ["division", "subsidiary", "spinoff"] },
+        "licenses": { "type": "array", "items": { "type": "string" } },
+        "capitalAsk": { "type": "string" },
+        "offtake": { "type": ["string", "null"] },
+        "compliance": { "type": "array", "items": { "type": "string" } },
+        "readiness": {
+          "type": "object",
+          "required": ["hardwarePilot", "partnerLoi", "unitEconomics"],
+          "additionalProperties": false,
+          "properties": {
+            "hardwarePilot": { "type": "boolean" },
+            "partnerLoi": { "type": "boolean" },
+            "unitEconomics": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["verifiedBy"],
+      "additionalProperties": true,
+      "properties": {
+        "verifiedBy": { "type": "array", "items": { "type": "string" } },
+        "driver": { "type": ["string", "null"] },
+        "rollbackToken": { "type": ["string", "null"] },
+        "source": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "tier": {
+      "type": "object",
+      "required": ["name", "audience", "mode", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "audience": { "type": "string" },
+        "mode": { "enum": ["community", "commercial", "internal"] },
+        "unit": { "type": "string" },
+        "topology": { "type": "string" },
+        "bom": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["part", "qty"],
+            "additionalProperties": false,
+            "properties": {
+              "part": { "type": "string", "minLength": 1 },
+              "qty": { "type": "integer", "minimum": 1 },
+              "unitUsd": { "type": ["number", "null"], "minimum": 0 },
+              "supplier": { "type": ["string", "null"] },
+              "source": { "type": "string" },
+              "sourcing": { "enum": ["vendor-list", "estimate", "quote-required", "quoted", "commodity"] }
+            }
+          }
+        },
+        "interfaces": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "telemetryTopic": { "type": "string" },
+            "controlTopic": { "type": "string" },
+            "deviceTypes": { "type": "array", "items": { "type": "string" } },
+            "sensors": { "type": "array", "items": { "type": "string" } },
+            "actuators": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "power": { "type": ["string", "null"] },
+        "powerBudget": { "type": ["string", "null"] },
+        "buildHours": { "type": ["number", "null"] },
+        "sla": { "type": ["string", "null"] },
+        "verification": { "type": "array", "items": { "type": "string" } },
+        "status": { "enum": ["draft", "verified"] },
+        "missing": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

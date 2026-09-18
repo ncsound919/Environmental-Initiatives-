@@ -1,12 +1,37 @@
 """
 Solvers Module - Shared optimization logic for ECOS projects
 Supports: OR-Tools, Linear Programming, Graph Theory
+
+Heavy dependencies (ortools, pulp) are imported lazily so the pure-Python
+helpers (e.g. optimize_fungal_match) remain usable in minimal environments.
 """
 
 from typing import Dict, List, Optional, Any
 import numpy as np
-from ortools.linear_solver import pywraplp
-from pulp import LpProblem, LpMinimize, LpVariable, lpSum, LpStatus
+
+try:  # optional heavy dependency
+    from ortools.linear_solver import pywraplp
+except ImportError:  # pragma: no cover - exercised only without ortools
+    pywraplp = None  # type: ignore[assignment]
+
+try:  # optional heavy dependency
+    from pulp import LpProblem, LpMinimize, LpVariable, lpSum, LpStatus
+except ImportError:  # pragma: no cover - exercised only without pulp
+    LpProblem = LpMinimize = LpVariable = lpSum = LpStatus = None  # type: ignore[assignment]
+
+
+def _require_ortools() -> None:
+    if pywraplp is None:
+        raise ImportError(
+            "ortools is required for this solver. Install it with: pip install ortools"
+        )
+
+
+def _require_pulp() -> None:
+    if LpProblem is None:
+        raise ImportError(
+            "pulp is required for this solver. Install it with: pip install pulp"
+        )
 
 
 def optimize_nutrient_cycle(
@@ -16,38 +41,39 @@ def optimize_nutrient_cycle(
     """
     Nutrient cycle optimization for Closed-Loop Farm (#3)
     Uses OR-Tools linear programming to balance waste inputs with crop demands
-    
+
     Args:
         waste_inputs: Available nutrients from waste {N, P, K} in kg
         crop_demands: Required nutrients for crops {N, P, K} in kg
-        
+
     Returns:
         Optimization solution with allocation plan
     """
+    _require_ortools()
     solver = pywraplp.Solver.CreateSolver('GLOP')
-    
+
     if not solver:
         return {'status': 'error', 'message': 'Solver not available'}
-    
+
     # Variables: how much of each nutrient to allocate
     n_alloc = solver.NumVar(0, waste_inputs.get('N', 0.0), 'n_alloc')
     p_alloc = solver.NumVar(0, waste_inputs.get('P', 0.0), 'p_alloc')
     k_alloc = solver.NumVar(0, waste_inputs.get('K', 0.0), 'k_alloc')
-    
+
     # Constraints: meet crop demands
     solver.Add(n_alloc >= crop_demands['N'])
     solver.Add(p_alloc >= crop_demands['P'])
     solver.Add(k_alloc >= crop_demands['K'])
-    
+
     # Objective: minimize waste
     objective = solver.Objective()
     objective.SetCoefficient(n_alloc, 1)
     objective.SetCoefficient(p_alloc, 1)
     objective.SetCoefficient(k_alloc, 1)
     objective.SetMinimization()
-    
+
     status = solver.Solve()
-    
+
     if status == pywraplp.Solver.OPTIMAL:
         return {
             'status': 'optimal',
@@ -75,43 +101,45 @@ def optimize_awg_schedule(
     """
     AWG run schedule optimization (#9)
     Minimize energy cost while meeting water production targets
-    
+
     Args:
         humidity_forecast: Predicted humidity for next N hours
         energy_prices: Energy prices for next N hours ($/kWh)
         target_liters: Required water production (liters)
-        
+
     Returns:
         Optimal run schedule
     """
+    _require_pulp()
     hours = len(humidity_forecast)
-    
+
     # Create LP problem
     prob = LpProblem("AWG_Schedule", LpMinimize)
-    
+
     # Decision variables: binary run/no-run for each hour
     run = [LpVariable(f"run_hour_{i}", cat='Binary') for i in range(hours)]
-    
-    # Water production rate (liters/hour) depends on humidity
-    # Simplified model: production = humidity * 0.1
+
+    # Water production rate (liters/hour) depends on humidity.
+    # PLACEHOLDER model: production = humidity * 0.1 L/h. Replace with a
+    # validated AWG performance curve before using for real scheduling.
     production_rate = [h * 0.1 for h in humidity_forecast]
-    
+
     # Constraint: meet production target
     prob += lpSum([run[i] * production_rate[i] for i in range(hours)]) >= target_liters
-    
+
     # Objective: minimize energy cost
     # Assume 2 kWh per hour of operation
     energy_per_hour = 2.0
     prob += lpSum([run[i] * energy_prices[i] * energy_per_hour for i in range(hours)])
-    
+
     # Solve
     prob.solve()
-    
+
     if LpStatus[prob.status] == 'Optimal':
         schedule = [int(run[i].varValue) for i in range(hours)]
         total_production = sum([schedule[i] * production_rate[i] for i in range(hours)])
         total_cost = sum([schedule[i] * energy_prices[i] * energy_per_hour for i in range(hours)])
-        
+
         return {
             'status': 'optimal',
             'schedule': schedule,
@@ -131,38 +159,39 @@ def optimize_geothermal_flow(
     """
     Geothermal network flow optimization (#10)
     Balance heat loads between buildings using graph theory
-    
+
     Args:
         building_loads: Required heat for each building {building_id: kW}
         ground_temp: Current ground loop temperature (celsius)
         available_capacity: Total system capacity (kW)
-        
+
     Returns:
         Flow allocation for each building
     """
+    _require_ortools()
     solver = pywraplp.Solver.CreateSolver('GLOP')
-    
+
     if not solver:
         return {'status': 'error', 'message': 'Solver not available'}
-    
+
     buildings = list(building_loads.keys())
-    
+
     # Variables: heat allocation to each building
     allocations = {}
     for building in buildings:
         allocations[building] = solver.NumVar(0, building_loads[building], f'alloc_{building}')
-    
+
     # Constraint: total allocation <= available capacity
     solver.Add(solver.Sum([allocations[b] for b in buildings]) <= available_capacity)
-    
+
     # Objective: maximize satisfied demand (prioritize critical buildings equally)
     objective = solver.Objective()
     for building in buildings:
         objective.SetCoefficient(allocations[building], 1)
     objective.SetMaximization()
-    
+
     status = solver.Solve()
-    
+
     if status == pywraplp.Solver.OPTIMAL:
         result = {
             'status': 'optimal',
@@ -170,11 +199,11 @@ def optimize_geothermal_flow(
             'total_allocated': sum([allocations[b].solution_value() for b in buildings]),
             'capacity_utilization': sum([allocations[b].solution_value() for b in buildings]) / max(available_capacity, 1e-9),
         }
-        
+
         # Calculate unmet demand
         unmet = {b: max(0, building_loads[b] - allocations[b].solution_value()) for b in buildings}
         result['unmet_demand'] = unmet
-        
+
         return result
     else:
         return {'status': 'infeasible', 'message': 'No solution found'}
@@ -183,18 +212,20 @@ def optimize_geothermal_flow(
 def optimize_fungal_match(soil_data: Dict[str, float]) -> Dict[str, Any]:
     """
     Fungal strain recommendation for Symbiosis (#2)
-    Simple ML-based matching (placeholder for scikit-learn model)
-    
+    Rule-based matching (placeholder for a trained scikit-learn model).
+
+    This function is pure Python and does not require ortools/pulp.
+
     Args:
         soil_data: Soil characteristics {pH, moisture, NPK, temp}
-        
+
     Returns:
         Recommended fungal strain and expected yield increase
     """
     # Simplified rule-based system (in production, use trained ML model)
     ph = soil_data.get('pH', 7.0)
     moisture = soil_data.get('moisture', 50.0)
-    
+
     if ph < 6.0:
         strain = "Acidophilus_Strain_A"
         yield_increase = 0.25
@@ -204,13 +235,13 @@ def optimize_fungal_match(soil_data: Dict[str, float]) -> Dict[str, Any]:
     else:
         strain = "Neutral_Strain_C"
         yield_increase = 0.30
-    
+
     # Adjust for moisture
     if moisture < 40:
         yield_increase *= 0.8
     elif moisture > 70:
         yield_increase *= 0.9
-    
+
     return {
         'recommended_strain': strain,
         'expected_yield_increase': yield_increase,

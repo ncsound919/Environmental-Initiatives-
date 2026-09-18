@@ -1,0 +1,231 @@
+{
+  "code": "P07_BIOREACTOR",
+  "id": "P07",
+  "name": "PlastiCycle",
+  "type": "Plastic-Eating Bacteria",
+  "phase": 2,
+  "stage": "concept",
+  "tracks": [
+    "Grant",
+    "Strategic Partner"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "bioprocess-control",
+        "name": "Bioprocess control OS",
+        "api": "/api/bioreactor/status",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "PlastiCycle Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "pH probe + board",
+          "qty": 1,
+          "unitUsd": 29.5,
+          "supplier": "DFRobot",
+          "source": "https://www.dfrobot.com/product-1025.html — SEN0161 pH kit (board + probe) $29.50 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "DS18B20 temp probe",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/381 — $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Dissolved-oxygen probe",
+          "qty": 1,
+          "unitUsd": 313.98,
+          "supplier": "Atlas Scientific",
+          "source": "DO probe $259.99 (atlas-scientific.com/probes/dissolved-oxygen-probe/) + EZO-DO circuit $53.99 (atlas-scientific.com/embedded-solutions/ezo-dissolved-oxygen-circuit/) = $313.98 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Peristaltic feed pump",
+          "qty": 1,
+          "unitUsd": 24.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/1150 — peristaltic pump $24.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Air pump",
+          "qty": 1,
+          "unitUsd": 7.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4699 — air pump $7.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Relay board",
+          "qty": 1,
+          "unitUsd": 6.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P07/{deviceId}/telemetry",
+        "controlTopic": "ecos/P07/{deviceId}/control",
+        "deviceTypes": [
+          "bioreactor"
+        ],
+        "sensors": [
+          "ph",
+          "temperature",
+          "dissolved_oxygen"
+        ],
+        "actuators": [
+          "agitator",
+          "airflow",
+          "feed_pump"
+        ]
+      },
+      "power": "USB 5V 0.5A + 12V 2A (~26 W)",
+      "powerBudget": "USB 5V 0.5A + 12V 2A (~26 W)",
+      "buildHours": 8,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (bioreactor)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "PlastiCycle Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "reactor -> PLC -> HMI -> MQTT",
+      "bom": [
+        {
+          "part": "100 L bioreactor vessel",
+          "qty": 1,
+          "unitUsd": 8000,
+          "supplier": "Biotech supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Agitator drive",
+          "qty": 1,
+          "unitUsd": 2000,
+          "supplier": "Biotech supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "DO/pH controllers",
+          "qty": 1,
+          "unitUsd": 1500,
+          "supplier": "Biotech supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Feed/air pumps",
+          "qty": 1,
+          "unitUsd": 900,
+          "supplier": "Biotech supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Industrial PLC",
+          "qty": 1,
+          "unitUsd": 2500,
+          "supplier": "Siemens",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "HMI panel",
+          "qty": 1,
+          "unitUsd": 1200,
+          "supplier": "Siemens",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P07/{deviceId}/telemetry",
+        "controlTopic": "ecos/P07/{deviceId}/control",
+        "deviceTypes": [
+          "bioreactor"
+        ],
+        "sensors": [
+          "ph",
+          "temperature",
+          "dissolved_oxygen"
+        ],
+        "actuators": [
+          "agitator",
+          "airflow",
+          "feed_pump"
+        ]
+      },
+      "power": "~3 kW per reactor",
+      "powerBudget": "~3 kW per reactor",
+      "buildHours": 80,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (bioreactor)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "PlastiCycle",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

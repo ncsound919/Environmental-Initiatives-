@@ -1,0 +1,14 @@
+{
+  "task_id": "build_chatgpt_like_system",
+  "generated": [
+    "../../chat_system/main.py",
+    "../../chat_system/requirements.txt",
+    "../../chat_system/Dockerfile",
+    "../../docker-compose.chat.yml",
+    "../../chat_system/static/index.html",
+    "../../chat_system/static/chat.js",
+    "../../chat_system/setup_autocoder.sh",
+    "../../chat_system/README.md"
+  ],
+  "errors": []
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "generate_session_endpoint",
+  "generated": [
+    "../../apps/api/routers/session.py"
+  ],
+  "errors": []
+}

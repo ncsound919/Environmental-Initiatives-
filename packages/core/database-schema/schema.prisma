@@ -276,7 +276,7 @@ model BulbTelemetry {
   voltage         Float    // V
   thermalCycles   Int
   uptime          Float    // hours
-  failurePrediction Float? // Bayesian probability
+  failurePrediction Float? // heuristic score 0-1 (Bayesian model planned)
   meshStatus      String   // Network connectivity
   timestamp       DateTime @default(now())
   

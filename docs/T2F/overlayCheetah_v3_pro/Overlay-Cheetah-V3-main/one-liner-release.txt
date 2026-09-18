@@ -1,0 +1,12 @@
+# One-liner PowerShell release script - Copy and paste this entire block into PowerShell
+
+Write-Host "🚀 TOON v1.0.0 Release Script" -ForegroundColor Green; Set-Location "C:\Users\tap45\Desktop\project 5\cheetah v2\toon-main"; Write-Host "📁 Working in: $(Get-Location)" -ForegroundColor Blue; function Run-Step { param($cmd, $desc) Write-Host "🔄 $desc..." -ForegroundColor Yellow; try { Invoke-Expression $cmd; if ($LASTEXITCODE -eq 0) { Write-Host "✅ $desc done!" -ForegroundColor Green } else { Write-Host "❌ $desc failed!" -ForegroundColor Red; exit 1 } } catch { Write-Host "❌ $desc error: $($_.Exception.Message)" -ForegroundColor Red; exit 1 } }; $pm = if (Get-Command pnpm -ErrorAction SilentlyContinue) { "pnpm" } elseif (Get-Command npm -ErrorAction SilentlyContinue) { "npm" } else { Write-Host "❌ No package manager found!" -ForegroundColor Red; exit 1 }; Run-Step "$pm install" "Installing dependencies"; Run-Step "$pm test" "Running tests"; Run-Step "$pm lint" "Running linting"; Run-Step "$pm test:types" "Running type checking"; Run-Step "$pm build" "Building packages"; if (!(Test-Path ".git")) { Run-Step "git init" "Initializing git" }; Run-Step "git add ." "Adding files"; Run-Step "git commit -m 'Release v1.0.0: Commercial release of TOON format
+
+- Complete TOON specification v1.4 implementation
+- 30-60% token savings vs JSON for uniform arrays
+- Comprehensive test suite and benchmarks
+- CLI tool for JSON ↔ TOON conversion
+- TypeScript-first with full type safety
+- Updated all packages to version 1.0.0
+- Added comprehensive CHANGELOG.md
+- Ready for commercial distribution'" "Creating commit"; Run-Step "git tag v1.0.0" "Creating tag"; try { $remote = git remote get-url origin 2>$null; if ($remote) { Run-Step "git push origin main" "Pushing main"; Run-Step "git push origin v1.0.0" "Pushing tag" } else { Write-Host "⚠️ Add remote: git remote add origin https://github.com/YOUR_REPO.git" -ForegroundColor Yellow; Write-Host "⚠️ Then push: git push origin main && git push origin v1.0.0" -ForegroundColor Yellow } } catch { Write-Host "⚠️ Remote not configured - add it manually" -ForegroundColor Yellow }; Write-Host "🎉 Release complete! Check npm: npm view @toon-format/toon" -ForegroundColor Green

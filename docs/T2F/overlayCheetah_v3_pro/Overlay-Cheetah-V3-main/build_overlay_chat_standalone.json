@@ -1,0 +1,16 @@
+{
+  "task_id": "build_overlay_chat_standalone",
+  "generated": [
+    "../../overlay_chat_standalone/build_localai.sh",
+    "../../overlay_chat_standalone/build_goose.sh",
+    "../../overlay_chat_standalone/main.py",
+    "../../overlay_chat_standalone/requirements.txt",
+    "../../overlay_chat_standalone/start.sh",
+    "../../overlay_chat_standalone/static/index.html",
+    "../../overlay_chat_standalone/static/chat.js",
+    "../../overlay_chat_standalone/goose_config.yaml",
+    "../../overlay_chat_standalone/download_models.sh",
+    "../../overlay_chat_standalone/README.md"
+  ],
+  "errors": []
+}

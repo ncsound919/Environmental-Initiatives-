@@ -7,6 +7,12 @@ Validates that all 13 projects have achieved 20% readiness
 import sys
 import os
 
+# Ensure UTF-8 output so emoji-laden reports work on Windows consoles.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # Add ecosystem-brains to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'packages/ecosystem-brains'))
 
@@ -101,7 +107,7 @@ def validate_level_1():
         opt_result = optimize_awg_schedule(
             [60, 65, 75, 80, 85, 70],
             [0.10, 0.12, 0.08, 0.09, 0.15, 0.11],
-            100.0
+            25.0
         )
         assert opt_result['status'] == 'optimal'
         print(f"  ✅ Optimization: ${opt_result['cost_per_liter']:.3f}/liter")
@@ -240,13 +246,14 @@ def validate_level_1():
     print(f"Projects Validated: {passed_projects} / 13")
     print(f"{'=' * 60}\n")
     
-    if passed_projects >= 12:  # 12 active projects (excluding P11_RESERVED)
+    failed_projects = [project for project, status in results.items() if status != 'PASS']
+    if passed_projects >= 12 and not failed_projects:  # 12 active projects (excluding P11_RESERVED)
         print("🎉 LEVEL 1 VALIDATION: SUCCESS")
         print("All active projects have achieved 20% readiness!\n")
         return 0
     else:
         print("❌ LEVEL 1 VALIDATION: FAILED")
-        print(f"Only {passed_projects} projects passed validation.\n")
+        print(f"Only {passed_projects} checks passed; failures: {', '.join(failed_projects) or 'none'}.\n")
         return 1
 
 

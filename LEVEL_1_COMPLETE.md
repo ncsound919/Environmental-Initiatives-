@@ -209,7 +209,7 @@
 
 **#8 EverLume (Centennial Bulb)** - 20% ✅
 - Database: BulbTelemetry model
-- Brain: Bayesian failure prediction
+- Brain: heuristic failure prediction (Bayesian model planned)
 - API: POST /api/bulb/predict
 - Unique Value: Predictive maintenance for long-life LEDs
 

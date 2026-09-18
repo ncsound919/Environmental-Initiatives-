@@ -1,0 +1,491 @@
+{#
+Game Maker UI Template for Cheetah v3 PRO
+=========================================
+Template for generating advanced game maker UI components
+Supports: React/TypeScript, Modern Design System, Performance Optimization
+#}
+
+{# Component Configuration #}
+{% set component_name = config.component_name | default('GameMakerComponent') %}
+{% set use_typescript = config.use_typescript | default(true) %}
+{% set include_tests = config.include_tests | default(true) %}
+{% set styling_framework = config.styling_framework | default('css-modules') %}
+{% set performance_optimized = config.performance_optimized | default(true) %}
+
+{# Import statements based on configuration #}
+import React, { useState, useEffect, useCallback, useMemo{% if performance_optimized %}, memo{% endif %} } from 'react';
+{% if config.needs_context %}
+import { useGameMakerContext } from '../context/GameMakerContext';
+{% endif %}
+{% if config.needs_engine %}
+import { useEngineConnector } from '../hooks/useEngineConnector';
+{% endif %}
+{% if config.needs_websocket %}
+import { useWebSocket } from '../hooks/useWebSocket';
+{% endif %}
+
+{# Type definitions #}
+{% if use_typescript %}
+{% if config.custom_types %}
+{% for type_def in config.custom_types %}
+{{ type_def }}
+{% endfor %}
+{% endif %}
+
+interface {{ component_name }}Props {
+  {% if config.props %}
+  {% for prop in config.props %}
+  {{ prop.name }}{% if not prop.required %}?{% endif %}: {{ prop.type }};
+  {% endfor %}
+  {% endif %}
+  {% if config.needs_children %}
+  children?: React.ReactNode;
+  {% endif %}
+  {% if config.needs_classname %}
+  className?: string;
+  {% endif %}
+  {% if config.needs_events and config.events %}
+  {% for event in config.events %}
+  {{ event.name }}?: {{ event.type }};
+  {% endfor %}
+  {% endif %}
+}
+{% endif %}
+
+{# Component implementation #}
+{% if performance_optimized %}
+const {{ component_name }}{% if use_typescript %}: React.FC<{{ component_name }}Props>{% endif %} = memo((props) => {
+{% else %}
+export const {{ component_name }}{% if use_typescript %}: React.FC<{{ component_name }}Props>{% endif %} = (props) => {
+{% endif %}
+  {% if config.props %}
+  const {
+    {% for prop in config.props %}{{ prop.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% if config.needs_children %}, children{% endif %}{% if config.needs_classname %}, className{% endif %}{% if config.needs_events and config.events %}{% for event in config.events %}, {{ event.name }}{% endfor %}{% endif %}
+  } = props;
+  {% endif %}
+
+  {# State management #}
+  {% if config.state_vars %}
+  {% for state_var in config.state_vars %}
+  const [{{ state_var.name }}, set{{ state_var.name | title }}] = useState{% if use_typescript %}<{{ state_var.type }}>{% endif %}({{ state_var.initial_value | default('null') }});
+  {% endfor %}
+  {% endif %}
+
+  {# Context usage #}
+  {% if config.needs_context %}
+  const {
+    currentEngine,
+    isConnected,
+    scenes,
+    characters,
+    updateScene,
+    updateCharacter,
+    sendMessage
+  } = useGameMakerContext();
+  {% endif %}
+
+  {# Engine connector #}
+  {% if config.needs_engine %}
+  const { engineConnector, connectionStatus } = useEngineConnector(currentEngine);
+  {% endif %}
+
+  {# WebSocket connection #}
+  {% if config.needs_websocket %}
+  const { socket, isConnected: wsConnected, sendMessage: wsSend } = useWebSocket();
+  {% endif %}
+
+  {# Event handlers #}
+  {% if config.event_handlers %}
+  {% for handler in config.event_handlers %}
+  const {{ handler.name }} = useCallback({% if use_typescript %}({{ handler.params | default('') }}) {% else %}({{ handler.params | default('') }}){% endif %} => {
+    {{ handler.body | indent(4) }}
+  }, [{% if handler.dependencies %}{% for dep in handler.dependencies %}{{ dep }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}]);
+  {% endfor %}
+  {% endif %}
+
+  {# Effects #}
+  {% if config.effects %}
+  {% for effect in config.effects %}
+  useEffect(() => {
+    {{ effect.body | indent(4) }}
+    {% if effect.cleanup %}
+    return () => {
+      {{ effect.cleanup | indent(6) }}
+    };
+    {% endif %}
+  }, [{% if effect.dependencies %}{% for dep in effect.dependencies %}{{ dep }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}]);
+  {% endfor %}
+  {% endif %}
+
+  {# Computed values #}
+  {% if config.computed_values %}
+  {% for computed in config.computed_values %}
+  const {{ computed.name }} = useMemo(() => {
+    {{ computed.body | indent(4) }}
+  }, [{% if computed.dependencies %}{% for dep in computed.dependencies %}{{ dep }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}]);
+  {% endfor %}
+  {% endif %}
+
+  {# Render logic #}
+  return (
+    <div
+      className={`game-maker-{{ component_name | lower }}{% if config.needs_classname %} ${className || ''}{% endif %}`}
+      {% if config.has_drag_drop %}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      {% endif %}
+      data-testid="{{ component_name | lower }}"
+    >
+      {% if config.has_header %}
+      <div className="component-header">
+        {% if config.header_title %}
+        <h2 className="header-title">{{ config.header_title }}</h2>
+        {% endif %}
+        {% if config.header_actions %}
+        <div className="header-actions">
+          {% for action in config.header_actions %}
+          <button
+            className="action-btn {{ action.class | default('') }}"
+            onClick={() => {{ action.handler }}()}
+            title="{{ action.tooltip | default('') }}"
+          >
+            {% if action.icon %}{{ action.icon }}{% endif %}
+            {% if action.label %} {{ action.label }}{% endif %}
+          </button>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if config.has_content %}
+      <div className="component-content">
+        {% if config.content_type == 'grid' %}
+        <div className="content-grid">
+          Grid content will be rendered here
+        </div>
+        {% elif config.content_type == 'tabs' %}
+        <div className="content-tabs">
+          <div className="tab-headers">
+            Tab headers will be rendered here
+          </div>
+          <div className="tab-content">
+            Tab content will be rendered here
+          </div>
+        </div>
+        {% elif config.content_type == 'list' %}
+        <div className="content-list">
+          List content will be rendered here
+        </div>
+        {% elif config.content_type == 'custom' %}
+        {# Custom content will be inserted here #}
+        <div className="custom-content">
+          {% if config.custom_content %}
+          {/* Custom content: {{ config.custom_content | truncate(100) }} */}
+          {% endif %}
+          Custom component content
+        </div>
+        {% else %}
+        <div className="default-content">
+          Default content
+        </div>
+        {% endif %}
+
+        {% if config.needs_children %}
+        {children}
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if config.has_footer %}
+      <div className="component-footer">
+        {% if config.footer_content %}
+        <div className="footer-content">{{ config.footer_content }}</div>
+        {% endif %}
+        {% if config.footer_actions %}
+        <div className="footer-actions">
+          {% for action in config.footer_actions %}
+          <button
+            className="footer-btn {{ action.class | default('') }}"
+            onClick={() => {{ action.handler }}()}
+          >
+            {% if action.icon %}{{ action.icon }}{% endif %}
+            {{ action.label }}
+          </button>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {# Loading and error states #}
+      {% if config.has_loading_state %}
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <span>{{ config.loading_text | default('Loading...') }}</span>
+          </div>
+        </div>
+      )}
+      {% endif %}
+
+      {% if config.has_error_state %}
+      {error && (
+        <div className="error-overlay">
+          <div className="error-message">
+            <span className="error-icon">⚠️</span>
+            <span>{error.message || '{{ config.error_text | default('An error occurred') }}'}</span>
+            {% if config.error_retry %}
+            <button className="retry-btn" onClick={() => handleRetry()}>
+              Retry
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      )}
+      {% endif %}
+    </div>
+  );
+});
+
+{% if performance_optimized %}
+{{ component_name }}.displayName = '{{ component_name }}';
+{% endif %}
+
+{% if not performance_optimized %}
+export { {{ component_name }} };
+{% else %}
+export default {{ component_name }};
+{% endif %}
+
+{# Styles template #}
+/* {{ component_name }} Styles */
+.game-maker-{{ component_name | lower }} {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: var(--border-radius, 8px);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.1));
+  overflow: hidden;
+
+  {% if config.has_header %}
+  .component-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--header-bg, #f8f9fa);
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+
+    .header-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary, #1a1a1a);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+
+      .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.5rem;
+        background: transparent;
+        border: 1px solid var(--border-color, #e0e0e0);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: var(--hover-bg, #f0f0f0);
+        }
+
+        &.primary {
+          background: var(--primary-color, #007bff);
+          color: white;
+          border-color: var(--primary-color, #007bff);
+
+          &:hover {
+            background: var(--primary-hover, #0056b3);
+          }
+        }
+      }
+    }
+  }
+  {% endif %}
+
+  {% if config.has_content %}
+  .component-content {
+    flex: 1;
+    padding: 1rem;
+    overflow: auto;
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .content-tabs {
+      display: flex;
+      flex-direction: column;
+
+      .tab-headers {
+        display: flex;
+        border-bottom: 1px solid var(--border-color, #e0e0e0);
+      }
+
+      .tab-content {
+        flex: 1;
+        padding: 1rem 0;
+      }
+    }
+
+    .content-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .custom-content {
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--background-color, #f8fafc);
+      border: 2px dashed var(--border-color, #e0e0e0);
+      border-radius: 4px;
+    }
+  }
+  {% endif %}
+
+  {% if config.has_footer %}
+  .component-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--footer-bg, #f8f9fa);
+    border-top: 1px solid var(--border-color, #e0e0e0);
+
+    .footer-actions {
+      display: flex;
+      gap: 0.5rem;
+
+      .footer-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.5rem 1rem;
+        background: var(--primary-color, #007bff);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &:hover {
+          background: var(--primary-hover, #0056b3);
+        }
+      }
+    }
+  }
+  {% endif %}
+
+  /* Loading and error states */
+  .loading-overlay, .error-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 10;
+  }
+
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border-color, #e0e0e0);
+      border-top-color: var(--primary-color, #007bff);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--error-bg, #f8d7da);
+    color: var(--error-text, #721c24);
+    border: 1px solid var(--error-border, #f5c6cb);
+    border-radius: 4px;
+  }
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+{% if include_tests %}
+
+// {{ component_name }}.test.tsx
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+{% if config.needs_context %}
+import { GameMakerProvider } from '../context/GameMakerContext';
+{% endif %}
+import {{ component_name }} from './{{ component_name }}';
+
+{% if config.needs_context %}
+const renderWithProvider = (ui: React.ReactElement) => {
+  return render(
+    <GameMakerProvider>
+      {ui}
+    </GameMakerProvider>
+  );
+};
+{% endif %}
+
+describe('{{ component_name }}', () => {
+  it('renders without crashing', () => {
+    {% if config.needs_context %}
+    renderWithProvider(<{{ component_name }} />);
+    {% else %}
+    render(<{{ component_name }} />);
+    {% endif %}
+
+    expect(screen.getByTestId('{{ component_name | lower }}')).toBeInTheDocument();
+  });
+
+  {% if config.has_header and config.header_title %}
+  it('displays the correct title', () => {
+    {% if config.needs_context %}
+    renderWithProvider(<{{ component_name }} />);
+    {% else %}
+    render(<{{ component_name }} />);
+    {% endif %}
+
+    expect(screen.getByText('{{ config.header_title }}')).toBeInTheDocument();
+  });
+  {% endif %}
+});
+
+{% endif %}

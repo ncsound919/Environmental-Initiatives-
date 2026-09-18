@@ -1,0 +1,15 @@
+{
+  "task_id": "marathon_build_complete_system",
+  "generated": [
+    "../../apps/api/routers/health.py",
+    "../../pytest.ini",
+    "../../apps/api/tests/conftest.py",
+    "../../apps/api/tests/test_queue.py",
+    "../../apps/api/tests/test_session.py",
+    "../../docker-compose.yml",
+    "../../Dockerfile.backend",
+    "../../Dockerfile.frontend",
+    "../../Makefile"
+  ],
+  "errors": []
+}

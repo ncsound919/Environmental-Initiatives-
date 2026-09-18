@@ -1,0 +1,216 @@
+{
+  "code": "P12_SOLAR",
+  "id": "P12",
+  "name": "SolarShare",
+  "type": "Community Solar",
+  "phase": 3,
+  "stage": "prototype",
+  "tracks": [
+    "Revenue",
+    "Affiliate",
+    "Strategic Partner"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "irradiance-forecast",
+        "name": "Irradiance forecast + credit allocator",
+        "api": "/api/solar/forecast",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "SolarShare Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "INA226 monitor",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "INA226 not stocked; INA260 substitute $9.95 — adafruit.com/product/4226 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Voltage divider",
+          "qty": 1,
+          "unitUsd": 3,
+          "supplier": "Generic",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "Photodiode irradiance",
+          "qty": 1,
+          "unitUsd": 7.5,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/6524 — TSL2585 ambient/UVA light sensor $7.50 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Setpoint relay board",
+          "qty": 1,
+          "unitUsd": 6.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Small PV panel",
+          "qty": 1,
+          "unitUsd": 20.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/5366 — 6V 2W solar panel $20.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P12/{deviceId}/telemetry",
+        "controlTopic": "ecos/P12/{deviceId}/control",
+        "deviceTypes": [
+          "inverter",
+          "string-monitor"
+        ],
+        "sensors": [
+          "irradiance",
+          "voltage",
+          "current",
+          "power"
+        ],
+        "actuators": [
+          "setpoint_power"
+        ]
+      },
+      "power": "USB 5V 0.5A + panel (~3 W)",
+      "powerBudget": "USB 5V 0.5A + panel (~3 W)",
+      "buildHours": 3,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (inverter)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "SolarShare Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "arrays -> inverters -> meter -> subscribers",
+      "bom": [
+        {
+          "part": "Solar PV (200 kW)",
+          "qty": 1,
+          "unitUsd": 60000,
+          "supplier": "Solar supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "String inverters",
+          "qty": 1,
+          "unitUsd": 12000,
+          "supplier": "Solar supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Monitoring + CT",
+          "qty": 1,
+          "unitUsd": 4000,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Mounting/racking",
+          "qty": 1,
+          "unitUsd": 15000,
+          "supplier": "Solar supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Installation",
+          "qty": 1,
+          "unitUsd": 20000,
+          "supplier": "EPC",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P12/{deviceId}/telemetry",
+        "controlTopic": "ecos/P12/{deviceId}/control",
+        "deviceTypes": [
+          "inverter",
+          "string-monitor"
+        ],
+        "sensors": [
+          "irradiance",
+          "voltage",
+          "current",
+          "power"
+        ],
+        "actuators": [
+          "setpoint_power"
+        ]
+      },
+      "power": "200 kW peak",
+      "powerBudget": "200 kW peak",
+      "buildHours": 160,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (inverter)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "SolarShare",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

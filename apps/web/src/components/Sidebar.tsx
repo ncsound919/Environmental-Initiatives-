@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
@@ -33,7 +34,7 @@ export function Sidebar() {
   const nav = (
     <>
       <div className="sidebar-logo">
-        <img src="/overlay-ecos-logo.png" alt="Overlay ECOS logo" width={32} height={32} style={{ borderRadius: 8, objectFit: 'cover' }} />
+        <Image src="/overlay-ecos-logo.png" alt="Overlay ECOS logo" width={32} height={32} style={{ borderRadius: 8, objectFit: 'cover' }} />
         <span>Overlay ECOS</span>
       </div>
       <nav className="sidebar-nav">

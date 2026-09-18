@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "description": "Configuration for Cheetah Benchmarking System - Tools and Scenarios",
+  "tools": [
+    {
+      "id": "cheetah",
+      "name": "Cheetah Auto-Coder",
+      "description": "Overlay365's Cheetah Auto-Coder tool for intelligent code generation",
+      "runner": "runners/cheetah-test.js",
+      "resultsDir": "results/cheetah",
+      "enabled": true
+    },
+    {
+      "id": "copilot",
+      "name": "GitHub Copilot",
+      "description": "GitHub's AI-powered code completion tool",
+      "runner": "runners/copilot-test.js",
+      "resultsDir": "results/copilot",
+      "enabled": true
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "taskflow",
+      "name": "TaskFlow Web App",
+      "description": "Complete task management web application with React, TypeScript, and Express",
+      "tasksFile": "scenarios/tasks.json",
+      "templateDir": "scenarios/templates/taskflow",
+      "projectType": "web",
+      "techStack": ["React", "TypeScript", "Tailwind CSS", "Node.js", "Express"],
+      "enabled": true
+    }
+  ],
+  "defaultTool": "cheetah",
+  "defaultScenario": "taskflow",
+  "comparison": {
+    "enabledTools": ["cheetah", "copilot"],
+    "outputDir": "results/comparisons",
+    "reportFormats": ["json", "markdown", "html"]
+  }
+}

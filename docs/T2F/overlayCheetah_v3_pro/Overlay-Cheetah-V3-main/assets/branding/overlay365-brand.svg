@@ -1,0 +1,37 @@
+<svg width="600" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A4A4A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6B6B6B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFC845;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="600" height="200" fill="url(#brandGrad)"/>
+  
+  <!-- Brand Circle -->
+  <circle cx="100" cy="100" r="60" fill="url(#accentGrad)"/>
+  <circle cx="100" cy="100" r="50" fill="#6B6B6B"/>
+  
+  <!-- 365 Symbol -->
+  <text x="70" y="85" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="url(#accentGrad)">365</text>
+  <circle cx="95" cy="110" r="15" stroke="url(#accentGrad)" stroke-width="3" fill="none"/>
+  <path d="M 95 95 L 95 110 L 105 110" stroke="url(#accentGrad)" stroke-width="2.5" fill="none"/>
+  
+  <!-- Brand Text -->
+  <text x="180" y="90" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#FFDAB9">Overlay365</text>
+  <text x="180" y="125" font-family="Arial, sans-serif" font-size="20" fill="#DDA0DD">Professional Development Suite</text>
+  <text x="180" y="150" font-family="Arial, sans-serif" font-size="14" fill="#D3D3D3">Empowering Developers • Building the Future • 24/7/365</text>
+  
+  <!-- Decorative Elements -->
+  <line x1="180" y1="135" x2="560" y2="135" stroke="#FFC845" stroke-width="2" opacity="0.5"/>
+  <circle cx="565" cy="135" r="3" fill="#FFC845"/>
+  
+  <!-- Corner Accents -->
+  <path d="M 10 10 L 30 10 L 10 30 Z" fill="#DDA0DD" opacity="0.3"/>
+  <path d="M 590 170 L 570 170 L 590 190 Z" fill="#DDA0DD" opacity="0.3"/>
+</svg>

@@ -1,0 +1,48 @@
+# Documenso — self-hosted e-signature for LOIs and pilot agreements.
+#
+# Adapted from documenso/documenso docker/production/compose.yml.
+#   - Host port 3400 (web app owns 3000; Twenty owns 3300).
+#   - Postgres is internal only (no host port) to avoid the ECOS stack.
+#   - Secrets come from .env (gitignored); copy .env.example -> .env.
+#   - The image entrypoint runs `prisma migrate deploy` then starts the server.
+#
+# Start:  docker compose up -d
+# UI:     http://localhost:3400
+# Health: http://localhost:3400/api/health
+
+name: documenso
+
+services:
+  database:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?err}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?err}
+      POSTGRES_DB: ${POSTGRES_DB:?err}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - database:/var/lib/postgresql/data
+
+  documenso:
+    image: documenso/documenso:latest
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "3400:3000"
+    volumes:
+      # Persistent dir for a future signing certificate (/opt/documenso/cert.p12).
+      # Without a cert the app still runs; document signing is disabled.
+      - documenso_cert:/opt/documenso
+
+volumes:
+  database:
+  documenso_cert:

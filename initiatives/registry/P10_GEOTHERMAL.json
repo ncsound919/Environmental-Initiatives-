@@ -1,0 +1,205 @@
+{
+  "code": "P10_GEOTHERMAL",
+  "id": "P10",
+  "name": "ThermalGrid",
+  "type": "Geothermal Network",
+  "phase": 3,
+  "stage": "concept",
+  "tracks": [
+    "Strategic Partner",
+    "Revenue"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "heat-flow-optimizer",
+        "name": "Heat flow optimizer",
+        "api": "/api/geothermal/optimize",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "ThermalGrid Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "DS18B20 probes",
+          "qty": 2,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/381 — $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Flow sensor (YF-S201)",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/828 — liquid flow meter $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Circulation pump",
+          "qty": 1,
+          "unitUsd": 25,
+          "supplier": "Generic",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "Relay module",
+          "qty": 1,
+          "unitUsd": 6.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P10/{deviceId}/telemetry",
+        "controlTopic": "ecos/P10/{deviceId}/control",
+        "deviceTypes": [
+          "geothermal-plc"
+        ],
+        "sensors": [
+          "flow_rate",
+          "supply_temp",
+          "return_temp"
+        ],
+        "actuators": [
+          "pump_speed",
+          "valve_position"
+        ]
+      },
+      "power": "USB 5V 0.5A + 12V 1A (~14.5 W)",
+      "powerBudget": "USB 5V 0.5A + 12V 1A (~14.5 W)",
+      "buildHours": 4,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (geothermal-plc)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "ThermalGrid Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "ground loop -> plant room -> buildings (SCADA)",
+      "bom": [
+        {
+          "part": "Ground loop + drilling",
+          "qty": 1,
+          "unitUsd": 250000,
+          "supplier": "Geothermal EPC",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Heat pumps",
+          "qty": 8,
+          "unitUsd": 8000,
+          "supplier": "HVAC supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Circulation pumps",
+          "qty": 4,
+          "unitUsd": 3500,
+          "supplier": "HVAC supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "PLC/SCADA",
+          "qty": 1,
+          "unitUsd": 12000,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Flow/temp sensors",
+          "qty": 1,
+          "unitUsd": 6000,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P10/{deviceId}/telemetry",
+        "controlTopic": "ecos/P10/{deviceId}/control",
+        "deviceTypes": [
+          "geothermal-plc"
+        ],
+        "sensors": [
+          "flow_rate",
+          "supply_temp",
+          "return_temp"
+        ],
+        "actuators": [
+          "pump_speed",
+          "valve_position"
+        ]
+      },
+      "power": "~400 kW thermal per district",
+      "powerBudget": "~400 kW thermal per district",
+      "buildHours": 480,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (geothermal-plc)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "ThermalGrid",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

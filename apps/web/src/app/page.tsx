@@ -19,9 +19,9 @@ export default function Home() {
       >
         <StatBand>
           <KpiCard value="13" label="Initiatives" accent="emerald" />
-          <KpiCard value="$183M" label="Year 3 ARR Target" accent="cyan" />
-          <KpiCard value="70%" label="Readiness" accent="violet" />
-          <KpiCard value="5" label="Revenue Streams" accent="amber" />
+          <KpiCard value="13" label="Defined Asks" accent="cyan" />
+          <KpiCard value="4" label="Funding Tracks" accent="violet" />
+          <KpiCard value="70%" label="Build Checklist (self-assessed)" accent="amber" />
         </StatBand>
       </PageHeader>
 

@@ -1,0 +1,49 @@
+# Default configuration for Overlay Cheetah V3
+
+version: "3.0.0"
+
+# AI Model settings
+model: "gpt-4"
+temperature: 0.7
+max_tokens: 2000
+
+# Language-specific defaults
+language_defaults:
+  python:
+    style: "pep8"
+    max_line_length: 88
+    use_type_hints: true
+  
+  javascript:
+    style: "airbnb"
+    max_line_length: 100
+    use_semicolons: true
+  
+  java:
+    style: "google"
+    max_line_length: 100
+  
+  cpp:
+    style: "google"
+    max_line_length: 80
+
+# Output settings
+output:
+  format: "auto"
+  encoding: "utf-8"
+  add_headers: true
+  add_documentation: true
+
+# Analysis settings
+analysis:
+  check_complexity: true
+  check_style: true
+  check_security: true
+  max_complexity: 10
+
+# Refactoring settings
+refactoring:
+  apply_style_guide: true
+  optimize_imports: true
+  remove_unused_code: true
+  add_type_hints: true

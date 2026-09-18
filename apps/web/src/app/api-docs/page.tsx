@@ -94,7 +94,7 @@ const endpointDocs = [
     request: `{
   "humidity_forecast": [65, 72, 78, 80, 75, 68],
   "energy_prices": [0.12, 0.15, 0.20, 0.25, 0.18, 0.10],
-  "target_liters": 100
+  "target_liters": 25
 }`,
     response: `{
   "project": "P09_AWG",
@@ -110,7 +110,7 @@ const endpointDocs = [
   {
     method: 'POST',
     path: '/api/bulb/predict',
-    description: 'Predict bulb failure probability using Bayesian model (#8)',
+    description: 'Predict bulb failure probability using a heuristic reliability score (#8; Bayesian model planned)',
     request: `{
   "voltage": 12.5,
   "thermal_cycles": 1500,

@@ -1,0 +1,213 @@
+{
+  "code": "P04_HEMP_LAB",
+  "id": "P04",
+  "name": "HempMobility",
+  "type": "Hemp Car Lab",
+  "phase": 4,
+  "stage": "concept",
+  "tracks": [
+    "Grant",
+    "Strategic Partner"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "materials-sim",
+        "name": "FEA / LCA materials simulation",
+        "api": "/api/hemp-lab/status",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "HempMobility Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Load cell (350 ohm)",
+          "qty": 1,
+          "unitUsd": 3.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4541 — 5Kg strain gauge load cell $3.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "HX711 amplifier",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/5974 — HX711 24-bit ADC $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "MAX6675 + thermocouple",
+          "qty": 1,
+          "unitUsd": 24.9,
+          "supplier": "Adafruit",
+          "source": "MAX31855 $14.95 (adafruit.com/product/269) + Type-K thermocouple $9.95 (product/270) = $24.90 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Heating pad",
+          "qty": 1,
+          "unitUsd": 7.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/1481 — electric heating pad 10x5cm $7.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Frame hardware",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Generic",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P04/{deviceId}/telemetry",
+        "controlTopic": "ecos/P04/{deviceId}/control",
+        "deviceTypes": [
+          "material-testbench"
+        ],
+        "sensors": [
+          "strain",
+          "stress",
+          "temperature"
+        ],
+        "actuators": [
+          "load_cell",
+          "heater"
+        ]
+      },
+      "power": "USB 5V 1A + 12V 2A (~29 W)",
+      "powerBudget": "USB 5V 1A + 12V 2A (~29 W)",
+      "buildHours": 5,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (material-testbench)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "HempMobility Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "test frame -> DAQ -> HPC -> results store",
+      "bom": [
+        {
+          "part": "Universal testing machine (small)",
+          "qty": 1,
+          "unitUsd": 12000,
+          "supplier": "Materials lab supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Thermal chamber",
+          "qty": 1,
+          "unitUsd": 6000,
+          "supplier": "Environmental supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "DAQ system",
+          "qty": 1,
+          "unitUsd": 1500,
+          "supplier": "National Instruments",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "HPC workstation",
+          "qty": 1,
+          "unitUsd": 4500,
+          "supplier": "Hardware vendor",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Instrumented fixtures",
+          "qty": 1,
+          "unitUsd": 500,
+          "supplier": "Materials lab supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P04/{deviceId}/telemetry",
+        "controlTopic": "ecos/P04/{deviceId}/control",
+        "deviceTypes": [
+          "material-testbench"
+        ],
+        "sensors": [
+          "strain",
+          "stress",
+          "temperature"
+        ],
+        "actuators": [
+          "load_cell",
+          "heater"
+        ]
+      },
+      "power": "~3 kW per lab",
+      "powerBudget": "~3 kW per lab",
+      "buildHours": 80,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (material-testbench)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "HempMobility",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

@@ -1,0 +1,81 @@
+cheetah benchmarks\benchmark_results_template.json
+{
+  "benchmark_id": "cheetah_v2_marathon_TEMPLATE",
+  "timestamp": "TEMPLATE_TIMESTAMP",
+  "overall_score": 0.0,
+  "grade": "TEMPLATE_GRADE",
+  "categories": {
+    "generation_performance": {
+      "score": 0,
+      "metrics": {
+        "template_processing_time": 0.0,
+        "file_generation_rate": 0,
+        "error_rate": 0.0,
+        "code_quality_score": 0.0
+      }
+    },
+    "build_success": {
+      "score": 0,
+      "metrics": {
+        "build_success_rate": 0.0,
+        "build_time": 0,
+        "executable_size": 0,
+        "dependency_resolution": 0.0
+      }
+    },
+    "system_integration": {
+      "score": 0,
+      "metrics": {
+        "api_compatibility": 0.0,
+        "subsystem_communication": 0.0,
+        "configuration_consistency": 0.0,
+        "error_recovery_rate": 0.0
+      }
+    },
+    "desktop_readiness": {
+      "score": 0,
+      "metrics": {
+        "installation_complexity": 0,
+        "startup_time": 0.0,
+        "user_interface_completeness": 0.0,
+        "documentation_coverage": 0.0
+      }
+    },
+    "error_handling": {
+      "score": 0,
+      "metrics": {
+        "error_detection_rate": 0.0,
+        "recovery_success_rate": 0.0,
+        "logging_completeness": 0.0,
+        "fallback_mechanism_coverage": 0.0
+      }
+    },
+    "performance_efficiency": {
+      "score": 0,
+      "metrics": {
+        "memory_usage": 0,
+        "cpu_utilization": 0.0,
+        "disk_io_efficiency": 0.0,
+        "scalability_score": 0.0
+      }
+    }
+  },
+  "recommendations": [
+    "TEMPLATE_RECOMMENDATION_1",
+    "TEMPLATE_RECOMMENDATION_2"
+  ],
+  "metadata": {
+    "marathon_version": "2.0",
+    "execution_environment": "TEMPLATE_ENVIRONMENT",
+    "total_execution_time": 0,
+    "generated_files_count": 0,
+    "error_count": 0,
+    "warnings_count": 0
+  },
+  "raw_data": {
+    "generation_logs": [],
+    "build_logs": [],
+    "test_results": [],
+    "performance_metrics": {}
+  }
+}

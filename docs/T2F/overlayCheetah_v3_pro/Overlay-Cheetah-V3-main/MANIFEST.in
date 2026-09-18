@@ -1,0 +1,26 @@
+# Include documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+include QUICK_START.md
+include LITE_VS_PRO.md
+recursive-include docs *.md
+
+# Include branding assets
+recursive-include assets/branding *.svg *.png *.jpg *.md
+
+# Include configuration files
+include config.json
+include config.yaml
+include *.yaml
+
+# Include example files
+recursive-include examples *.md *.py *.json
+
+# Exclude development and build artifacts
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude *.swp
+global-exclude *~

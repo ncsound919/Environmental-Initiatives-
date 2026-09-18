@@ -1,0 +1,249 @@
+{
+  "task_id": "marathon_build_entire_ecosystem",
+  "generated": [
+    "../../../apps/api/routers/health.py",
+    "../../../apps/api/routers/session.py",
+    "../../../apps/api/tests/conftest.py",
+    "../../../apps/api/tests/test_session.py",
+    "../../../docker-compose.yml",
+    "../../../Dockerfile.backend",
+    "../../../Dockerfile.frontend",
+    "../../../Makefile",
+    "../../../pytest.ini",
+    "../../../beatgame_app.py",
+    "../../../beatgame/core/content_loader.py",
+    "../../../beatgame/core/deterministic_rng.py",
+    "../../../beatgame/core/midi_engine.py",
+    "../../../beatgame/core/parameter_validator.py",
+    "../../../beatgame/ui/arrangement_viewer.py",
+    "../../../beatgame/ui/export_dialog.py",
+    "../../../beatgame/ui/main_window.py",
+    "../../../beatgame/ui/parameter_panel.py",
+    "../../../beatgame/ui/rig_selector.py",
+    "../../../beatgame/ui/ui_utils.py",
+    "../../../beatgame/tests/test_runner.py",
+    "../../../README.md",
+    "../../../build_exe.bat",
+    "../../../overlay365_ecosystem.spec",
+    "../../../tests/conftest.py",
+    "../../../tests/test_runner.py"
+  ],
+  "errors": [
+    {
+      "file": "../../../src/kernel/kernel_main.py",
+      "error": "overlay_nova_os/kernel_main.py.j2"
+    },
+    {
+      "file": "../../../src/kernel/memory/memory_manager.py",
+      "error": "overlay_nova_os/memory_manager.py.j2"
+    },
+    {
+      "file": "../../../src/kernel/process/process_manager.py",
+      "error": "overlay_nova_os/process_manager.py.j2"
+    },
+    {
+      "file": "../../../src/kernel/scheduler/scheduler.py",
+      "error": "overlay_nova_os/scheduler.py.j2"
+    },
+    {
+      "file": "../../../src/kernel/ipc/ipc_manager.py",
+      "error": "overlay_nova_os/ipc_manager.py.j2"
+    },
+    {
+      "file": "../../../src/kernel/security/security_manager.py",
+      "error": "overlay_nova_os/security_manager.py.j2"
+    },
+    {
+      "file": "../../../src/services/service_registry.py",
+      "error": "overlay_nova_os/service_registry.py.j2"
+    },
+    {
+      "file": "../../../src/services/service_orchestrator.py",
+      "error": "overlay_nova_os/service_orchestrator.py.j2"
+    },
+    {
+      "file": "../../../src/services/audio-backend/audio_server.py",
+      "error": "overlay_nova_os/audio_server.py.j2"
+    },
+    {
+      "file": "../../../src/services/llm-assistant/llm_assistant.py",
+      "error": "overlay_nova_os/llm_assistant.py.j2"
+    },
+    {
+      "file": "../../../src/drivers/driver_manager.py",
+      "error": "overlay_nova_os/driver_manager.py.j2"
+    },
+    {
+      "file": "../../../src/ui/window_manager.py",
+      "error": "overlay_nova_os/window_manager.py.j2"
+    },
+    {
+      "file": "../../../src/ui/desktop_environment.py",
+      "error": "overlay_nova_os/desktop_environment.py.j2"
+    },
+    {
+      "file": "../../../config/system.yaml",
+      "error": "overlay_nova_os/system_config.yaml.j2"
+    },
+    {
+      "file": "../../../config/audio.yaml",
+      "error": "overlay_nova_os/audio_config.yaml.j2"
+    },
+    {
+      "file": "../../../config/llm.yaml",
+      "error": "overlay_nova_os/llm_config.yaml.j2"
+    },
+    {
+      "file": "../../../requirements.txt",
+      "error": "overlay_nova_os/requirements.txt.j2"
+    },
+    {
+      "file": "../../../src/main.py",
+      "error": "overlay_nova_os/main.py.j2"
+    },
+    {
+      "file": "../../../beatgame/core/game_controller.py",
+      "error": "game_controller.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/battle/battle_engine.py",
+      "error": "rap_game/battle/battle_engine.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/battle/combo.py",
+      "error": "rap_game/battle/combo.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/battle/rhythm.py",
+      "error": "rap_game/battle/rhythm.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/characters/enemy.py",
+      "error": "rap_game/characters/enemy.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/characters/player.py",
+      "error": "rap_game/characters/player.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/core/game_engine.py",
+      "error": "rap_game/core/game_engine.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/core/scene_manager.py",
+      "error": "rap_game/core/scene_manager.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/core/event_manager.py",
+      "error": "rap_game/core/event_manager.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/core/save_manager.py",
+      "error": "rap_game/core/save_manager.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/items/inventory.py",
+      "error": "rap_game/items/inventory.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/story/quest.py",
+      "error": "rap_game/story/quest.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/ui/main_menu.py",
+      "error": "rap_game/ui/main_menu.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/ui/battle_ui.py",
+      "error": "rap_game/ui/battle_ui.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/ui/pixel_renderer.py",
+      "error": "rap_game/ui/pixel_renderer.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/world/world_map.py",
+      "error": "rap_game/world/world_map.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/dialogue/dialogue_system.py",
+      "error": "rap_game/dialogue/dialogue_system.py.j2"
+    },
+    {
+      "file": "../../../rap_game_rpg/main.py",
+      "error": "rap_game/main.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/main.py",
+      "error": "rap_game/main.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/core/game_engine.py",
+      "error": "rap_game/core/game_engine.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/core/scene_manager.py",
+      "error": "rap_game/core/scene_manager.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/core/event_manager.py",
+      "error": "rap_game/core/event_manager.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/core/save_manager.py",
+      "error": "rap_game/core/save_manager.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/characters/player.py",
+      "error": "rap_game/characters/player.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/characters/enemy.py",
+      "error": "rap_game/characters/enemy.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/battle/battle_engine.py",
+      "error": "rap_game/battle/battle_engine.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/battle/rhythm.py",
+      "error": "rap_game/battle/rhythm.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/battle/combo.py",
+      "error": "rap_game/battle/combo.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/ui/main_menu.py",
+      "error": "rap_game/ui/main_menu.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/ui/battle_ui.py",
+      "error": "rap_game/ui/battle_ui.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/ui/pixel_renderer.py",
+      "error": "rap_game/ui/pixel_renderer.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/world/world_map.py",
+      "error": "rap_game/world/world_map.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/dialogue/dialogue_system.py",
+      "error": "rap_game/dialogue/dialogue_system.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/items/inventory.py",
+      "error": "rap_game/items/inventory.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/story/quest.py",
+      "error": "rap_game/story/quest.py.j2"
+    },
+    {
+      "file": "../../../rap_game_full/src/audio/audio_engine.py",
+      "error": "rap_game/audio/audio_engine.py.j2"
+    }
+  ]
+}

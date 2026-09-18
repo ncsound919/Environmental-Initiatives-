@@ -1,0 +1,58 @@
+"""{{ description | default('API module') }}"""
+
+from typing import List, Dict, Any, Optional
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
+
+app = FastAPI(title="{{ app_name | default('API') }}")
+
+
+{% if models %}
+# Data Models
+{% for model in models %}
+class {{ model.name }}(BaseModel):
+    """{{ model.get('docstring', 'Data model') }}"""
+{% for field in model.fields %}
+    {{ field.name }}: {{ field.type }}{% if field.get('default') is not none %} = {{ field.default }}{% endif %}
+
+{% endfor %}
+
+{% endfor %}
+{% endif %}
+
+{% if endpoints %}
+# API Endpoints
+{% for endpoint in endpoints %}
+@app.{{ endpoint.method | default('get') }}("{{ endpoint.path }}")
+async def {{ endpoint.function_name }}({% if endpoint.get('params') %}{{ endpoint.params }}{% endif %}){% if endpoint.get('response_model') %} -> {{ endpoint.response_model }}{% endif %}:
+    """{{ endpoint.docstring | default('API endpoint') }}"""
+    {% if endpoint.get('body') %}
+    {{ endpoint.body | indent(4) }}
+    {% else %}
+    # TODO: Implement endpoint logic
+    return {"message": "Not implemented"}
+    {% endif %}
+
+
+{% endfor %}
+{% endif %}
+
+{% if startup_code is defined %}
+# Startup
+@app.on_event("startup")
+async def startup_event():
+    """Run on application startup"""
+    {{ startup_code | indent(4) }}
+
+
+{% endif %}
+
+if __name__ == "__main__":
+    import os
+    import uvicorn
+    # Use localhost by default for security; override with environment variables for production
+    uvicorn.run(
+        app,
+        host=os.getenv("APP_HOST", "{{ host | default('127.0.0.1') }}"),
+        port=int(os.getenv("APP_PORT", "{{ port | default(8000) }}")),
+    )

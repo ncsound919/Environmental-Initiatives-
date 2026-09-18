@@ -1,6 +1,8 @@
 """Environmental Initiatives Platform - FastAPI Main Application
 All revenue routers wired up and ready.
 """
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import challenges, membership, marketplace, gamification, diy_kits
@@ -13,10 +15,16 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
-# CORS - allow frontend
+# CORS - origins are configured via ECOS_ALLOWED_ORIGINS (comma-separated).
+# Defaults to local development only; no production origin is hardcoded.
+_allowed_origins = [
+    origin.strip()
+    for origin in os.environ.get("ECOS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    if origin.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://environmental-initiatives.vercel.app"],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

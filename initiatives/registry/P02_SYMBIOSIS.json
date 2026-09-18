@@ -1,0 +1,228 @@
+{
+  "code": "P02_SYMBIOSIS",
+  "id": "P02",
+  "name": "AgriConnect",
+  "type": "Plant-Fungi Symbiosis",
+  "phase": 2,
+  "stage": "prototype",
+  "tracks": [
+    "Strategic Partner",
+    "Revenue",
+    "Affiliate"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "fungal-matching",
+        "name": "Fungal strain matching",
+        "api": "/api/symbiosis/recommend",
+        "status": "heuristic",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "AgriConnect Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Capacitive soil moisture",
+          "qty": 1,
+          "unitUsd": 7.5,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4026 — $7.50 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "RS485 NPK soil sensor",
+          "qty": 1,
+          "unitUsd": 7.5,
+          "supplier": "Adafruit",
+          "source": "estimate — no public list price (vendor quote required)",
+          "sourcing": "estimate"
+        },
+        {
+          "part": "Peristaltic dosing pump",
+          "qty": 1,
+          "unitUsd": 24.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/1150 — peristaltic pump $24.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Relay module",
+          "qty": 1,
+          "unitUsd": 6.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Tubing kit",
+          "qty": 1,
+          "unitUsd": 6,
+          "supplier": "Generic",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P02/{deviceId}/telemetry",
+        "controlTopic": "ecos/P02/{deviceId}/control",
+        "deviceTypes": [
+          "soil-probe",
+          "irrigation-valve"
+        ],
+        "sensors": [
+          "soil_moisture",
+          "soil_ph",
+          "n",
+          "p",
+          "k"
+        ],
+        "actuators": [
+          "valve_open",
+          "fertigation_mix"
+        ]
+      },
+      "power": "USB 5V 0.5A + 12V pump 1A (~14.5 W)",
+      "powerBudget": "USB 5V 0.5A + 12V pump 1A (~14.5 W)",
+      "buildHours": 4,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (soil-probe)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "AgriConnect Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "probes -> LoRa -> gateway -> MQTT",
+      "bom": [
+        {
+          "part": "Soil probe array",
+          "qty": 6,
+          "unitUsd": 45,
+          "supplier": "Generic",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "LoRa gateway",
+          "qty": 1,
+          "unitUsd": 220,
+          "supplier": "Digi-Key",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Irrigation valve + actuator",
+          "qty": 4,
+          "unitUsd": 85,
+          "supplier": "Agricultural supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Fertigation dosing pump",
+          "qty": 1,
+          "unitUsd": 250,
+          "supplier": "Agricultural supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Zone controller",
+          "qty": 1,
+          "unitUsd": 150,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Solar + battery PSU",
+          "qty": 1,
+          "unitUsd": 180,
+          "supplier": "Generic",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P02/{deviceId}/telemetry",
+        "controlTopic": "ecos/P02/{deviceId}/control",
+        "deviceTypes": [
+          "soil-probe",
+          "irrigation-valve"
+        ],
+        "sensors": [
+          "soil_moisture",
+          "soil_ph",
+          "n",
+          "p",
+          "k"
+        ],
+        "actuators": [
+          "valve_open",
+          "fertigation_mix"
+        ]
+      },
+      "power": "~200 W per acre",
+      "powerBudget": "~200 W per acre",
+      "buildHours": 16,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (soil-probe)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "AgriConnect",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

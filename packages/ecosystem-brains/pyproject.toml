@@ -28,3 +28,11 @@ dev = [
     "black>=23.12.0",
     "mypy>=1.7.0",
 ]
+
+[tool.pytest.ini_options]
+# The package directory name contains a hyphen ("ecosystem-brains"), so the
+# parent __init__.py cannot be imported as a package. Tests import the
+# submodules (forecasting, solvers, dispatcher, checklist) directly from the
+# package root, which is added to sys.path here.
+pythonpath = ["."]
+testpaths = ["tests"]

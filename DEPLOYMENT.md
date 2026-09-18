@@ -143,7 +143,7 @@ curl -X POST http://localhost:8000/api/awg/optimize \
   -d '{
     "humidity_forecast": [60, 65, 75, 80, 85, 70],
     "energy_prices": [0.10, 0.12, 0.08, 0.09, 0.15, 0.11],
-    "target_liters": 100.0
+    "target_liters": 25.0
   }'
 ```
 

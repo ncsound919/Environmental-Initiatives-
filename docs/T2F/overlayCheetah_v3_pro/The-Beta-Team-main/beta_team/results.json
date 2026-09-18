@@ -1,0 +1,27 @@
+{
+  "build": {
+    "build": "build",
+    "time": 0.4125504493713379,
+    "results": [
+      {
+        "scenario": "onboarding",
+        "passed": false,
+        "duration": 0,
+        "log": "Error: Robot Framework not found. Please install with: pip install robotframework"
+      },
+      {
+        "scenario": "poweruser",
+        "passed": false,
+        "duration": 0,
+        "log": "Error: Robot Framework not found. Please install with: pip install robotframework"
+      },
+      {
+        "scenario": "edgecases",
+        "passed": false,
+        "duration": 0,
+        "log": "Error: Robot Framework not found. Please install with: pip install robotframework"
+      }
+    ],
+    "delta": "NEW"
+  }
+}

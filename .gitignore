@@ -53,3 +53,11 @@ packages/core/database-schema/migrations/
 
 # Brainstorming session artifacts
 .superpowers/
+
+# Twenty CRM local secrets / Playwright session state
+deploy/twenty/.login.local
+deploy/twenty/.auth.json
+deploy/twenty/screenshots/
+
+# IDS apply-gate journal + backups (fleet development state)
+.recourse/

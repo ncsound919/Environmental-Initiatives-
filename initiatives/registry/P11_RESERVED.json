@@ -1,0 +1,98 @@
+{
+  "code": "P11_RESERVED",
+  "id": "P11",
+  "name": "ThoriumOS",
+  "type": "Reserved - Thorium Reactor",
+  "phase": 4,
+  "stage": "research",
+  "tracks": [
+    "Grant"
+  ],
+  "version": 1,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "molten-salt-sim",
+        "name": "Molten-salt chemistry simulation",
+        "api": null,
+        "status": "planned",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "ThoriumOS Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [],
+      "interfaces": {
+        "telemetryTopic": "ecos/P11/{deviceId}/telemetry",
+        "controlTopic": "ecos/P11/{deviceId}/control",
+        "deviceTypes": [
+          "placeholder"
+        ],
+        "sensors": [],
+        "actuators": []
+      },
+      "power": null,
+      "powerBudget": null,
+      "buildHours": null,
+      "sla": null,
+      "verification": [],
+      "status": "draft",
+      "missing": [
+        "Hardware intentionally undefined — P11 is a reserved research-stage initiative (no device in config/hardware-manifests.json)"
+      ]
+    },
+    "enterprise": {
+      "name": "ThoriumOS Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "bom": [],
+      "interfaces": {
+        "telemetryTopic": "ecos/P11/{deviceId}/telemetry",
+        "controlTopic": "ecos/P11/{deviceId}/control",
+        "deviceTypes": [
+          "placeholder"
+        ],
+        "sensors": [],
+        "actuators": []
+      },
+      "power": null,
+      "powerBudget": null,
+      "buildHours": null,
+      "sla": null,
+      "verification": [],
+      "status": "draft",
+      "missing": [
+        "Hardware intentionally undefined — P11 is a reserved research-stage initiative (no device in config/hardware-manifests.json)"
+      ]
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "ThoriumOS",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [],
+    "driver": null,
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

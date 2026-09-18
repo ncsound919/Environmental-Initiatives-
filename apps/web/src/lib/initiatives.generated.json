@@ -1,0 +1,2616 @@
+{
+  "P01_FOAM_HOMES": {
+    "code": "P01_FOAM_HOMES",
+    "id": "P01",
+    "name": "EcoHomes OS",
+    "type": "Foam Homes",
+    "stage": "prototype",
+    "phase": 3,
+    "tracks": [
+      "Strategic Partner",
+      "Revenue"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "parametric-bom",
+          "name": "Parametric design + BOM engine",
+          "api": "/api/foam-homes/status",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "EcoHomes OS Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "DHT22 temp/humidity",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/385 — $9.95 (discontinued)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "SGP30 TVOC/CO2",
+            "qty": 1,
+            "unitUsd": 17.5,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3709 — SGP30 VOC/eCO2 $17.50 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "5V relay module",
+            "qty": 1,
+            "unitUsd": 6.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "5V fan",
+            "qty": 1,
+            "unitUsd": 3.5,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3368 — miniature 5V fan $3.50 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Breadboard + jumpers",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3314 — half-size breadboard + 78-piece jumper bundle $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P01/{deviceId}/telemetry",
+          "controlTopic": "ecos/P01/{deviceId}/control",
+          "deviceTypes": [
+            "hvac-controller",
+            "thermostat",
+            "air-quality"
+          ],
+          "sensors": [
+            "temperature",
+            "humidity",
+            "co2",
+            "vocs"
+          ],
+          "actuators": [
+            "fan_speed",
+            "damper",
+            "heat_pump_stage"
+          ]
+        },
+        "power": "USB 5V 0.5A (2.5 W)",
+        "powerBudget": "USB 5V 0.5A (2.5 W)",
+        "buildHours": 3,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (hvac-controller)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "EcoHomes OS Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "thermostat -> HVAC controller -> BMS gateway -> MQTT",
+        "bom": [
+          {
+            "part": "Commercial thermostat (0-10V)",
+            "qty": 1,
+            "unitUsd": 120,
+            "supplier": "HVAC distributor",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "CO2/VOC sensor",
+            "qty": 1,
+            "unitUsd": 45,
+            "supplier": "Digi-Key",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Damper actuator",
+            "qty": 4,
+            "unitUsd": 60,
+            "supplier": "HVAC distributor",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Heat-pump control board",
+            "qty": 1,
+            "unitUsd": 55,
+            "supplier": "HVAC distributor",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "BMS edge gateway",
+            "qty": 1,
+            "unitUsd": 150,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P01/{deviceId}/telemetry",
+          "controlTopic": "ecos/P01/{deviceId}/control",
+          "deviceTypes": [
+            "hvac-controller",
+            "thermostat",
+            "air-quality"
+          ],
+          "sensors": [
+            "temperature",
+            "humidity",
+            "co2",
+            "vocs"
+          ],
+          "actuators": [
+            "fan_speed",
+            "damper",
+            "heat_pump_stage"
+          ]
+        },
+        "power": "~120 W per home",
+        "powerBudget": "~120 W per home",
+        "buildHours": 8,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (hvac-controller)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "EcoHomes OS",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P02_SYMBIOSIS": {
+    "code": "P02_SYMBIOSIS",
+    "id": "P02",
+    "name": "AgriConnect",
+    "type": "Plant-Fungi Symbiosis",
+    "stage": "prototype",
+    "phase": 2,
+    "tracks": [
+      "Strategic Partner",
+      "Revenue",
+      "Affiliate"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "fungal-matching",
+          "name": "Fungal strain matching",
+          "api": "/api/symbiosis/recommend",
+          "status": "heuristic",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "AgriConnect Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Capacitive soil moisture",
+            "qty": 1,
+            "unitUsd": 7.5,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4026 — $7.50 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "RS485 NPK soil sensor",
+            "qty": 1,
+            "unitUsd": 7.5,
+            "supplier": "Adafruit",
+            "source": "estimate — no public list price (vendor quote required)",
+            "sourcing": "estimate"
+          },
+          {
+            "part": "Peristaltic dosing pump",
+            "qty": 1,
+            "unitUsd": 24.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/1150 — peristaltic pump $24.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Relay module",
+            "qty": 1,
+            "unitUsd": 6.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Tubing kit",
+            "qty": 1,
+            "unitUsd": 6,
+            "supplier": "Generic",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P02/{deviceId}/telemetry",
+          "controlTopic": "ecos/P02/{deviceId}/control",
+          "deviceTypes": [
+            "soil-probe",
+            "irrigation-valve"
+          ],
+          "sensors": [
+            "soil_moisture",
+            "soil_ph",
+            "n",
+            "p",
+            "k"
+          ],
+          "actuators": [
+            "valve_open",
+            "fertigation_mix"
+          ]
+        },
+        "power": "USB 5V 0.5A + 12V pump 1A (~14.5 W)",
+        "powerBudget": "USB 5V 0.5A + 12V pump 1A (~14.5 W)",
+        "buildHours": 4,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (soil-probe)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "AgriConnect Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "probes -> LoRa -> gateway -> MQTT",
+        "bom": [
+          {
+            "part": "Soil probe array",
+            "qty": 6,
+            "unitUsd": 45,
+            "supplier": "Generic",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "LoRa gateway",
+            "qty": 1,
+            "unitUsd": 220,
+            "supplier": "Digi-Key",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Irrigation valve + actuator",
+            "qty": 4,
+            "unitUsd": 85,
+            "supplier": "Agricultural supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Fertigation dosing pump",
+            "qty": 1,
+            "unitUsd": 250,
+            "supplier": "Agricultural supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Zone controller",
+            "qty": 1,
+            "unitUsd": 150,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Solar + battery PSU",
+            "qty": 1,
+            "unitUsd": 180,
+            "supplier": "Generic",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P02/{deviceId}/telemetry",
+          "controlTopic": "ecos/P02/{deviceId}/control",
+          "deviceTypes": [
+            "soil-probe",
+            "irrigation-valve"
+          ],
+          "sensors": [
+            "soil_moisture",
+            "soil_ph",
+            "n",
+            "p",
+            "k"
+          ],
+          "actuators": [
+            "valve_open",
+            "fertigation_mix"
+          ]
+        },
+        "power": "~200 W per acre",
+        "powerBudget": "~200 W per acre",
+        "buildHours": 16,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (soil-probe)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "AgriConnect",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P03_FARM": {
+    "code": "P03_FARM",
+    "id": "P03",
+    "name": "RegeneraFarm",
+    "type": "Closed-Loop Farm",
+    "stage": "prototype",
+    "phase": 2,
+    "tracks": [
+      "Strategic Partner",
+      "Revenue"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "nutrient-optimizer",
+          "name": "Nutrient cycle optimizer",
+          "api": "/api/farm/optimize",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "RegeneraFarm Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "DS18B20 temp probe",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/381 — $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Moisture probe",
+            "qty": 1,
+            "unitUsd": 7.5,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4026 — capacitive moisture sensor $7.50 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "pH probe + board",
+            "qty": 1,
+            "unitUsd": 29.5,
+            "supplier": "DFRobot",
+            "source": "https://www.dfrobot.com/product-1025.html — SEN0161 pH kit (board + probe) $29.50 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Air pump",
+            "qty": 1,
+            "unitUsd": 7.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4699 — air pump $7.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Relay module",
+            "qty": 1,
+            "unitUsd": 6.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P03/{deviceId}/telemetry",
+          "controlTopic": "ecos/P03/{deviceId}/control",
+          "deviceTypes": [
+            "compost-sensor",
+            "nutrient-loop"
+          ],
+          "sensors": [
+            "temperature",
+            "moisture",
+            "ph",
+            "n",
+            "p",
+            "k"
+          ],
+          "actuators": [
+            "aeration",
+            "pump"
+          ]
+        },
+        "power": "USB 5V 0.5A + 12V (~18 W)",
+        "powerBudget": "USB 5V 0.5A + 12V (~18 W)",
+        "buildHours": 4,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (compost-sensor)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "RegeneraFarm Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "probes -> controller -> aerator/doser -> gateway -> MQTT",
+        "bom": [
+          {
+            "part": "Compost probe set",
+            "qty": 8,
+            "unitUsd": 45,
+            "supplier": "Generic",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Aerator blower",
+            "qty": 1,
+            "unitUsd": 350,
+            "supplier": "Agricultural supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Nutrient dosing pump",
+            "qty": 1,
+            "unitUsd": 300,
+            "supplier": "Agricultural supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Loop controller",
+            "qty": 1,
+            "unitUsd": 180,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "LoRa gateway",
+            "qty": 1,
+            "unitUsd": 200,
+            "supplier": "Digi-Key",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Windrow sensor",
+            "qty": 1,
+            "unitUsd": 250,
+            "supplier": "Agricultural supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P03/{deviceId}/telemetry",
+          "controlTopic": "ecos/P03/{deviceId}/control",
+          "deviceTypes": [
+            "compost-sensor",
+            "nutrient-loop"
+          ],
+          "sensors": [
+            "temperature",
+            "moisture",
+            "ph",
+            "n",
+            "p",
+            "k"
+          ],
+          "actuators": [
+            "aeration",
+            "pump"
+          ]
+        },
+        "power": "~1.2 kW per site",
+        "powerBudget": "~1.2 kW per site",
+        "buildHours": 24,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (compost-sensor)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "RegeneraFarm",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P04_HEMP_LAB": {
+    "code": "P04_HEMP_LAB",
+    "id": "P04",
+    "name": "HempMobility",
+    "type": "Hemp Car Lab",
+    "stage": "concept",
+    "phase": 4,
+    "tracks": [
+      "Grant",
+      "Strategic Partner"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "materials-sim",
+          "name": "FEA / LCA materials simulation",
+          "api": "/api/hemp-lab/status",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "HempMobility Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Load cell (350 ohm)",
+            "qty": 1,
+            "unitUsd": 3.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4541 — 5Kg strain gauge load cell $3.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "HX711 amplifier",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/5974 — HX711 24-bit ADC $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "MAX6675 + thermocouple",
+            "qty": 1,
+            "unitUsd": 24.9,
+            "supplier": "Adafruit",
+            "source": "MAX31855 $14.95 (adafruit.com/product/269) + Type-K thermocouple $9.95 (product/270) = $24.90 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Heating pad",
+            "qty": 1,
+            "unitUsd": 7.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/1481 — electric heating pad 10x5cm $7.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Frame hardware",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Generic",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P04/{deviceId}/telemetry",
+          "controlTopic": "ecos/P04/{deviceId}/control",
+          "deviceTypes": [
+            "material-testbench"
+          ],
+          "sensors": [
+            "strain",
+            "stress",
+            "temperature"
+          ],
+          "actuators": [
+            "load_cell",
+            "heater"
+          ]
+        },
+        "power": "USB 5V 1A + 12V 2A (~29 W)",
+        "powerBudget": "USB 5V 1A + 12V 2A (~29 W)",
+        "buildHours": 5,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (material-testbench)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "HempMobility Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "test frame -> DAQ -> HPC -> results store",
+        "bom": [
+          {
+            "part": "Universal testing machine (small)",
+            "qty": 1,
+            "unitUsd": 12000,
+            "supplier": "Materials lab supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Thermal chamber",
+            "qty": 1,
+            "unitUsd": 6000,
+            "supplier": "Environmental supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "DAQ system",
+            "qty": 1,
+            "unitUsd": 1500,
+            "supplier": "National Instruments",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "HPC workstation",
+            "qty": 1,
+            "unitUsd": 4500,
+            "supplier": "Hardware vendor",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Instrumented fixtures",
+            "qty": 1,
+            "unitUsd": 500,
+            "supplier": "Materials lab supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P04/{deviceId}/telemetry",
+          "controlTopic": "ecos/P04/{deviceId}/control",
+          "deviceTypes": [
+            "material-testbench"
+          ],
+          "sensors": [
+            "strain",
+            "stress",
+            "temperature"
+          ],
+          "actuators": [
+            "load_cell",
+            "heater"
+          ]
+        },
+        "power": "~3 kW per lab",
+        "powerBudget": "~3 kW per lab",
+        "buildHours": 80,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (material-testbench)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "HempMobility",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P05_GREENHOUSE": {
+    "code": "P05_GREENHOUSE",
+    "id": "P05",
+    "name": "LumiFreq",
+    "type": "Resonant Illumination",
+    "stage": "concept",
+    "phase": 4,
+    "tracks": [
+      "Strategic Partner",
+      "Revenue"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "light-recipes",
+          "name": "Adaptive light recipe control",
+          "api": "/api/greenhouse/status",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "LumiFreq Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "4-channel LED driver",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/5757 — Mosfetti 4-channel MOSFET driver $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "RGBW + far-red LED module",
+            "qty": 1,
+            "unitUsd": 35,
+            "supplier": "LED supplier",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "PPFD/spectrum sensor",
+            "qty": 1,
+            "unitUsd": 410,
+            "supplier": "Apogee Instruments",
+            "source": "https://www.apogeeinstruments.com/sq-500-ss-full-spectrum-quantum-sensor/ — SQ-500-SS full-spectrum quantum (PPFD) sensor $410.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Breadboard + jumpers",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3314 — half-size breadboard + 78-piece jumper bundle $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P05/{deviceId}/telemetry",
+          "controlTopic": "ecos/P05/{deviceId}/control",
+          "deviceTypes": [
+            "spectral-controller"
+          ],
+          "sensors": [
+            "ppfd",
+            "spectrum"
+          ],
+          "actuators": [
+            "channel_uv",
+            "channel_blue",
+            "channel_red",
+            "channel_farred"
+          ]
+        },
+        "power": "12V 3A (~36 W)",
+        "powerBudget": "12V 3A (~36 W)",
+        "buildHours": 4,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (spectral-controller)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "LumiFreq Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "LED arrays -> zone controller -> gateway -> MQTT",
+        "bom": [
+          {
+            "part": "LED array (4-channel)",
+            "qty": 20,
+            "unitUsd": 320,
+            "supplier": "LED supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Spectral sensor",
+            "qty": 6,
+            "unitUsd": 220,
+            "supplier": "Apogee Instruments",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Zone controller",
+            "qty": 1,
+            "unitUsd": 350,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Gateway",
+            "qty": 1,
+            "unitUsd": 200,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P05/{deviceId}/telemetry",
+          "controlTopic": "ecos/P05/{deviceId}/control",
+          "deviceTypes": [
+            "spectral-controller"
+          ],
+          "sensors": [
+            "ppfd",
+            "spectrum"
+          ],
+          "actuators": [
+            "channel_uv",
+            "channel_blue",
+            "channel_red",
+            "channel_farred"
+          ]
+        },
+        "power": "~6.5 kW per greenhouse",
+        "powerBudget": "~6.5 kW per greenhouse",
+        "buildHours": 40,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (spectral-controller)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "LumiFreq",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P06_REACTOR": {
+    "code": "P06_REACTOR",
+    "id": "P06",
+    "name": "NucleoSim",
+    "type": "Fast Reactor Twin",
+    "stage": "concept",
+    "phase": 4,
+    "tracks": [
+      "Grant",
+      "Strategic Partner"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "neutronics-sim",
+          "name": "Neutronics + thermal-hydraulics",
+          "api": "/api/reactor/status",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "NucleoSim Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "Mini-PC (8-core)",
+            "qty": 1,
+            "unitUsd": 450,
+            "supplier": "Hardware vendor",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "32 GB RAM",
+            "qty": 1,
+            "unitUsd": 80,
+            "supplier": "Hardware vendor",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "1 TB NVMe",
+            "qty": 1,
+            "unitUsd": 70,
+            "supplier": "Hardware vendor",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "UPS",
+            "qty": 1,
+            "unitUsd": 90,
+            "supplier": "Hardware vendor",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "Network switch",
+            "qty": 1,
+            "unitUsd": 30,
+            "supplier": "Hardware vendor",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P06/{deviceId}/telemetry",
+          "controlTopic": "ecos/P06/{deviceId}/control",
+          "deviceTypes": [
+            "simulation-node"
+          ],
+          "sensors": [
+            "temp_sim",
+            "pressure_sim"
+          ],
+          "actuators": [
+            "sim_case"
+          ]
+        },
+        "power": "~120 W",
+        "powerBudget": "~120 W",
+        "buildHours": 3,
+        "sla": null,
+        "verification": [
+          "compute-node: undefined — no device firmware; verified as compute hardware",
+          "interfaces cross-check against config/hardware-manifests.json (undefined)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "NucleoSim Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "simulation nodes -> scheduler -> results store",
+        "bom": [
+          {
+            "part": "HPC node (dual CPU)",
+            "qty": 1,
+            "unitUsd": 12000,
+            "supplier": "OEM",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "GPU accelerator",
+            "qty": 1,
+            "unitUsd": 8000,
+            "supplier": "OEM",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Rack + PDU",
+            "qty": 1,
+            "unitUsd": 2500,
+            "supplier": "Datacenter supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Cooling",
+            "qty": 1,
+            "unitUsd": 1800,
+            "supplier": "Datacenter supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Networking (100GbE)",
+            "qty": 1,
+            "unitUsd": 3000,
+            "supplier": "Datacenter supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P06/{deviceId}/telemetry",
+          "controlTopic": "ecos/P06/{deviceId}/control",
+          "deviceTypes": [
+            "simulation-node"
+          ],
+          "sensors": [
+            "temp_sim",
+            "pressure_sim"
+          ],
+          "actuators": [
+            "sim_case"
+          ]
+        },
+        "power": "~4 kW per node",
+        "powerBudget": "~4 kW per node",
+        "buildHours": 40,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "compute-node: undefined — no device firmware; verified as compute hardware",
+          "interfaces cross-check against config/hardware-manifests.json (undefined)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "NucleoSim",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P07_BIOREACTOR": {
+    "code": "P07_BIOREACTOR",
+    "id": "P07",
+    "name": "PlastiCycle",
+    "type": "Plastic-Eating Bacteria",
+    "stage": "concept",
+    "phase": 2,
+    "tracks": [
+      "Grant",
+      "Strategic Partner"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "bioprocess-control",
+          "name": "Bioprocess control OS",
+          "api": "/api/bioreactor/status",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "PlastiCycle Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "pH probe + board",
+            "qty": 1,
+            "unitUsd": 29.5,
+            "supplier": "DFRobot",
+            "source": "https://www.dfrobot.com/product-1025.html — SEN0161 pH kit (board + probe) $29.50 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "DS18B20 temp probe",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/381 — $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Dissolved-oxygen probe",
+            "qty": 1,
+            "unitUsd": 313.98,
+            "supplier": "Atlas Scientific",
+            "source": "DO probe $259.99 (atlas-scientific.com/probes/dissolved-oxygen-probe/) + EZO-DO circuit $53.99 (atlas-scientific.com/embedded-solutions/ezo-dissolved-oxygen-circuit/) = $313.98 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Peristaltic feed pump",
+            "qty": 1,
+            "unitUsd": 24.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/1150 — peristaltic pump $24.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Air pump",
+            "qty": 1,
+            "unitUsd": 7.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4699 — air pump $7.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Relay board",
+            "qty": 1,
+            "unitUsd": 6.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P07/{deviceId}/telemetry",
+          "controlTopic": "ecos/P07/{deviceId}/control",
+          "deviceTypes": [
+            "bioreactor"
+          ],
+          "sensors": [
+            "ph",
+            "temperature",
+            "dissolved_oxygen"
+          ],
+          "actuators": [
+            "agitator",
+            "airflow",
+            "feed_pump"
+          ]
+        },
+        "power": "USB 5V 0.5A + 12V 2A (~26 W)",
+        "powerBudget": "USB 5V 0.5A + 12V 2A (~26 W)",
+        "buildHours": 8,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (bioreactor)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "PlastiCycle Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "reactor -> PLC -> HMI -> MQTT",
+        "bom": [
+          {
+            "part": "100 L bioreactor vessel",
+            "qty": 1,
+            "unitUsd": 8000,
+            "supplier": "Biotech supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Agitator drive",
+            "qty": 1,
+            "unitUsd": 2000,
+            "supplier": "Biotech supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "DO/pH controllers",
+            "qty": 1,
+            "unitUsd": 1500,
+            "supplier": "Biotech supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Feed/air pumps",
+            "qty": 1,
+            "unitUsd": 900,
+            "supplier": "Biotech supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Industrial PLC",
+            "qty": 1,
+            "unitUsd": 2500,
+            "supplier": "Siemens",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "HMI panel",
+            "qty": 1,
+            "unitUsd": 1200,
+            "supplier": "Siemens",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P07/{deviceId}/telemetry",
+          "controlTopic": "ecos/P07/{deviceId}/control",
+          "deviceTypes": [
+            "bioreactor"
+          ],
+          "sensors": [
+            "ph",
+            "temperature",
+            "dissolved_oxygen"
+          ],
+          "actuators": [
+            "agitator",
+            "airflow",
+            "feed_pump"
+          ]
+        },
+        "power": "~3 kW per reactor",
+        "powerBudget": "~3 kW per reactor",
+        "buildHours": 80,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (bioreactor)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "PlastiCycle",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P08_BULB": {
+    "code": "P08_BULB",
+    "id": "P08",
+    "name": "EverLume",
+    "type": "Centennial Bulb (Lighting-as-a-Service)",
+    "stage": "prototype",
+    "phase": 1,
+    "tracks": [
+      "Strategic Partner",
+      "Revenue"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "reliability-score",
+          "name": "Fixture reliability score",
+          "api": "/api/bulb/predict",
+          "status": "heuristic",
+          "evidence": "Reference implementation; heuristic stress score (Bayesian model planned)"
+        },
+        {
+          "id": "fleet-telemetry",
+          "name": "Fleet telemetry + OTA queue",
+          "api": "/api/telemetry",
+          "status": "scaffold",
+          "evidence": "ESP32 firmware template with simulation mode"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "EverLume Community Bench Fixture",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 fixture + gateway",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "INA219 current/voltage breakout",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/904 — $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "DS18B20 waterproof temperature sensor",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/381 — $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Logic-level MOSFET driver module",
+            "qty": 1,
+            "unitUsd": 2.5,
+            "supplier": "SparkFun",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "12V LED COB + 12V 1A PSU",
+            "qty": 1,
+            "unitUsd": 6.5,
+            "supplier": "Generic",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "Breadboard + jumper kit",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3314 — half-size breadboard + 78-piece jumper bundle $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P08/{deviceId}/telemetry",
+          "controlTopic": "ecos/P08/{deviceId}/control",
+          "deviceTypes": [
+            "led-bulb"
+          ],
+          "sensors": [
+            "voltage",
+            "thermal_cycles",
+            "uptime"
+          ],
+          "actuators": [
+            "brightness",
+            "on_off"
+          ]
+        },
+        "power": "USB 5V 0.5A (2.5 W) + 12V 0.5A (6 W) = ~8.5 W",
+        "powerBudget": "8.5 W",
+        "buildHours": 3,
+        "sla": null,
+        "verification": [
+          "interfaces cross-check against config/hardware-manifests.json P08",
+          "firmware/esp32-template/ecos_template.ino PROJECT_CODE=P08 and DEVICE_TYPE=bulb",
+          "telemetry/control topics match ecos/P08/{deviceId}/{telemetry|control}",
+          "every BOM line priced with supplier + source",
+          "power budget and buildHours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "EverLume Fleet (LaaS)",
+        "audience": "commercial property / campus",
+        "mode": "commercial",
+        "unit": "per 100-fixture building",
+        "topology": "Thread/Zigbee mesh -> building gateway -> MQTT -> cloud",
+        "bom": [
+          {
+            "part": "Commercial LED troffer/high-bay fixture (0-10V dimmable)",
+            "qty": 100,
+            "unitUsd": 55,
+            "supplier": "Commercial lighting distributor",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "0-10V dimmable LED driver",
+            "qty": 100,
+            "unitUsd": 25,
+            "supplier": "Commercial lighting distributor",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Thread/Zigbee mesh module (per fixture)",
+            "qty": 100,
+            "unitUsd": 8,
+            "supplier": "Digi-Key",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Per-circuit energy meter (CT clamp)",
+            "qty": 8,
+            "unitUsd": 20,
+            "supplier": "Digi-Key",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Industrial PoE MQTT gateway",
+            "qty": 1,
+            "unitUsd": 150,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "PoE network switch (24-port)",
+            "qty": 1,
+            "unitUsd": 120,
+            "supplier": "Network supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P08/{deviceId}/telemetry",
+          "controlTopic": "ecos/P08/{deviceId}/control",
+          "deviceTypes": [
+            "led-bulb"
+          ],
+          "sensors": [
+            "voltage",
+            "thermal_cycles",
+            "uptime"
+          ],
+          "actuators": [
+            "brightness",
+            "on_off"
+          ]
+        },
+        "power": "100 × 18 W LED = 1.8 kW + gateway/switch ~50 W = ~1.85 kW",
+        "powerBudget": "~1.85 kW per 100-fixture building",
+        "buildHours": 24,
+        "sla": "uptime guarantee (requires underwriting partner)",
+        "verification": [
+          "interfaces cross-check against config/hardware-manifests.json P08",
+          "firmware/esp32-template/ecos_template.ino PROJECT_CODE=P08",
+          "per-building BOM priced with supplier + source (100-fixture basis)",
+          "power budget (~1.85 kW) and install hours stated",
+          "topology: mesh -> gateway -> MQTT -> cloud"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "EverLume",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "2 pilot buildings (100+ fixtures) + uptime underwriting partner",
+      "offtake": "multi-year Lighting-as-a-Service contract",
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P09_AWG": {
+    "code": "P09_AWG",
+    "id": "P09",
+    "name": "AquaGen",
+    "type": "Atmospheric Water Generator",
+    "stage": "prototype",
+    "phase": 1,
+    "tracks": [
+      "Grant",
+      "Strategic Partner",
+      "Revenue"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "awg-forecast",
+          "name": "Humidity forecast + cost optimizer",
+          "api": "/api/awg/forecast",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "AquaGen Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "SHT31 humidity/temp",
+            "qty": 1,
+            "unitUsd": 13.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/2857 — $13.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "INA219 power monitor",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/904 — $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Peltier condenser module",
+            "qty": 1,
+            "unitUsd": 34.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/1335 — 12V 5A Peltier + heatsink $34.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Fan",
+            "qty": 1,
+            "unitUsd": 5.5,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/6103 — 5V 6cm fan $5.50 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "UV LED",
+            "qty": 1,
+            "unitUsd": 8,
+            "supplier": "Generic",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P09/{deviceId}/telemetry",
+          "controlTopic": "ecos/P09/{deviceId}/control",
+          "deviceTypes": [
+            "awg-unit"
+          ],
+          "sensors": [
+            "humidity",
+            "temperature",
+            "power_draw"
+          ],
+          "actuators": [
+            "compressor",
+            "fan",
+            "uv"
+          ]
+        },
+        "power": "12V 5A (~60 W)",
+        "powerBudget": "12V 5A (~60 W)",
+        "buildHours": 4,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (awg-unit)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "AquaGen Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "AWG units -> controller -> MQTT",
+        "bom": [
+          {
+            "part": "AWG unit (1000 L/day)",
+            "qty": 10,
+            "unitUsd": 12000,
+            "supplier": "Water tech supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Water-quality lab kit",
+            "qty": 1,
+            "unitUsd": 3000,
+            "supplier": "Lab supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Controls + sensors",
+            "qty": 1,
+            "unitUsd": 1500,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Installation",
+            "qty": 1,
+            "unitUsd": 4000,
+            "supplier": "Contractor",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P09/{deviceId}/telemetry",
+          "controlTopic": "ecos/P09/{deviceId}/control",
+          "deviceTypes": [
+            "awg-unit"
+          ],
+          "sensors": [
+            "humidity",
+            "temperature",
+            "power_draw"
+          ],
+          "actuators": [
+            "compressor",
+            "fan",
+            "uv"
+          ]
+        },
+        "power": "~12 kW per campus",
+        "powerBudget": "~12 kW per campus",
+        "buildHours": 40,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (awg-unit)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "AquaGen",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P10_GEOTHERMAL": {
+    "code": "P10_GEOTHERMAL",
+    "id": "P10",
+    "name": "ThermalGrid",
+    "type": "Geothermal Network",
+    "stage": "concept",
+    "phase": 3,
+    "tracks": [
+      "Strategic Partner",
+      "Revenue"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "heat-flow-optimizer",
+          "name": "Heat flow optimizer",
+          "api": "/api/geothermal/optimize",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "ThermalGrid Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "DS18B20 probes",
+            "qty": 2,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/381 — $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Flow sensor (YF-S201)",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/828 — liquid flow meter $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Circulation pump",
+            "qty": 1,
+            "unitUsd": 25,
+            "supplier": "Generic",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "Relay module",
+            "qty": 1,
+            "unitUsd": 6.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P10/{deviceId}/telemetry",
+          "controlTopic": "ecos/P10/{deviceId}/control",
+          "deviceTypes": [
+            "geothermal-plc"
+          ],
+          "sensors": [
+            "flow_rate",
+            "supply_temp",
+            "return_temp"
+          ],
+          "actuators": [
+            "pump_speed",
+            "valve_position"
+          ]
+        },
+        "power": "USB 5V 0.5A + 12V 1A (~14.5 W)",
+        "powerBudget": "USB 5V 0.5A + 12V 1A (~14.5 W)",
+        "buildHours": 4,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (geothermal-plc)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "ThermalGrid Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "ground loop -> plant room -> buildings (SCADA)",
+        "bom": [
+          {
+            "part": "Ground loop + drilling",
+            "qty": 1,
+            "unitUsd": 250000,
+            "supplier": "Geothermal EPC",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Heat pumps",
+            "qty": 8,
+            "unitUsd": 8000,
+            "supplier": "HVAC supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Circulation pumps",
+            "qty": 4,
+            "unitUsd": 3500,
+            "supplier": "HVAC supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "PLC/SCADA",
+            "qty": 1,
+            "unitUsd": 12000,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Flow/temp sensors",
+            "qty": 1,
+            "unitUsd": 6000,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P10/{deviceId}/telemetry",
+          "controlTopic": "ecos/P10/{deviceId}/control",
+          "deviceTypes": [
+            "geothermal-plc"
+          ],
+          "sensors": [
+            "flow_rate",
+            "supply_temp",
+            "return_temp"
+          ],
+          "actuators": [
+            "pump_speed",
+            "valve_position"
+          ]
+        },
+        "power": "~400 kW thermal per district",
+        "powerBudget": "~400 kW thermal per district",
+        "buildHours": 480,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (geothermal-plc)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "ThermalGrid",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P11_RESERVED": {
+    "code": "P11_RESERVED",
+    "id": "P11",
+    "name": "ThoriumOS",
+    "type": "Reserved - Thorium Reactor",
+    "stage": "research",
+    "phase": 4,
+    "tracks": [
+      "Grant"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "molten-salt-sim",
+          "name": "Molten-salt chemistry simulation",
+          "api": null,
+          "status": "planned",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "ThoriumOS Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [],
+        "interfaces": {
+          "telemetryTopic": "ecos/P11/{deviceId}/telemetry",
+          "controlTopic": "ecos/P11/{deviceId}/control",
+          "deviceTypes": [
+            "placeholder"
+          ],
+          "sensors": [],
+          "actuators": []
+        },
+        "power": null,
+        "powerBudget": null,
+        "buildHours": null,
+        "sla": null,
+        "verification": [],
+        "status": "draft",
+        "missing": [
+          "Hardware intentionally undefined — P11 is a reserved research-stage initiative (no device in config/hardware-manifests.json)"
+        ]
+      },
+      "enterprise": {
+        "name": "ThoriumOS Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "bom": [],
+        "interfaces": {
+          "telemetryTopic": "ecos/P11/{deviceId}/telemetry",
+          "controlTopic": "ecos/P11/{deviceId}/control",
+          "deviceTypes": [
+            "placeholder"
+          ],
+          "sensors": [],
+          "actuators": []
+        },
+        "power": null,
+        "powerBudget": null,
+        "buildHours": null,
+        "sla": null,
+        "verification": [],
+        "status": "draft",
+        "missing": [
+          "Hardware intentionally undefined — P11 is a reserved research-stage initiative (no device in config/hardware-manifests.json)"
+        ]
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "ThoriumOS",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 2
+    }
+  },
+  "P12_SOLAR": {
+    "code": "P12_SOLAR",
+    "id": "P12",
+    "name": "SolarShare",
+    "type": "Community Solar",
+    "stage": "prototype",
+    "phase": 3,
+    "tracks": [
+      "Revenue",
+      "Affiliate",
+      "Strategic Partner"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "irradiance-forecast",
+          "name": "Irradiance forecast + credit allocator",
+          "api": "/api/solar/forecast",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "SolarShare Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "INA226 monitor",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "INA226 not stocked; INA260 substitute $9.95 — adafruit.com/product/4226 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Voltage divider",
+            "qty": 1,
+            "unitUsd": 3,
+            "supplier": "Generic",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "Photodiode irradiance",
+            "qty": 1,
+            "unitUsd": 7.5,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/6524 — TSL2585 ambient/UVA light sensor $7.50 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Setpoint relay board",
+            "qty": 1,
+            "unitUsd": 6.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Small PV panel",
+            "qty": 1,
+            "unitUsd": 20.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/5366 — 6V 2W solar panel $20.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P12/{deviceId}/telemetry",
+          "controlTopic": "ecos/P12/{deviceId}/control",
+          "deviceTypes": [
+            "inverter",
+            "string-monitor"
+          ],
+          "sensors": [
+            "irradiance",
+            "voltage",
+            "current",
+            "power"
+          ],
+          "actuators": [
+            "setpoint_power"
+          ]
+        },
+        "power": "USB 5V 0.5A + panel (~3 W)",
+        "powerBudget": "USB 5V 0.5A + panel (~3 W)",
+        "buildHours": 3,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (inverter)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "SolarShare Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "arrays -> inverters -> meter -> subscribers",
+        "bom": [
+          {
+            "part": "Solar PV (200 kW)",
+            "qty": 1,
+            "unitUsd": 60000,
+            "supplier": "Solar supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "String inverters",
+            "qty": 1,
+            "unitUsd": 12000,
+            "supplier": "Solar supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Monitoring + CT",
+            "qty": 1,
+            "unitUsd": 4000,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Mounting/racking",
+            "qty": 1,
+            "unitUsd": 15000,
+            "supplier": "Solar supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Installation",
+            "qty": 1,
+            "unitUsd": 20000,
+            "supplier": "EPC",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P12/{deviceId}/telemetry",
+          "controlTopic": "ecos/P12/{deviceId}/control",
+          "deviceTypes": [
+            "inverter",
+            "string-monitor"
+          ],
+          "sensors": [
+            "irradiance",
+            "voltage",
+            "current",
+            "power"
+          ],
+          "actuators": [
+            "setpoint_power"
+          ]
+        },
+        "power": "200 kW peak",
+        "powerBudget": "200 kW peak",
+        "buildHours": 160,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (inverter)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "SolarShare",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  },
+  "P13_HYDRO": {
+    "code": "P13_HYDRO",
+    "id": "P13",
+    "name": "MicroHydro",
+    "type": "Micro-Hydro Power",
+    "stage": "concept",
+    "phase": 1,
+    "tracks": [
+      "Grant",
+      "Strategic Partner",
+      "Revenue"
+    ],
+    "software": {
+      "capabilities": [
+        {
+          "id": "streamflow-forecast",
+          "name": "Stream flow forecast (LSTM)",
+          "api": "/api/hydro/forecast",
+          "status": "scaffold",
+          "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+        }
+      ]
+    },
+    "hardware": {
+      "individual": {
+        "name": "MicroHydro Community Build",
+        "audience": "community builder / maker (build-it-yourself)",
+        "mode": "community",
+        "unit": "1 unit",
+        "bom": [
+          {
+            "part": "ESP32-DevKitC v4",
+            "qty": 1,
+            "unitUsd": 15,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Flow sensor",
+            "qty": 1,
+            "unitUsd": 9.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/828 — liquid flow meter $9.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Pressure/head sensor",
+            "qty": 1,
+            "unitUsd": 30,
+            "supplier": "Generic",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          },
+          {
+            "part": "Servo/gate actuator",
+            "qty": 1,
+            "unitUsd": 12,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/155 — TowerPro SG-5010 standard servo $12.00 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Relay module",
+            "qty": 1,
+            "unitUsd": 6.95,
+            "supplier": "Adafruit",
+            "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+            "sourcing": "vendor-list"
+          },
+          {
+            "part": "Turbine runner (small)",
+            "qty": 1,
+            "unitUsd": 45,
+            "supplier": "Hydro supplier",
+            "source": "commodity — procure at build time (multi-vendor, volatile price)",
+            "sourcing": "commodity"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P13/{deviceId}/telemetry",
+          "controlTopic": "ecos/P13/{deviceId}/control",
+          "deviceTypes": [
+            "turbine-controller"
+          ],
+          "sensors": [
+            "flow",
+            "head",
+            "power"
+          ],
+          "actuators": [
+            "gate",
+            "diverter"
+          ]
+        },
+        "power": "USB 5V 0.5A (~2.5 W)",
+        "powerBudget": "USB 5V 0.5A (~2.5 W)",
+        "buildHours": 6,
+        "sla": null,
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (turbine-controller)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "community BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated"
+        ],
+        "status": "verified"
+      },
+      "enterprise": {
+        "name": "MicroHydro Enterprise Deployment",
+        "audience": "commercial / municipal / campus",
+        "mode": "commercial",
+        "unit": "per site",
+        "topology": "turbine -> PLC -> gate -> island/grid",
+        "bom": [
+          {
+            "part": "Turbine + generator (5 kW)",
+            "qty": 1,
+            "unitUsd": 45000,
+            "supplier": "Hydro supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "PLC/controls",
+            "qty": 1,
+            "unitUsd": 8000,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Gate actuator",
+            "qty": 1,
+            "unitUsd": 6000,
+            "supplier": "Hydro supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Flow/head sensors",
+            "qty": 1,
+            "unitUsd": 3000,
+            "supplier": "Industrial supplier",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          },
+          {
+            "part": "Civil works",
+            "qty": 1,
+            "unitUsd": 40000,
+            "supplier": "EPC",
+            "source": "quote-required — no public list price (RFQ)",
+            "sourcing": "quote-required"
+          }
+        ],
+        "interfaces": {
+          "telemetryTopic": "ecos/P13/{deviceId}/telemetry",
+          "controlTopic": "ecos/P13/{deviceId}/control",
+          "deviceTypes": [
+            "turbine-controller"
+          ],
+          "sensors": [
+            "flow",
+            "head",
+            "power"
+          ],
+          "actuators": [
+            "gate",
+            "diverter"
+          ]
+        },
+        "power": "5 kW nominal",
+        "powerBudget": "5 kW nominal",
+        "buildHours": 300,
+        "sla": "uptime/performance SLA to be agreed with the operator partner",
+        "verification": [
+          "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+          "interfaces cross-check against config/hardware-manifests.json (turbine-controller)",
+          "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+          "enterprise BOM priced with supplier + source (vendor list estimates)",
+          "power budget and build hours stated",
+          "indicative deployment BOM — EPC/vendor quotes required before procurement"
+        ],
+        "status": "verified"
+      }
+    },
+    "founding": {
+      "status": "not_started",
+      "parent": "Overlay 365",
+      "division": "Overlay Environmental",
+      "ventureName": "MicroHydro",
+      "structure": "division",
+      "licenses": [],
+      "capitalAsk": "to_verify",
+      "offtake": null,
+      "compliance": [],
+      "readiness": {
+        "hardwarePilot": false,
+        "partnerLoi": false,
+        "unitEconomics": false
+      }
+    },
+    "derived": {
+      "readinessScore": 0,
+      "gapCount": 0
+    }
+  }
+}

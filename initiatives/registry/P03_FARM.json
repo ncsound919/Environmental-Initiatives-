@@ -1,0 +1,229 @@
+{
+  "code": "P03_FARM",
+  "id": "P03",
+  "name": "RegeneraFarm",
+  "type": "Closed-Loop Farm",
+  "phase": 2,
+  "stage": "prototype",
+  "tracks": [
+    "Strategic Partner",
+    "Revenue"
+  ],
+  "version": 2,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "nutrient-optimizer",
+        "name": "Nutrient cycle optimizer",
+        "api": "/api/farm/optimize",
+        "status": "scaffold",
+        "evidence": "Scaffold endpoint (see apps/api-gateway); status per fundability audit"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "RegeneraFarm Community Build",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 unit",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "DS18B20 temp probe",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/381 — $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Moisture probe",
+          "qty": 1,
+          "unitUsd": 7.5,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4026 — capacitive moisture sensor $7.50 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "pH probe + board",
+          "qty": 1,
+          "unitUsd": 29.5,
+          "supplier": "DFRobot",
+          "source": "https://www.dfrobot.com/product-1025.html — SEN0161 pH kit (board + probe) $29.50 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Air pump",
+          "qty": 1,
+          "unitUsd": 7.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4699 — air pump $7.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Relay module",
+          "qty": 1,
+          "unitUsd": 6.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/4409 — STEMMA mini relay $6.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P03/{deviceId}/telemetry",
+        "controlTopic": "ecos/P03/{deviceId}/control",
+        "deviceTypes": [
+          "compost-sensor",
+          "nutrient-loop"
+        ],
+        "sensors": [
+          "temperature",
+          "moisture",
+          "ph",
+          "n",
+          "p",
+          "k"
+        ],
+        "actuators": [
+          "aeration",
+          "pump"
+        ]
+      },
+      "power": "USB 5V 0.5A + 12V (~18 W)",
+      "powerBudget": "USB 5V 0.5A + 12V (~18 W)",
+      "buildHours": 4,
+      "sla": null,
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (compost-sensor)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "community BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "RegeneraFarm Enterprise Deployment",
+      "audience": "commercial / municipal / campus",
+      "mode": "commercial",
+      "unit": "per site",
+      "topology": "probes -> controller -> aerator/doser -> gateway -> MQTT",
+      "bom": [
+        {
+          "part": "Compost probe set",
+          "qty": 8,
+          "unitUsd": 45,
+          "supplier": "Generic",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Aerator blower",
+          "qty": 1,
+          "unitUsd": 350,
+          "supplier": "Agricultural supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Nutrient dosing pump",
+          "qty": 1,
+          "unitUsd": 300,
+          "supplier": "Agricultural supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Loop controller",
+          "qty": 1,
+          "unitUsd": 180,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "LoRa gateway",
+          "qty": 1,
+          "unitUsd": 200,
+          "supplier": "Digi-Key",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Windrow sensor",
+          "qty": 1,
+          "unitUsd": 250,
+          "supplier": "Agricultural supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P03/{deviceId}/telemetry",
+        "controlTopic": "ecos/P03/{deviceId}/control",
+        "deviceTypes": [
+          "compost-sensor",
+          "nutrient-loop"
+        ],
+        "sensors": [
+          "temperature",
+          "moisture",
+          "ph",
+          "n",
+          "p",
+          "k"
+        ],
+        "actuators": [
+          "aeration",
+          "pump"
+        ]
+      },
+      "power": "~1.2 kW per site",
+      "powerBudget": "~1.2 kW per site",
+      "buildHours": 24,
+      "sla": "uptime/performance SLA to be agreed with the operator partner",
+      "verification": [
+        "firmware scaffold with PROJECT_CODE matches (firmware/scaffolds)",
+        "interfaces cross-check against config/hardware-manifests.json (compost-sensor)",
+        "telemetry/control topics match ecos/<id>/{deviceId}/{telemetry|control}",
+        "enterprise BOM priced with supplier + source (vendor list estimates)",
+        "power budget and build hours stated",
+        "indicative deployment BOM — EPC/vendor quotes required before procurement"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "RegeneraFarm",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "to_verify",
+    "offtake": null,
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [
+      "verify.mjs"
+    ],
+    "driver": "specify-script",
+    "rollbackToken": null,
+    "source": "seed.mjs (draft from hardware-manifests.json)"
+  }
+}

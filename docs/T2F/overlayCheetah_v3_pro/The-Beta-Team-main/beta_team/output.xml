@@ -1,0 +1,1432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.13.9 on win32)" generated="2025-12-09T00:56:39.467107" rpa="false" schemaversion="5">
+<suite id="s1" name="Tests" source="C:\Users\tap45\Desktop\Repo Assist\IP-Builder-Platform--main\build tools\The-Beta-Team-main\beta_team\tests">
+<suite id="s1-s1" name="Edgecases" source="C:\Users\tap45\Desktop\Repo Assist\IP-Builder-Platform--main\build tools\The-Beta-Team-main\beta_team\tests\edgecases.robot">
+<test id="s1-s1-t1" name="Edge Case Testing" line="8">
+<kw name="Open Application">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-12-09T00:56:53.458432" level="INFO">Opening application: </msg>
+<arg>Opening application: ${path}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-12-09T00:56:53.456246" elapsed="0.002668"/>
+</kw>
+<arg>${BUILD_PATH}</arg>
+<status status="PASS" start="2025-12-09T00:56:53.401977" elapsed="0.057683"/>
+</kw>
+<kw name="Test Invalid Inputs">
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-12-09T00:56:53.542523" level="INFO">Typing text 'invalid-email' into text field 'id=email'.</msg>
+<msg time="2025-12-09T00:56:53.543328" level="INFO">Cannot capture screenshot because no browser is open.</msg>
+<msg time="2025-12-09T00:56:53.544168" level="FAIL">No browser is open.</msg>
+<arg>id=email</arg>
+<arg>invalid-email</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="FAIL" start="2025-12-09T00:56:53.537979" elapsed="1.908668">No browser is open.</status>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=submit</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:56:55.447617" elapsed="0.000252"/>
+</kw>
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<arg>Invalid email</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:56:55.448632" elapsed="0.000229"/>
+</kw>
+<status status="FAIL" start="2025-12-09T00:56:53.535951" elapsed="1.913928">No browser is open.</status>
+</kw>
+<kw name="Test Large File Upload">
+<status status="NOT RUN" start="2025-12-09T00:56:55.496198" elapsed="0.000291"/>
+</kw>
+<kw name="Test Network Disconnect">
+<status status="NOT RUN" start="2025-12-09T00:56:55.543091" elapsed="0.000285"/>
+</kw>
+<kw name="Test Memory Pressure">
+<status status="NOT RUN" start="2025-12-09T00:56:55.560475" elapsed="0.000272"/>
+</kw>
+<status status="FAIL" start="2025-12-09T00:56:53.387869" elapsed="2.174431">No browser is open.</status>
+</test>
+<status status="FAIL" start="2025-12-09T00:56:41.196713" elapsed="14.371915"/>
+</suite>
+<suite id="s1-s2" name="Onboarding" source="C:\Users\tap45\Desktop\Repo Assist\IP-Builder-Platform--main\build tools\The-Beta-Team-main\beta_team\tests\onboarding.robot">
+<test id="s1-s2-t1" name="Platform Core Functionality" line="12">
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T00:56:56.294327" level="INFO">${start} = 1765259816</msg>
+<var>${start}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T00:56:56.292534" elapsed="0.002102"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-12-09T00:56:56.513086" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3000'.</msg>
+<msg time="2025-12-09T00:58:15.015992" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2025-12-09T00:58:15.017433" level="FAIL">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</msg>
+<arg>${PLATFORM_URL}</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="FAIL" start="2025-12-09T00:56:56.511615" elapsed="81.233548">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:18.135473" elapsed="0.000328"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>IP Builder Platform</arg>
+<arg>30s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:18.471947" elapsed="0.000247"/>
+</kw>
+<kw name="Page Should Contain Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Get Started")]</arg>
+<doc>Verifies that element ``locator`` is found on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:18.865296" elapsed="0.000358"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Start")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.244624" elapsed="0.000269"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=email</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.436280" elapsed="0.002995"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=email</arg>
+<arg>beta_tester@platform.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.562730" elapsed="0.002029"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>BetaTest123!</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.635363" elapsed="0.000209"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=register-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.808000" elapsed="0.000242"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Welcome to IP Builder</arg>
+<arg>15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.847322" elapsed="0.000292"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Create New Build")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.850209" elapsed="0.000252"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=build-name</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.851700" elapsed="0.000220"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=build-name</arg>
+<arg>Beta Test Build</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.859833" elapsed="0.000238"/>
+</kw>
+<kw name="Select From List By Value" owner="SeleniumLibrary">
+<arg>id=build-type</arg>
+<arg>web-app</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.863314" elapsed="0.000308"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=create-build-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.874808" elapsed="0.000274"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Build created successfully</arg>
+<arg>15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.876724" elapsed="0.000267"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.879280" elapsed="0.000264"/>
+</kw>
+<kw name="Get Time" owner="BuiltIn">
+<var>${end}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.881070" elapsed="0.000246"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${duration}</var>
+<arg>${end}-${start}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.894083" elapsed="0.000270"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Platform core test took ${duration} seconds</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-12-09T00:58:19.979314" elapsed="0.000250"/>
+</kw>
+<doc>Test core IP Builder Platform features</doc>
+<status status="FAIL" start="2025-12-09T00:56:56.082318" elapsed="83.946050">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</test>
+<test id="s1-s2-t2" name="Content Creation Engine Integration" line="43">
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T00:58:20.171608" level="INFO">${start} = 1765259900</msg>
+<var>${start}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T00:58:20.168651" elapsed="0.003303"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-12-09T00:58:20.177424" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3000'.</msg>
+<msg time="2025-12-09T01:01:04.806739" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-2.png"&gt;&lt;img src="selenium-screenshot-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2025-12-09T01:01:04.807739" level="FAIL">ReadTimeoutError: HTTPConnectionPool(host='localhost', port=57377): Read timed out. (read timeout=120)</msg>
+<arg>${PLATFORM_URL}</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="FAIL" start="2025-12-09T00:58:20.175667" elapsed="170.881111">ReadTimeoutError: HTTPConnectionPool(host='localhost', port=57377): Read timed out. (read timeout=120)</status>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:11.234669" elapsed="0.000272"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=email</arg>
+<arg>beta_tester@platform.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:11.384242" elapsed="0.000277"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>BetaTest123!</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:11.494571" elapsed="0.000286"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=login-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:11.607634" elapsed="0.000227"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Dashboard</arg>
+<arg>10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:11.741089" elapsed="0.000291"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//a[contains(text(),"Content Creation")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:11.894001" elapsed="0.000262"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Hood Alchemy Content Engine</arg>
+<arg>15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:12.014531" elapsed="0.000269"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Create Episode")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:13.001752" elapsed="0.000254"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=episode-id</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:13.156436" elapsed="0.000223"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=episode-id</arg>
+<arg>beta_test_ep_001</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:13.439395" elapsed="0.000282"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=upload-mp3-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:13.650062" elapsed="0.000302"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Episode setup complete</arg>
+<arg>20s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:13.818336" elapsed="0.000315"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:14.174673" elapsed="0.001744"/>
+</kw>
+<kw name="Get Time" owner="BuiltIn">
+<var>${end}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:14.357927" elapsed="0.000225"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${duration}</var>
+<arg>${end}-${start}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:14.635052" elapsed="0.000205"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Content engine test took ${duration} seconds</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:14.884788" elapsed="0.000256"/>
+</kw>
+<doc>Test Content Creation Engine integration</doc>
+<status status="FAIL" start="2025-12-09T00:58:20.165019" elapsed="174.767526">ReadTimeoutError: HTTPConnectionPool(host='localhost', port=57377): Read timed out. (read timeout=120)</status>
+</test>
+<test id="s1-s2-t3" name="Cheetah V3 Integration Test" line="71">
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T01:01:15.193582" level="INFO">${start} = 1765260075</msg>
+<var>${start}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T01:01:15.191894" elapsed="0.003254"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2025-12-09T01:01:15.207438" level="INFO">Starting process:
+cd ../../../Site Features/Overlay-Cheetah-V3-main &amp;&amp; python3 autocoder.py --once</msg>
+<msg time="2025-12-09T01:01:15.360241" level="INFO">Waiting for process to complete.</msg>
+<msg time="2025-12-09T01:01:29.335249" level="INFO">Process completed.</msg>
+<msg time="2025-12-09T01:01:29.335995" level="INFO">${result} = &lt;result object with rc 0&gt;</msg>
+<var>${result}</var>
+<arg>cd ../../../Site Features/Overlay-Cheetah-V3-main &amp;&amp; python3 autocoder.py --once</arg>
+<arg>shell=True</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2025-12-09T01:01:15.206252" elapsed="14.129963"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-12-09T01:01:29.476741" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${result.rc}</arg>
+<arg>0</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-12-09T01:01:29.473784" elapsed="0.003380"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<msg time="2025-12-09T01:01:29.609604" level="FAIL">'' does not contain 'AutoCoder'</msg>
+<arg>${result.stdout}</arg>
+<arg>AutoCoder</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="FAIL" start="2025-12-09T01:01:29.606602" elapsed="0.003491">'' does not contain 'AutoCoder'</status>
+</kw>
+<kw name="Get Time" owner="BuiltIn">
+<var>${end}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:29.779121" elapsed="0.000273"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${duration}</var>
+<arg>${end}-${start}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:29.905745" elapsed="0.000352"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Cheetah V3 test took ${duration} seconds</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-12-09T01:01:30.073744" elapsed="0.000252"/>
+</kw>
+<doc>Test Overlay Cheetah V3 autocoder integration</doc>
+<status status="FAIL" start="2025-12-09T01:01:15.181588" elapsed="15.090913">'' does not contain 'AutoCoder'</status>
+</test>
+<test id="s1-s2-t4" name="Build Tools Integration" line="84">
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T01:01:31.122388" level="INFO">${start} = 1765260091</msg>
+<var>${start}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T01:01:31.119210" elapsed="0.003818"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2025-12-09T01:01:31.234271" level="INFO">Starting process:
+cd ../../../build tools/hardhat-hardhat-3.0.16 &amp;&amp; npm --version</msg>
+<msg time="2025-12-09T01:01:31.399274" level="INFO">Waiting for process to complete.</msg>
+<msg time="2025-12-09T01:02:04.777770" level="INFO">Process completed.</msg>
+<msg time="2025-12-09T01:02:04.778599" level="INFO">${result} = &lt;result object with rc 0&gt;</msg>
+<var>${result}</var>
+<arg>cd ../../../build tools/hardhat-hardhat-3.0.16 &amp;&amp; npm --version</arg>
+<arg>shell=True</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2025-12-09T01:01:31.231984" elapsed="33.546839"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-12-09T01:02:04.784669" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${result.rc}</arg>
+<arg>0</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-12-09T01:02:04.781080" elapsed="0.003989"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2025-12-09T01:02:04.791655" level="INFO">Starting process:
+cd ../../../build tools/web3-decoder-main &amp;&amp; ls -la</msg>
+<msg time="2025-12-09T01:02:04.932316" level="INFO">Waiting for process to complete.</msg>
+<msg time="2025-12-09T01:02:13.401480" level="INFO">Process completed.</msg>
+<msg time="2025-12-09T01:02:13.402335" level="INFO">${result} = &lt;result object with rc 0&gt;</msg>
+<var>${result}</var>
+<arg>cd ../../../build tools/web3-decoder-main &amp;&amp; ls -la</arg>
+<arg>shell=True</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2025-12-09T01:02:04.790616" elapsed="8.612625"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-12-09T01:02:13.415106" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${result.rc}</arg>
+<arg>0</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-12-09T01:02:13.410128" elapsed="0.005575"/>
+</kw>
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T01:02:13.419312" level="INFO">${end} = 1765260133</msg>
+<var>${end}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T01:02:13.417614" elapsed="0.002003"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-12-09T01:02:13.426470" level="INFO">${duration} = 42</msg>
+<var>${duration}</var>
+<arg>${end}-${start}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-12-09T01:02:13.424287" elapsed="0.002483"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-12-09T01:02:13.430675" level="INFO">Build tools test took 42 seconds</msg>
+<arg>Build tools test took ${duration} seconds</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-12-09T01:02:13.429267" elapsed="0.001850"/>
+</kw>
+<doc>Test various build tools integration</doc>
+<status status="PASS" start="2025-12-09T01:01:31.005810" elapsed="42.428372"/>
+</test>
+<status status="FAIL" start="2025-12-09T00:56:55.575023" elapsed="317.866505"/>
+</suite>
+<suite id="s1-s3" name="Poweruser" source="C:\Users\tap45\Desktop\Repo Assist\IP-Builder-Platform--main\build tools\The-Beta-Team-main\beta_team\tests\poweruser.robot">
+<test id="s1-s3-t1" name="Advanced Build Workflows" line="11">
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T01:02:13.524584" level="INFO">${start} = 1765260133</msg>
+<var>${start}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T01:02:13.512244" elapsed="0.012594"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-12-09T01:02:13.534817" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3000'.</msg>
+<msg time="2025-12-09T01:02:52.671807" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-3.png"&gt;&lt;img src="selenium-screenshot-3.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2025-12-09T01:02:52.673726" level="FAIL">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</msg>
+<arg>${PLATFORM_URL}</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="FAIL" start="2025-12-09T01:02:13.526580" elapsed="39.156723">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:52.864118" elapsed="0.000275"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=email</arg>
+<arg>poweruser@platform.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:52.957573" elapsed="0.000396"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>PowerUser123!</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.127578" elapsed="0.000321"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=login-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.368185" elapsed="0.000205"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Dashboard</arg>
+<arg>10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.490135" elapsed="0.000237"/>
+</kw>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Create New Build")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.531428" elapsed="0.000176"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=build-name</arg>
+<arg>5s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.532224" elapsed="0.000363"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=build-name</arg>
+<arg>Advanced Build ${i}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.534424" elapsed="0.000258"/>
+</kw>
+<kw name="Select From List By Value" owner="SeleniumLibrary">
+<arg>id=build-type</arg>
+<arg>${i % 2 == 0 and "mobile-app" or "web-app"}</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.535469" elapsed="0.000217"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=create-build-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.536324" elapsed="0.000180"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Build created successfully</arg>
+<arg>10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.538206" elapsed="0.000353"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.539317" elapsed="0.000223"/>
+</kw>
+<var name="${i}"/>
+<status status="NOT RUN" start="2025-12-09T01:02:53.530802" elapsed="0.009027"/>
+</iter>
+<var>${i}</var>
+<value>1</value>
+<value>4</value>
+<status status="NOT RUN" start="2025-12-09T01:02:53.529910" elapsed="0.010395"/>
+</for>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//div[contains(@class,"build-card")][1]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.543168" elapsed="0.000686"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=invite-collaborator-btn</arg>
+<arg>5s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.548119" elapsed="0.000290"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=invite-collaborator-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.551045" elapsed="0.000243"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=collaborator-email</arg>
+<arg>collaborator@platform.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.556116" elapsed="0.000283"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=send-invite-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.558360" elapsed="0.000318"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Invitation sent</arg>
+<arg>10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.560232" elapsed="0.000222"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=create-version-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.562052" elapsed="0.000252"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=version-name</arg>
+<arg>v2.0.0</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.565528" elapsed="0.000277"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=version-notes</arg>
+<arg>Major feature update</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.567869" elapsed="0.000306"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=save-version-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.578660" elapsed="0.000287"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Version created</arg>
+<arg>10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.581663" elapsed="0.000377"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.585326" elapsed="0.000277"/>
+</kw>
+<kw name="Get Time" owner="BuiltIn">
+<var>${end}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.590910" elapsed="0.000282"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${duration}</var>
+<arg>${end}-${start}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.594122" elapsed="0.000335"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Advanced workflows test took ${duration} seconds</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-12-09T01:02:53.596547" elapsed="0.000269"/>
+</kw>
+<doc>Test advanced build creation and management</doc>
+<status status="FAIL" start="2025-12-09T01:02:13.509247" elapsed="40.091101">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</test>
+<test id="s1-s3-t2" name="Content Engine Advanced Features" line="54">
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T01:02:53.877690" level="INFO">${start} = 1765260173</msg>
+<var>${start}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T01:02:53.642945" elapsed="0.235003"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-12-09T01:02:54.080991" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3000'.</msg>
+<msg time="2025-12-09T01:03:54.715588" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-4.png"&gt;&lt;img src="selenium-screenshot-4.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2025-12-09T01:03:54.716646" level="FAIL">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</msg>
+<arg>${PLATFORM_URL}</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="FAIL" start="2025-12-09T01:02:54.077842" elapsed="60.650327">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:54.807757" elapsed="0.000292"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=email</arg>
+<arg>poweruser@platform.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:54.840102" elapsed="0.000260"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>PowerUser123!</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:54.917338" elapsed="0.001132"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=login-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:54.924928" elapsed="0.000656"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Dashboard</arg>
+<arg>10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:54.927735" elapsed="0.000817"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//a[contains(text(),"Content Creation")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:54.931695" elapsed="0.000339"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Hood Alchemy Content Engine</arg>
+<arg>15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:54.962733" elapsed="0.003321"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Batch Create")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.020157" elapsed="0.000262"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=batch-count</arg>
+<arg>5s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.022928" elapsed="0.000829"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=batch-count</arg>
+<arg>3</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.025167" elapsed="0.000244"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=batch-upload-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.026880" elapsed="0.000261"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Batch setup complete</arg>
+<arg>30s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.028567" elapsed="0.000251"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Custom DNA")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.030096" elapsed="0.000239"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=dna-editor</arg>
+<arg>5s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.031907" elapsed="0.000258"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=dna-editor</arg>
+<arg>{"comedy_modules": ["custom_module_1"]}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.035965" elapsed="0.000376"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=save-dna-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.039495" elapsed="0.000213"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>DNA configuration saved</arg>
+<arg>10s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.040810" elapsed="0.000194"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Marketing Campaign")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.042310" elapsed="0.000243"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=campaign-name</arg>
+<arg>5s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.044768" elapsed="0.000223"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=campaign-name</arg>
+<arg>Power User Campaign</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.064931" elapsed="0.000242"/>
+</kw>
+<kw name="Select From List By Value" owner="SeleniumLibrary">
+<arg>id=campaign-type</arg>
+<arg>social-media</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.076517" elapsed="0.000216"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=create-campaign-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.086288" elapsed="0.001999"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Campaign created</arg>
+<arg>15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.094176" elapsed="0.000331"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.109773" elapsed="0.000233"/>
+</kw>
+<kw name="Get Time" owner="BuiltIn">
+<var>${end}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.111300" elapsed="0.000216"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${duration}</var>
+<arg>${end}-${start}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.113729" elapsed="0.000258"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Advanced content test took ${duration} seconds</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-12-09T01:03:55.115338" elapsed="0.000218"/>
+</kw>
+<doc>Test advanced content creation features</doc>
+<status status="FAIL" start="2025-12-09T01:02:53.633437" elapsed="61.483478">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</test>
+<test id="s1-s3-t3" name="Performance Under Load" line="97">
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T01:03:55.200638" level="INFO">${start} = 1765260235</msg>
+<var>${start}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T01:03:55.197236" elapsed="0.003728"/>
+</kw>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-12-09T01:03:55.215700" level="INFO">Opening browser 'chrome' to base url 'http://localhost:3000'.</msg>
+<msg time="2025-12-09T01:04:49.328792" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-5.png"&gt;&lt;img src="selenium-screenshot-5.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2025-12-09T01:04:49.329793" level="FAIL">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</msg>
+<arg>${PLATFORM_URL}</arg>
+<arg>chrome</arg>
+<arg>alias=session_${i}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="FAIL" start="2025-12-09T01:03:55.212799" elapsed="54.131557">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.345800" elapsed="0.000307"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<arg>${PLATFORM_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.346956" elapsed="0.000256"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=email</arg>
+<arg>user${i}@platform.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.348139" elapsed="0.000271"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>TestPass123!</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.352138" elapsed="0.000355"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=login-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.356119" elapsed="0.000304"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Dashboard</arg>
+<arg>15s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.357294" elapsed="0.000518"/>
+</kw>
+<var name="${i}">1</var>
+<status status="FAIL" start="2025-12-09T01:03:55.211714" elapsed="54.146774">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</iter>
+<var>${i}</var>
+<value>1</value>
+<value>6</value>
+<status status="FAIL" start="2025-12-09T01:03:55.210117" elapsed="54.149177">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</for>
+<kw name="Switch Browser" owner="SeleniumLibrary">
+<arg>session_1</arg>
+<doc>Switches between active browsers using ``index_or_alias``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.426732" elapsed="0.000351"/>
+</kw>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath=//button[contains(text(),"Create New Build")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.465102" elapsed="0.000380"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id=build-name</arg>
+<arg>Load Test Build ${i}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.466260" elapsed="0.000226"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>id=create-build-btn</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.467155" elapsed="0.000198"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="SeleniumLibrary">
+<arg>Build created successfully</arg>
+<arg>20s</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.468545" elapsed="0.000249"/>
+</kw>
+<var name="${i}"/>
+<status status="NOT RUN" start="2025-12-09T01:04:49.462335" elapsed="0.006796"/>
+</iter>
+<var>${i}</var>
+<value>1</value>
+<value>4</value>
+<status status="NOT RUN" start="2025-12-09T01:04:49.461747" elapsed="0.007798"/>
+</for>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.629210" elapsed="0.000193"/>
+</kw>
+<var name="${i}"/>
+<status status="NOT RUN" start="2025-12-09T01:04:49.628624" elapsed="0.001051"/>
+</iter>
+<var>${i}</var>
+<value>1</value>
+<value>6</value>
+<status status="NOT RUN" start="2025-12-09T01:04:49.628156" elapsed="0.001805"/>
+</for>
+<kw name="Get Time" owner="BuiltIn">
+<var>${end}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.686920" elapsed="0.000259"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${duration}</var>
+<arg>${end}-${start}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.729963" elapsed="0.000252"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Load test took ${duration} seconds</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-12-09T01:04:49.830574" elapsed="0.000225"/>
+</kw>
+<doc>Test platform performance with multiple concurrent operations</doc>
+<status status="FAIL" start="2025-12-09T01:03:55.184856" elapsed="54.714670">WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=143.0.7499.41)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79fb88255
+	0x7ff79fb882b0
+	0x7ff79f96165d
+	0x7ff79f95e1dd
+	0x7ff79f94eb69
+	0x7ff79f950974
+	0x7ff79f94f10f
+	0x7ff79f94e871
+	0x7ff79f94e5bd
+	0x7ff79f94c20a
+	0x7ff79f94c9f2
+	0x7ff79f965950
+	0x7ff79fa0bad4
+	0x7ff79f9e1fda
+	0x7ff79fa0ac97
+	0x7ff79f9aac29
+	0x7ff79f9aba93
+	0x7ff79fe9fff0
+	0x7ff79fe9a930
+	0x7ff79feb9096
+	0x7ff79fba5754
+	0x7ff79fbae6fc
+	0x7ff79fb91974
+	0x7ff79fb91b25
+	0x7ff79fb77852
+	0x7fff9d747374
+	0x7fff9f5fcc91
+</status>
+</test>
+<test id="s1-s3-t4" name="Cheetah V3 Advanced Usage" line="130">
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T01:04:50.197615" level="INFO">${start} = 1765260290</msg>
+<var>${start}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T01:04:50.196315" elapsed="0.001531"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2025-12-09T01:04:50.200423" level="INFO">Starting process:
+cd ../../../Site Features/Overlay-Cheetah-V3-main &amp;&amp; python3 autocoder.py --once</msg>
+<msg time="2025-12-09T01:04:56.677202" level="INFO">Waiting for process to complete.</msg>
+<msg time="2025-12-09T01:05:13.918646" level="INFO">Process completed.</msg>
+<msg time="2025-12-09T01:05:13.919318" level="INFO">${result} = &lt;result object with rc 0&gt;</msg>
+<var>${result}</var>
+<arg>cd ../../../Site Features/Overlay-Cheetah-V3-main &amp;&amp; python3 autocoder.py --once</arg>
+<arg>shell=True</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2025-12-09T01:04:50.199297" elapsed="23.720231"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-12-09T01:05:14.085377" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${result.rc}</arg>
+<arg>0</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-12-09T01:05:14.076195" elapsed="0.010196"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2025-12-09T01:05:14.196813" level="INFO">Starting process:
+cd ../../../Site Features/Overlay-Cheetah-V3-main &amp;&amp; find templates -name "*.j2" | wc -l</msg>
+<msg time="2025-12-09T01:05:14.327251" level="INFO">Waiting for process to complete.</msg>
+<msg time="2025-12-09T01:05:17.845984" level="INFO">Process completed.</msg>
+<msg time="2025-12-09T01:05:17.846715" level="INFO">${result} = &lt;result object with rc 0&gt;</msg>
+<var>${result}</var>
+<arg>cd ../../../Site Features/Overlay-Cheetah-V3-main &amp;&amp; find templates -name "*.j2" | wc -l</arg>
+<arg>shell=True</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2025-12-09T01:05:14.194245" elapsed="3.652704"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>int(${result.stdout.strip()}) &gt; 10</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2025-12-09T01:05:17.865337" elapsed="0.003342"/>
+</kw>
+<kw name="Run Process" owner="Process">
+<msg time="2025-12-09T01:05:17.872175" level="INFO">Starting process:
+cd ../../../Site Features/Overlay-Cheetah-V3-main &amp;&amp; ls -la out/ | wc -l</msg>
+<msg time="2025-12-09T01:05:17.935128" level="INFO">Waiting for process to complete.</msg>
+<msg time="2025-12-09T01:05:22.600038" level="INFO">Process completed.</msg>
+<msg time="2025-12-09T01:05:22.600673" level="INFO">${result} = &lt;result object with rc 0&gt;</msg>
+<var>${result}</var>
+<arg>cd ../../../Site Features/Overlay-Cheetah-V3-main &amp;&amp; ls -la out/ | wc -l</arg>
+<arg>shell=True</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2025-12-09T01:05:17.870695" elapsed="4.730155"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>int(${result.stdout.strip()}) &gt; 5</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2025-12-09T01:05:22.620689" elapsed="0.003817"/>
+</kw>
+<kw name="Get Time" owner="BuiltIn">
+<msg time="2025-12-09T01:05:22.628385" level="INFO">${end} = 1765260322</msg>
+<var>${end}</var>
+<arg>epoch</arg>
+<doc>Returns the given time in the requested format.</doc>
+<status status="PASS" start="2025-12-09T01:05:22.626846" elapsed="0.001775"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-12-09T01:05:22.680622" level="INFO">${duration} = 32</msg>
+<var>${duration}</var>
+<arg>${end}-${start}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-12-09T01:05:22.679082" elapsed="0.001762"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-12-09T01:05:22.698853" level="INFO">Advanced Cheetah test took 32 seconds</msg>
+<arg>Advanced Cheetah test took ${duration} seconds</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-12-09T01:05:22.697767" elapsed="0.001488"/>
+</kw>
+<doc>Test advanced Cheetah V3 autocoder features</doc>
+<status status="PASS" start="2025-12-09T01:04:50.134958" elapsed="32.565837"/>
+</test>
+<status status="FAIL" start="2025-12-09T01:02:13.456379" elapsed="189.308184"/>
+</suite>
+<status status="FAIL" start="2025-12-09T00:56:39.516536" elapsed="523.282816"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="7" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Tests" id="s1" pass="2" fail="7" skip="0">Tests</stat>
+<stat name="Edgecases" id="s1-s1" pass="0" fail="1" skip="0">Tests.Edgecases</stat>
+<stat name="Onboarding" id="s1-s2" pass="1" fail="3" skip="0">Tests.Onboarding</stat>
+<stat name="Poweruser" id="s1-s3" pass="1" fail="3" skip="0">Tests.Poweruser</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

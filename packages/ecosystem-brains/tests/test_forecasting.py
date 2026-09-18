@@ -5,6 +5,7 @@ Validates Level 1 completion criteria
 
 from datetime import datetime, timedelta
 import pandas as pd
+import pytest
 from forecasting import (
     forecast_stream_flow,
     forecast_solar_irradiance,
@@ -16,6 +17,7 @@ from forecasting import (
 
 def test_forecast_stream_flow():
     """Test Micro-Hydro (#13) stream flow forecasting"""
+    pytest.importorskip('prophet')
     # Mock historical data
     timestamps = [datetime.now() - timedelta(hours=i) for i in range(48, 0, -1)]
     historical_data = {
@@ -37,6 +39,7 @@ def test_forecast_stream_flow():
 
 def test_forecast_solar_irradiance():
     """Test Solar Gardens (#12) irradiance forecasting"""
+    pytest.importorskip('prophet')
     timestamps = [datetime.now() - timedelta(hours=i) for i in range(48, 0, -1)]
     historical_data = {
         'timestamp': [t.isoformat() for t in timestamps],
@@ -55,6 +58,7 @@ def test_forecast_solar_irradiance():
 
 def test_forecast_humidity():
     """Test AWG (#9) humidity forecasting"""
+    pytest.importorskip('prophet')
     timestamps = [datetime.now() - timedelta(hours=i) for i in range(48, 0, -1)]
     historical_data = {
         'timestamp': [t.isoformat() for t in timestamps],
@@ -71,7 +75,7 @@ def test_forecast_humidity():
 
 
 def test_predict_bulb_failure():
-    """Test Centennial Bulb (#8) failure prediction"""
+    """Test Centennial Bulb (#8) heuristic reliability score"""
     telemetry = {
         'voltage': 12.5,
         'thermal_cycles': 5000,
@@ -85,11 +89,13 @@ def test_predict_bulb_failure():
     assert 'expected_remaining_years' in result
     assert 0 <= result['failure_probability'] <= 1
     assert result['expected_remaining_hours'] >= 0
-    print(f"✓ Bulb (#8) prediction: {result['failure_probability']:.2%} failure probability")
+    assert result['model_type'] == 'heuristic'
+    print(f"✓ Bulb (#8) prediction: {result['failure_probability']:.2%} failure probability (heuristic)")
 
 
 def test_prophet_forecaster():
     """Test Prophet wrapper functionality"""
+    pytest.importorskip('prophet')
     # Create sample data
     dates = pd.date_range(start='2024-01-01', periods=100, freq='D')
     df = pd.DataFrame({

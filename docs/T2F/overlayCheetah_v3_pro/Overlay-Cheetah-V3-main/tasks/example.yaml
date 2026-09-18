@@ -1,0 +1,64 @@
+# Example task file for autocoder
+# This demonstrates the YAML task format
+
+task_id: example_api
+files:
+  - template: python/api.py.j2
+    output: src/api.py
+    context:
+      description: "Simple REST API example"
+      app_name: "Example API"
+      models:
+        - name: User
+          docstring: "User data model"
+          fields:
+            - name: id
+              type: int
+            - name: username
+              type: str
+            - name: email
+              type: str
+            - name: active
+              type: bool
+              default: true
+      endpoints:
+        - method: get
+          path: /users
+          function_name: get_users
+          docstring: "Get all users"
+          response_model: "List[User]"
+          body: |
+            # Mock data
+            return [
+                User(id=1, username="alice", email="alice@example.com"),
+                User(id=2, username="bob", email="bob@example.com")
+            ]
+        - method: post
+          path: /users
+          function_name: create_user
+          docstring: "Create a new user"
+          params: "user: User"
+          response_model: "User"
+          body: |
+            # In a real app, save to database
+            return user
+      host: "0.0.0.0"
+      port: 8000
+
+  - template: python/generic.py.j2
+    output: src/models.py
+    context:
+      description: "Data models"
+      imports:
+        - "from datetime import datetime"
+        - "from typing import Optional"
+      classes:
+        - name: BaseModel
+          docstring: "Base model class"
+          init_params: "**kwargs"
+          methods:
+            - name: to_dict
+              return_type: dict
+              docstring: "Convert to dictionary"
+              body: |
+                return self.__dict__

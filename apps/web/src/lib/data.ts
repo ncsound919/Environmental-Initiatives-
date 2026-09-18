@@ -64,9 +64,9 @@ export const projects: Project[] = [
     icon: '💡',
     color: '#fbbf24',
     readiness: 70,
-    description: 'Lighting-as-a-Service with predictive maintenance using Bayesian reliability models to predict failure years in advance.',
+    description: 'Lighting-as-a-Service with predictive maintenance using a reliability model (heuristic today; Bayesian model planned) to flag at-risk fixtures in advance.',
     businessModel: 'Commercial clients pay monthly subscription for guaranteed uptime',
-    features: ['Predictive Maintenance', 'Bayesian Reliability Model', 'Fleet Management', 'Mesh Network'],
+    features: ['Predictive Maintenance', 'Reliability Model (heuristic)', 'Fleet Management', 'Mesh Network'],
     techStack: ['C++ (ESP32)', 'AWS IoT Core', 'React Dashboard'],
     regenCityRole: 'Streetlights and housing illumination; establishes mesh network for other sensors',
     apiEndpoints: ['/api/bulb/predict'],
@@ -591,4 +591,237 @@ export const systemMetrics = {
   carbonOffset: 12.7,
   activeDevices: 47,
   systemUptime: 99.2
+};
+
+// ---------------------------------------------------------------------------
+// Fundability layer
+//
+// Each sector is presented as a fundable unit with an explicit ask, use of
+// funds, target funders/partners, milestones, and an honest split between what
+// is proven today and what is still missing. `stage` describes real maturity;
+// the per-project `readiness` number is a self-assessed build checklist, not
+// market or traction readiness.
+// ---------------------------------------------------------------------------
+
+export type FundTrack = 'Grant' | 'Strategic Partner' | 'Revenue' | 'Affiliate';
+
+export interface Fundability {
+  stage: string;
+  tracks: FundTrack[];
+  ask: string;
+  useOfFunds: string[];
+  grantTargets: string[];
+  partnerProfile: string;
+  offtake: string;
+  milestones: string[];
+  evidence: {
+    proven: string[];
+    missing: string[];
+  };
+  arrTarget: string;
+}
+
+export const TRACK_TONES: Record<FundTrack, 'violet' | 'cyan' | 'emerald' | 'amber'> = {
+  Grant: 'violet',
+  'Strategic Partner': 'cyan',
+  Revenue: 'emerald',
+  Affiliate: 'amber',
+};
+
+export const fundabilityByCode: Record<string, Fundability> = {
+  P08_BULB: {
+    stage: 'Prototype — firmware template + simulated telemetry',
+    tracks: ['Strategic Partner', 'Revenue'],
+    ask: '2 pilot buildings (100+ fixtures) and an underwriting partner for the uptime guarantee.',
+    useOfFunds: ['Pilot fleet hardware', 'Field installation labor', '12-month reliability dataset', 'Safety certification'],
+    grantTargets: ['Utility demand-side efficiency programs', 'NSF SBIR (sensors/reliability)'],
+    partnerProfile: 'Commercial property managers, facility operators, lighting contractors, insurers.',
+    offtake: 'Multi-year Lighting-as-a-Service contract per building.',
+    milestones: ['First pilot building live', '12-month failure dataset collected', 'Uptime guarantee underwritten'],
+    evidence: {
+      proven: ['ESP32 firmware template', 'REST predict endpoint (reference implementation)'],
+      missing: ['Real failure dataset', 'Trained reliability model', 'Signed pilot', 'Unit economics'],
+    },
+    arrTarget: '$12M Year-3 target (assumption-based)',
+  },
+  P13_HYDRO: {
+    stage: 'Concept — forecasting code only, no site',
+    tracks: ['Grant', 'Strategic Partner', 'Revenue'],
+    ask: '$150K for a site flow study and a 5 kW containerized pilot.',
+    useOfFunds: ['Hydrology / flow study', 'Turbine + controls', 'Permitting', 'Install crew'],
+    grantTargets: ['USDA Rural Energy for America (REAP)', 'DOE Water Power Technologies', 'State green banks'],
+    partnerProfile: 'Eco-resorts, rural energy co-ops, hydrology engineering firms, battery suppliers.',
+    offtake: 'Power purchase agreement per kWh at remote sites.',
+    milestones: ['Site flow study complete', '5 kW pilot generating', '12-month generation data'],
+    evidence: {
+      proven: ['LSTM/Prophet forecasting wrapper', 'Forecast API contract'],
+      missing: ['Real stream data', 'Turbine hardware', 'Site rights', 'PPA'],
+    },
+    arrTarget: '$26M Year-3 target (assumption-based)',
+  },
+  P09_AWG: {
+    stage: 'Prototype — forecasting + cost optimizer, no field unit',
+    tracks: ['Grant', 'Strategic Partner', 'Revenue'],
+    ask: 'One campus pilot (10 units) plus a water-quality testing partner.',
+    useOfFunds: ['Condensation units', 'Water-quality lab work', 'Sensors + controls', 'Regulatory pathway'],
+    grantTargets: ['EPA Water Infrastructure', 'USDA water programs', 'Climate-resilience foundations'],
+    partnerProfile: 'HVAC/condenser manufacturers, water utilities, campuses, disaster-relief agencies.',
+    offtake: 'Water subscription or per-liter contract.',
+    milestones: ['10-unit pilot installed', 'L/kWh benchmark published', 'Water-quality certification'],
+    evidence: {
+      proven: ['Humidity forecasting + PuLP optimizer', 'Optimize API contract'],
+      missing: ['Field unit', 'Real L/kWh data', 'Regulatory approval', 'Offtake'],
+    },
+    arrTarget: '$36M Year-3 target (assumption-based)',
+  },
+  P02_SYMBIOSIS: {
+    stage: 'Prototype — model scaffold, no trial data',
+    tracks: ['Strategic Partner', 'Revenue', 'Affiliate'],
+    ask: '3 farms with 1-acre trial plots and mycology lab access.',
+    useOfFunds: ['Trial plots', 'Lab access', 'Soil sensors', 'Agronomist time'],
+    grantTargets: ['USDA NIFA', 'USDA SARE', 'Regional soil-health programs'],
+    partnerProfile: 'Commercial farms, ag-tech co-ops, soil-science universities.',
+    offtake: 'SaaS subscription + sensor lease per farm.',
+    milestones: ['Trial plots established', 'Yield lift validated against control', 'Strain library published'],
+    evidence: {
+      proven: ['scikit-learn recommendation scaffold', 'Recommend API contract'],
+      missing: ['Trial results', 'Trained strain model', 'Farm partner'],
+    },
+    arrTarget: '$12M Year-3 target (assumption-based)',
+  },
+  P03_FARM: {
+    stage: 'Prototype — optimizer code, no site or carbon method',
+    tracks: ['Strategic Partner', 'Revenue'],
+    ask: 'A 6-acre operating site and a carbon-registry methodology partner.',
+    useOfFunds: ['Site preparation', 'Nutrient/compost infrastructure', 'Geospatial data pipeline', 'Carbon methodology'],
+    grantTargets: ['USDA Climate-Smart Commodities', 'Carbon registry methodology grants', 'Impact investment'],
+    partnerProfile: 'Carbon registries, precision-ag equipment makers, grocery off-takers, CSAs.',
+    offtake: 'Verified carbon credits + produce offtake agreements.',
+    milestones: ['Optimizer on real field data', 'Carbon methodology accepted', 'First verified credit batch'],
+    evidence: {
+      proven: ['OR-Tools nutrient optimizer', 'Optimize API contract'],
+      missing: ['Operating site', 'Carbon methodology', 'Field validation'],
+    },
+    arrTarget: '$18M Year-3 target (assumption-based)',
+  },
+  P07_BIOREACTOR: {
+    stage: 'Concept — control OS, no wet lab',
+    tracks: ['Grant', 'Strategic Partner'],
+    ask: 'Wet lab + 100 L bioreactor pilot and a municipal feedstock LOI.',
+    useOfFunds: ['Bioreactor vessels', 'Wet-lab setup', 'Permitting', 'Strain validation'],
+    grantTargets: ['DOE Bioenergy Technologies', 'EPA SBIR', 'State waste-diversion programs'],
+    partnerProfile: 'Municipalities, petrochemical monomer off-takers, biotech universities.',
+    offtake: 'Tipping-fee contracts + monomer offtake.',
+    milestones: ['Degradation rate validated', 'Pilot permit issued', 'Tipping contract signed'],
+    evidence: {
+      proven: ['Control OS scaffold', 'Status API contract'],
+      missing: ['Wet lab', 'Pilot permit', 'Monomer offtake', 'Municipal contract'],
+    },
+    arrTarget: '$15M Year-3 target (assumption-based)',
+  },
+  P01_FOAM_HOMES: {
+    stage: 'Prototype — parametric design/BOM, no pilot build',
+    tracks: ['Strategic Partner', 'Revenue'],
+    ask: 'One pilot build plus a spray-foam supplier and a construction-robotics partner.',
+    useOfFunds: ['Pilot build', 'Robotic toolpath validation', 'Structural engineering', 'Material testing'],
+    grantTargets: ['HUD affordable-housing', 'DOE Building Technologies', 'State housing programs'],
+    partnerProfile: 'Affordable-housing developers, foam suppliers, robotics firms, architects.',
+    offtake: 'SaaS subscription + per-project transaction fee.',
+    milestones: ['Design → robot toolpath on a real build', '40-home layout approved', 'Material marketplace live'],
+    evidence: {
+      proven: ['Parametric design + BOM scaffold', 'Status API contract'],
+      missing: ['Pilot build', 'Robot partner', 'Structural sign-off'],
+    },
+    arrTarget: '$15M Year-3 target (assumption-based)',
+  },
+  P10_GEOTHERMAL: {
+    stage: 'Concept — graph optimizer, no subsurface data',
+    tracks: ['Strategic Partner', 'Revenue'],
+    ask: 'A feasibility site and a utility/municipal concession conversation.',
+    useOfFunds: ['Subsurface study', 'Loop design', 'Permits', 'Control center'],
+    grantTargets: ['DOE Geothermal Technologies', 'State geothermal programs'],
+    partnerProfile: 'District-energy utilities, drilling firms, HVAC integrators, municipalities.',
+    offtake: '20-year Heat-as-a-Service concession.',
+    milestones: ['Subsurface study complete', 'Loop design approved', 'Concession LOI signed'],
+    evidence: {
+      proven: ['Graph-based heat-flow optimizer', 'Optimize API contract'],
+      missing: ['Subsurface data', 'Site', 'Concession', 'Capital structure'],
+    },
+    arrTarget: '$19M Year-3 target (assumption-based)',
+  },
+  P12_SOLAR: {
+    stage: 'Prototype — billing/admin, no project',
+    tracks: ['Revenue', 'Affiliate', 'Strategic Partner'],
+    ask: 'One community solar project and a net-metering utility partner.',
+    useOfFunds: ['Subscriber portal', 'Billing integration', 'Metering integration', 'Legal/regulatory'],
+    grantTargets: ['DOE Solar Energy Technologies', 'State community-solar programs'],
+    partnerProfile: 'Community solar developers, utilities, EPC contractors, HOAs.',
+    offtake: 'Per-subscriber monthly admin fee.',
+    milestones: ['Subscriber onboarding live', 'Credit allocation validated', 'First 200 kW array subscribed'],
+    evidence: {
+      proven: ['Credit-allocation + irradiance forecast scaffold', 'Forecast API contract'],
+      missing: ['Live project', 'Utility integration', 'Signed subscribers'],
+    },
+    arrTarget: '$12M Year-3 target (assumption-based)',
+  },
+  P04_HEMP_LAB: {
+    stage: 'Concept — FEA/LCA plan, no lab or HPC',
+    tracks: ['Grant', 'Strategic Partner'],
+    ask: 'HPC allocation + materials lab access and an OEM test contract.',
+    useOfFunds: ['HPC simulation time', 'Physical materials lab', 'Hemp feedstock', 'LCA software'],
+    grantTargets: ['DOE Vehicle Technologies', 'NSF SBIR', 'State industrial-hemp programs'],
+    partnerProfile: 'OEM automotive groups, hemp processors, university materials labs, national labs.',
+    offtake: 'R&D testing contracts + fleet analytics SaaS.',
+    milestones: ['FEA/LCA validated on coupons', 'OEM test contract signed', 'Fleet pilot data'],
+    evidence: {
+      proven: ['Materials simulation plan', 'Status API contract'],
+      missing: ['HPC access', 'Lab', 'Test data', 'OEM partner'],
+    },
+    arrTarget: '$12M Year-3 target (assumption-based)',
+  },
+  P05_GREENHOUSE: {
+    stage: 'Concept — controller design, no prototype',
+    tracks: ['Strategic Partner', 'Revenue'],
+    ask: 'One greenhouse pilot and an LED-board manufacturing partner.',
+    useOfFunds: ['Controller prototype', 'LED frequency boards', 'Plant-response trials', 'CV pipeline'],
+    grantTargets: ['USDA Specialty Crop', 'DOE advanced lighting'],
+    partnerProfile: 'Greenhouse/vertical-farm operators, LED grow-light makers, botanical labs.',
+    offtake: 'Controller sale + recipe subscription.',
+    milestones: ['Frequency controller prototype', 'Plant-response trial results', 'Pilot greenhouse live'],
+    evidence: {
+      proven: ['Light-recipe control concept', 'Status API contract'],
+      missing: ['Hardware prototype', 'Trial data', 'Pilot operator'],
+    },
+    arrTarget: '$6M Year-3 target (assumption-based)',
+  },
+  P06_REACTOR: {
+    stage: 'Concept / research — solvers defined, no validated model',
+    tracks: ['Grant', 'Strategic Partner'],
+    ask: 'National-lab affiliation and a regulatory validation dataset.',
+    useOfFunds: ['HPC cluster', 'Regulatory data agreements', 'Physics/thermal modeling', 'Audit logging'],
+    grantTargets: ['DOE Nuclear Energy', 'INL / ANL / ORNL collaborations'],
+    partnerProfile: 'National labs, NRC/IAEA, utility training programs, nuclear engineering departments.',
+    offtake: 'Training-simulator licensing.',
+    milestones: ['OpenMC benchmark reproduced', 'Immutable audit logging', 'Training-simulator LOI'],
+    evidence: {
+      proven: ['Solver interface scaffold', 'Status API contract'],
+      missing: ['Validated physics model', 'Regulatory dataset', 'Lab partner'],
+    },
+    arrTarget: 'Not counted in Year-3 (long-horizon R&D)',
+  },
+  P11_RESERVED: {
+    stage: 'Research concept — no build',
+    tracks: ['Grant'],
+    ask: 'Endowment / ARPA-E support for molten-salt chemistry modeling.',
+    useOfFunds: ['Chemistry modeling', 'Corrosion test data', 'Materials research'],
+    grantTargets: ['ARPA-E', 'University nuclear research programs'],
+    partnerProfile: 'Molten-salt research institutions, advanced-materials suppliers, policy think tanks.',
+    offtake: 'Long-term IP licensing and consulting.',
+    milestones: ['Molten-salt model', 'Corrosion dataset', 'Research partnership'],
+    evidence: {
+      proven: ['Concept only'],
+      missing: ['Everything — model, data, partner, funding'],
+    },
+    arrTarget: 'Not counted in Year-3 (pre-commercial)',
+  },
 };

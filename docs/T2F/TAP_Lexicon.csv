@@ -1,0 +1,10 @@
+phrase,feature,default_weight,description
+spread wide,coverage_bias,3,Prefer numbers not yet used across tickets to maximize unique coverage.
+avoid birthdays,anti_split_high,2,Reduce count of whites 1-31 to avoid popular calendar clusters.
+anchor a pair,use_anchor_pair,1,Include a historically co-drawn or theme pair when available.
+tilt high,high_numbers_bias,1,Bias selection toward 32-69 for whites.
+tilt low,low_numbers_bias,0,Bias selection toward 1-31 for whites (not recommended for anti-split).
+favor frequent whites,freq_whites_bias,2,Bias toward a curated list of historically frequent whites (editable).
+favor frequent reds,freq_reds_bias,2,Bias toward a curated list of historically frequent red balls (editable).
+no cute ladders,no_sequences,2,"Reject rows with long consecutive runs (e.g., 11-12-13)."
+unique reds,unique_reds_bias,2,Prefer distinct Powerballs across tickets.

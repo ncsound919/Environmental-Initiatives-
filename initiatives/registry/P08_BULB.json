@@ -1,0 +1,225 @@
+{
+  "code": "P08_BULB",
+  "id": "P08",
+  "name": "EverLume",
+  "type": "Centennial Bulb (Lighting-as-a-Service)",
+  "phase": 1,
+  "stage": "prototype",
+  "tracks": [
+    "Strategic Partner",
+    "Revenue"
+  ],
+  "version": 1,
+  "updatedAt": "2026-09-12",
+  "software": {
+    "capabilities": [
+      {
+        "id": "reliability-score",
+        "name": "Fixture reliability score",
+        "api": "/api/bulb/predict",
+        "status": "heuristic",
+        "evidence": "Reference implementation; heuristic stress score (Bayesian model planned)"
+      },
+      {
+        "id": "fleet-telemetry",
+        "name": "Fleet telemetry + OTA queue",
+        "api": "/api/telemetry",
+        "status": "scaffold",
+        "evidence": "ESP32 firmware template with simulation mode"
+      }
+    ]
+  },
+  "hardware": {
+    "individual": {
+      "name": "EverLume Community Bench Fixture",
+      "audience": "community builder / maker (build-it-yourself)",
+      "mode": "community",
+      "unit": "1 fixture + gateway",
+      "bom": [
+        {
+          "part": "ESP32-DevKitC v4",
+          "qty": 1,
+          "unitUsd": 15,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3269 — $15.00 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "INA219 current/voltage breakout",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/904 — $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "DS18B20 waterproof temperature sensor",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/381 — $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        },
+        {
+          "part": "Logic-level MOSFET driver module",
+          "qty": 1,
+          "unitUsd": 2.5,
+          "supplier": "SparkFun",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "12V LED COB + 12V 1A PSU",
+          "qty": 1,
+          "unitUsd": 6.5,
+          "supplier": "Generic",
+          "source": "commodity — procure at build time (multi-vendor, volatile price)",
+          "sourcing": "commodity"
+        },
+        {
+          "part": "Breadboard + jumper kit",
+          "qty": 1,
+          "unitUsd": 9.95,
+          "supplier": "Adafruit",
+          "source": "https://www.adafruit.com/product/3314 — half-size breadboard + 78-piece jumper bundle $9.95 (2026-09-12)",
+          "sourcing": "vendor-list"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P08/{deviceId}/telemetry",
+        "controlTopic": "ecos/P08/{deviceId}/control",
+        "deviceTypes": [
+          "led-bulb"
+        ],
+        "sensors": [
+          "voltage",
+          "thermal_cycles",
+          "uptime"
+        ],
+        "actuators": [
+          "brightness",
+          "on_off"
+        ]
+      },
+      "power": "USB 5V 0.5A (2.5 W) + 12V 0.5A (6 W) = ~8.5 W",
+      "powerBudget": "8.5 W",
+      "buildHours": 3,
+      "sla": null,
+      "verification": [
+        "interfaces cross-check against config/hardware-manifests.json P08",
+        "firmware/esp32-template/ecos_template.ino PROJECT_CODE=P08 and DEVICE_TYPE=bulb",
+        "telemetry/control topics match ecos/P08/{deviceId}/{telemetry|control}",
+        "every BOM line priced with supplier + source",
+        "power budget and buildHours stated"
+      ],
+      "status": "verified"
+    },
+    "enterprise": {
+      "name": "EverLume Fleet (LaaS)",
+      "audience": "commercial property / campus",
+      "mode": "commercial",
+      "unit": "per 100-fixture building",
+      "topology": "Thread/Zigbee mesh -> building gateway -> MQTT -> cloud",
+      "bom": [
+        {
+          "part": "Commercial LED troffer/high-bay fixture (0-10V dimmable)",
+          "qty": 100,
+          "unitUsd": 55,
+          "supplier": "Commercial lighting distributor",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "0-10V dimmable LED driver",
+          "qty": 100,
+          "unitUsd": 25,
+          "supplier": "Commercial lighting distributor",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Thread/Zigbee mesh module (per fixture)",
+          "qty": 100,
+          "unitUsd": 8,
+          "supplier": "Digi-Key",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Per-circuit energy meter (CT clamp)",
+          "qty": 8,
+          "unitUsd": 20,
+          "supplier": "Digi-Key",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "Industrial PoE MQTT gateway",
+          "qty": 1,
+          "unitUsd": 150,
+          "supplier": "Industrial supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        },
+        {
+          "part": "PoE network switch (24-port)",
+          "qty": 1,
+          "unitUsd": 120,
+          "supplier": "Network supplier",
+          "source": "quote-required — no public list price (RFQ)",
+          "sourcing": "quote-required"
+        }
+      ],
+      "interfaces": {
+        "telemetryTopic": "ecos/P08/{deviceId}/telemetry",
+        "controlTopic": "ecos/P08/{deviceId}/control",
+        "deviceTypes": [
+          "led-bulb"
+        ],
+        "sensors": [
+          "voltage",
+          "thermal_cycles",
+          "uptime"
+        ],
+        "actuators": [
+          "brightness",
+          "on_off"
+        ]
+      },
+      "power": "100 × 18 W LED = 1.8 kW + gateway/switch ~50 W = ~1.85 kW",
+      "powerBudget": "~1.85 kW per 100-fixture building",
+      "buildHours": 24,
+      "sla": "uptime guarantee (requires underwriting partner)",
+      "verification": [
+        "interfaces cross-check against config/hardware-manifests.json P08",
+        "firmware/esp32-template/ecos_template.ino PROJECT_CODE=P08",
+        "per-building BOM priced with supplier + source (100-fixture basis)",
+        "power budget (~1.85 kW) and install hours stated",
+        "topology: mesh -> gateway -> MQTT -> cloud"
+      ],
+      "status": "verified"
+    }
+  },
+  "founding": {
+    "status": "not_started",
+    "parent": "Overlay 365",
+    "division": "Overlay Environmental",
+    "ventureName": "EverLume",
+    "structure": "division",
+    "licenses": [],
+    "capitalAsk": "2 pilot buildings (100+ fixtures) + uptime underwriting partner",
+    "offtake": "multi-year Lighting-as-a-Service contract",
+    "compliance": [],
+    "readiness": {
+      "hardwarePilot": false,
+      "partnerLoi": false,
+      "unitEconomics": false
+    }
+  },
+  "provenance": {
+    "verifiedBy": [],
+    "driver": null,
+    "rollbackToken": null,
+    "source": "seed: data.ts P08 fundability + config/hardware-manifests.json"
+  }
+}
