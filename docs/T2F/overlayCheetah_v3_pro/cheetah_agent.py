@@ -286,13 +286,15 @@ class Workspace:
         if runner not in available and runner != "pytest":
             return {"ok": False, "status": "ERROR",
                     "detail": f"runner {runner!r} not detected here"}
+        from cheetah_gates import detect_toolchain, _node_exec, _node_run
+        tc = detect_toolchain(str(self.root))
         cmd: List[str]
         if runner == "pytest":
-            cmd = ["python", "-m", "pytest", "-q"]
+            cmd = [tc.get("python") or "python", "-m", "pytest", "-q"]
         elif runner == "vitest":
-            cmd = ["npx", "vitest", "run"]
+            cmd = _node_exec(tc["package_manager"], ["vitest", "run"])
         else:
-            cmd = ["npm", "test", "--silent"]
+            cmd = _node_run(tc["package_manager"], "test")
         started = time.time()
         try:
             proc = subprocess.run(
@@ -355,6 +357,10 @@ def run_coding_task(root: str, plan: List[Dict[str, Any]],
         elif op == "test":
             res = ws.run_tests(step.get("runner", "auto"),
                                step.get("timeout_sec", 300))
+        elif op == "verify":
+            from cheetah_gates import verify_workspace
+            res = verify_workspace(step.get("root", root),
+                                   gates=step.get("gates"))
         else:
             res = {"ok": False, "error": f"unknown op: {op!r}"}
         results.append({"step": i, "op": op, "result": res})
@@ -363,5 +369,7 @@ def run_coding_task(root: str, plan: List[Dict[str, Any]],
         if not res.get("ok") and not step.get("allow_fail", False):
             if op in ("edit", "write", "test"):
                 break
+        if op == "verify" and not res.get("passed"):
+            break
     ok = all(r["result"].get("ok") for r in results)
     return {"ok": ok, "steps": results, "operation_log": ws.operation_log()}
