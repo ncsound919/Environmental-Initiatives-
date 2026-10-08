@@ -1,0 +1,40 @@
+{
+  "exe": "C:\\Users\\User\\Downloads\\BUSINESS\\CREATIVE\\ChordStudio\\build-local\\ChordStudio_artefacts\\Release\\Chord Studio.exe",
+  "total_seconds": 14.107,
+  "marks": [
+    {
+      "label": "launch_and_attach",
+      "seconds": 6.659
+    },
+    {
+      "label": "generate_progression",
+      "seconds": 0.86
+    },
+    {
+      "label": "audition_chord",
+      "seconds": 0.212
+    },
+    {
+      "label": "song_play_stop",
+      "seconds": 2.327
+    },
+    {
+      "label": "drum_program",
+      "seconds": 3.597
+    },
+    {
+      "label": "synth_engine_switch",
+      "seconds": 0.442
+    },
+    {
+      "label": "total",
+      "seconds": 0.009
+    }
+  ],
+  "process": {
+    "pid": 64220,
+    "rss_mb": 106.2,
+    "cpu_percent": 12.5
+  },
+  "app_alive": true
+}
