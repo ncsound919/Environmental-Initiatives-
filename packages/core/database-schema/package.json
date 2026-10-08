@@ -3,11 +3,30 @@
   "version": "1.0.0",
   "description": "Shared Prisma schema for all ECOS projects",
   "main": "index.ts",
+  "types": "index.ts",
+  "files": [
+    "prisma",
+    "index.ts",
+    "README.md"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getcoherence/ecos-environmental-initiatives.git",
+    "directory": "packages/core/database-schema"
+  },
+  "license": "MIT",
   "scripts": {
+    "build": "prisma generate",
     "generate": "prisma generate",
     "migrate": "prisma migrate dev",
     "studio": "prisma studio",
-    "format": "prisma format"
+    "format": "prisma format",
+    "test": "echo 'No tests yet'",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1"

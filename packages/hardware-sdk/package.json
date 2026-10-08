@@ -4,9 +4,31 @@
   "description": "Shared hardware/IoT SDK for all ECOS projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getcoherence/ecos-environmental-initiatives.git",
+    "directory": "packages/hardware-sdk"
+  },
+  "keywords": [
+    "iot",
+    "hardware",
+    "mqtt",
+    "sensors"
+  ],
+  "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "pnpm run build && pnpm run test"
   },
   "dependencies": {
     "mqtt": "^5.3.4",
@@ -14,6 +36,9 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.6",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.11",
+    "ts-jest": "^29.1.2"
   }
 }
