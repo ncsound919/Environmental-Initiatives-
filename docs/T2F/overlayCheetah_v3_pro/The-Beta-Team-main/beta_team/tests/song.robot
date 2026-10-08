@@ -9,7 +9,7 @@ Documentation     Beta Team song suite for ChordStudio.
 Library           ${CURDIR}/../sdk/adapters/ChordStudioCdp.py
 Library           OperatingSystem
 Suite Setup       Start ChordStudio
-Suite Teardown    Close App
+Suite Teardown    End ChordStudio
 
 *** Variables ***
 ${BUILD_PATH}     ${EMPTY}
@@ -23,7 +23,6 @@ Generate A Chord Progression
     ${n}=    Chord Count
     Should Be True    ${n} >= 8    Generate produced only ${n} chords
     Text Should Be Visible    sections
-    Screenshot    song-01-compose
 
 Audition A Chord
     [Documentation]    The selected chord auditions through the engine.
@@ -57,7 +56,6 @@ Synth Engines And Operators Respond
     Press Control Key    Rate 1    End
     ${v}=    Control Value    Rate 1
     Should Be True    ${v} >= 0
-    Screenshot    song-02-synth
 
 Mixer Mute And Solo Round Trip
     [Documentation]    A track's mute toggles and restores through the engine.
@@ -113,7 +111,6 @@ Combine Chords Synth And Drums Into A Beat
     Song Transport    play
     Wait Until Keyword Succeeds    6x    0.4s    Song Should Be Playing
     Sleep    2.5s
-    Screenshot    song-03-full-beat
 
     Song Transport    stop
     Open Workspace    Drums
@@ -127,6 +124,10 @@ Start ChordStudio
     ELSE
         Launch App    port=${CDP_PORT}
     END
+
+End ChordStudio
+    Run Keyword And Ignore Error    Screenshot    song-final
+    Close App
 
 Song Should Be Playing
     ${state}=    Song Playing

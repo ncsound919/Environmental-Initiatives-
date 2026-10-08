@@ -187,6 +187,12 @@ class ChordStudioCdp:
             )
         else:
             proc.kill()
+        # Wait for the process tree to actually exit: a lingering msedgewebview2
+        # keeps the WebView2 user-data folder locked and the next launch then
+        # fails to create its webview.
+        deadline = time.time() + 15
+        while time.time() < deadline and proc.poll() is None:
+            time.sleep(0.2)
 
     # ------------------------------------------------------------- primitives
 
@@ -484,6 +490,14 @@ class ChordStudioCdp:
     def generate_progression(self) -> None:
         """Open Compose and press Generate; wait for chord pads to appear."""
         self.open_workspace("Compose")
+        # The header button reads exactly "Generate" when idle; while a run is in
+        # flight it is disabled / relabelled, so wait for the idle state.
+        if not self._wait_until(
+            "[...document.querySelectorAll('button')]"
+            ".some(b => b.textContent.trim().toLowerCase() === 'generate' && !b.disabled)",
+            timeout=20,
+        ):
+            raise ChordStudioError("Generate button did not become available")
         self.click_button_containing("Generate")
         if not self._wait_until(
             "[...document.querySelectorAll('button[aria-label]')]"
@@ -771,15 +785,22 @@ class ChordStudioCdp:
     def ensure_step(self, pad: str, step: int, state: str = "on") -> None:
         """Make a step be 'on' or 'off' regardless of its current value.
 
-        A single synthetic click can be missed (the grid re-renders under the
-        pointer), so this verifies after each toggle and retries before failing.
+        Toggling is verified against the engine after each click (a click can be
+        missed, and the state read lags the click, so a blind retry can
+        double-toggle). It waits for the engine to reflect each toggle.
         """
         want = state.lower() == "on"
+        want_js = "true" if want else "false"
         for _ in range(5):
             if (self.step_state(pad, step) == "on") == want:
                 return
             self.toggle_step(pad, step)
-            time.sleep(0.15)
+            self._wait_until(
+                "(() => { const el = %s; return el !== undefined && "
+                "(el.getAttribute('aria-pressed') === 'true') === %s; })()"
+                % (self._step_expr(pad, step), want_js),
+                timeout=2.0,
+            )
         if (self.step_state(pad, step) == "on") != want:
             raise ChordStudioError(
                 f"could not set {pad} step {step} to {state} "
