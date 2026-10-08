@@ -1,5 +1,6 @@
 import json
 import subprocess
+import sys
 import time
 import tkinter as tk
 from pathlib import Path
@@ -17,6 +18,9 @@ class BetaTeam:
             "onboarding": tk.BooleanVar(),
             "poweruser": tk.BooleanVar(),
             "edgecases": tk.BooleanVar(),
+            "beatmaking": tk.BooleanVar(),   # ChordStudio (native, over CDP)
+            "song": tk.BooleanVar(),         # ChordStudio chords/synth/mix/full beat
+            "benchmark": tk.BooleanVar(),    # ChordStudio timings + process metrics
             "performance": tk.BooleanVar(),  # New
             "security": tk.BooleanVar(),     # New
             "ui_stability": tk.BooleanVar(), # New
@@ -150,6 +154,8 @@ class BetaTeam:
         tests_dir = self.script_dir / "tests"
         reports_dir = self.script_dir / "reports"
         cmd = [
+            sys.executable,
+            "-m",
             "robot",
             "--variable",
             f"BUILD_PATH:{build_path}",
