@@ -807,6 +807,52 @@ class ChordStudioCdp:
                 f"(it is {self.step_state(pad, step)})"
             )
 
+    def make_song_base64(self, seconds: float = 8.0, bpm: int = 120) -> str:
+        """Synthesize a short drum-loop 'song' (kick/snare/hat) for chop testing.
+
+        A steady, transient-rich 4/4 loop so Regions/BPM chopping finds clear
+        slices. Deterministic.
+        """
+        import math
+        import random
+
+        sr = 44100
+        total = int(sr * seconds)
+        out = [0.0] * total
+        beat = 60.0 / bpm
+        rnd = random.Random(99)
+
+        def add(at_sec, gen, dur):
+            start = int(at_sec * sr)
+            n = int(dur * sr)
+            for i in range(n):
+                if start + i >= total:
+                    break
+                out[start + i] += gen(i / sr)
+
+        nbeats = int(seconds / beat)
+        for b in range(nbeats):
+            t = b * beat
+            add(t, lambda x: math.sin(2 * math.pi * (120 * math.exp(-x * 18) + 45) * x) * math.exp(-x * 9), 0.25)
+            if b % 4 in (1, 3):
+                add(t, lambda x: (rnd.uniform(-1, 1) * 0.8 + math.sin(2 * math.pi * 190 * x) * 0.4) * math.exp(-x * 22), 0.18)
+            add(t, lambda x: rnd.uniform(-1, 1) * math.exp(-x * 60), 0.05)
+            add(t + beat / 2, lambda x: rnd.uniform(-1, 1) * math.exp(-x * 60), 0.05)
+
+        return self._encode_wav(out, sr)
+
+    def set_chop_mode(self, name: str) -> None:
+        """Set the chop mode (Threshold / Regions / BPM / Manual)."""
+        self.click_group_button("Chop mode", name)
+
+    def chop_slice_count(self) -> int:
+        """Number of slices the chop preview currently shows ('N SLICES')."""
+        import re
+
+        text = self.get_body_text()
+        m = re.search(r"(\d+)\s+SLICES", text)
+        return int(m.group(1)) if m else 0
+
     def make_transient_wav_base64(self) -> str:
         """Synthesize a 1.2 s mono WAV with three clear transients (3 chop slices).
 

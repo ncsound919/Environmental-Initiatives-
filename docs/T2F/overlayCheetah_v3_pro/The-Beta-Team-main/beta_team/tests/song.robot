@@ -76,6 +76,24 @@ VST3 Hosting Controls Are Present
     Open Workspace    Mix
     Plugin Controls Present
 
+Load A Song And Chop It Into Pads
+    [Documentation]    Drop a synthesized drum-loop 'song' onto a pad and chop it into
+    ...    pads (Regions mode), verifying the sampling pipeline end to end.
+    Dismiss Overlays
+    Open Workspace    Drums
+    Select Pad Bank    H
+    Select Pad    H01
+    ${song}=    Make Song Base64
+    Drop Sample On Pad    H01    SONG.wav    ${song}
+    Wait Until Keyword Succeeds    6x    0.4s    Pad Label Should Contain    H01    SONG
+    Open Sampler Mode    Chop
+    Set Chop Mode    Regions
+    Wait Until Keyword Succeeds    10x    0.4s    Chop Slice Count Should Be At Least    8
+    Chop To Pads
+    Wait Until Keyword Succeeds    6x    0.4s    Pad Label Should Contain    H02    SONG
+    ${n}=    Chop Slice Count
+    Should Be True    ${n} >= 8    only ${n} slices
+
 Combine Chords Synth And Drums Into A Beat
     [Documentation]    Program a drum pattern, start the drum machine, generate a
     ...    progression, and play the song so chords + synth + drums sound together.
@@ -151,3 +169,8 @@ Transport State Should Be
     [Arguments]    ${action}    ${expected}
     ${now}=    Transport State    ${action}
     Should Be Equal    ${now}    ${expected}
+
+Chop Slice Count Should Be At Least
+    [Arguments]    ${minimum}
+    ${n}=    Chop Slice Count
+    Should Be True    ${n} >= ${minimum}    only ${n} slices
