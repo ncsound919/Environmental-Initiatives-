@@ -55,7 +55,8 @@ Pattern Length And Pattern Selection
     Open Workspace    Drums
     Select Pad    A01
     Open Sampler Mode    Sequence
-    Set Pattern Length    32
+    Set Time Correct    1/16
+    Set Pattern Length    2 bars
     Wait Until Keyword Succeeds    5x    0.3s    Step Exists    A01    32
     Select Pattern    2
     Wait Until Keyword Succeeds    5x    0.3s    Pattern State Should Be   2    on
@@ -122,8 +123,8 @@ Make A Beat Using The App's Functions
     # 2. Program pattern 1 on the 1/16 grid: kick 1/9/13, snare 5/13, hats on the offbeats.
     Open Sampler Mode    Sequence
     Select Pattern    1
-    Set Pattern Length    16
     Set Time Correct    1/16
+    Set Pattern Length    1 bar
     FOR    ${s}    IN    1    9    13
         Ensure Step    A01    ${s}    on
     END
@@ -146,7 +147,8 @@ Make A Beat Using The App's Functions
 
     # 4. A second, longer pattern (32 steps) and switch back to pattern 1.
     Select Pattern    2
-    Set Pattern Length    32
+    Set Time Correct    1/16
+    Set Pattern Length    2 bars
     FOR    ${s}    IN    1    9    17    25
         Ensure Step    A01    ${s}    on
     END

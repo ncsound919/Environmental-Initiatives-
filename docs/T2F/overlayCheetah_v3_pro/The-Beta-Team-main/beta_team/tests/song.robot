@@ -94,8 +94,8 @@ Combine Chords Synth And Drums Into A Beat
     Drop Sample On Pad    A03    HAT.wav    ${hat}
     Open Sampler Mode    Sequence
     Select Pattern    1
-    Set Pattern Length    16
     Set Time Correct    1/16
+    Set Pattern Length    1 bar
     FOR    ${s}    IN    1    9    13
         Ensure Step    A01    ${s}    on
     END

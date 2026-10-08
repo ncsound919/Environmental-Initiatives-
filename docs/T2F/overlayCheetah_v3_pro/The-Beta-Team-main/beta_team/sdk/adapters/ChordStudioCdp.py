@@ -399,9 +399,13 @@ class ChordStudioCdp:
             raise ChordStudioError(f"pattern {index} not found")
         return "on" if val == "true" else "off"
 
-    def set_pattern_length(self, steps: int) -> None:
-        """Set the pattern length in steps (16/32/48/64 ...)."""
-        self._click(self._group_button("Pattern length", str(steps)), f"pattern length {steps}", js=True)
+    def set_pattern_length(self, label: str) -> None:
+        """Set the pattern length by its visible label ('1 bar', '2 bars', '4 bars', '8 bars').
+
+        The control labels lengths as whole bars of the current Time Correct
+        grid, so set the grid first when the bar size matters.
+        """
+        self._click(self._group_button("Pattern length", label), f"pattern length {label}", js=True)
 
     def set_time_correct(self, label: str) -> None:
         """Set the Time Correct grid, e.g. 1/16 or 1/8T."""

@@ -40,8 +40,8 @@ Measure Drum Program
     Open Workspace    Drums
     Open Sampler Mode    Sequence
     Select Pattern    1
-    Set Pattern Length    16
     Set Time Correct    1/16
+    Set Pattern Length    1 bar
     FOR    ${s}    IN    1    5    9    13
         Ensure Step    A01    ${s}    on
     END
