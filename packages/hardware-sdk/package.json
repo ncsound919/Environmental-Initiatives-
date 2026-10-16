@@ -31,7 +31,7 @@
     "prepublishOnly": "pnpm run build && pnpm run test"
   },
   "dependencies": {
-    "mqtt": "^5.3.4",
+    "mqtt": "^5.16.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
